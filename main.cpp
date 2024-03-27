@@ -21,10 +21,10 @@ int main(int ac, char **av)
                 if (server.getClientSocket() != -1)
                 {
                     printf("New connection, Socket fd : %d, client fd : %d\n", server.getSocket(), server.getClientSocket());
-                    // char buffer[1024];
-                    // ssize_t bytes_received = recv(server.getClientSocket(), buffer, sizeof(buffer), 0);
-                    // std::cout << buffer << std::endl;
-                    // (void)bytes_received;
+                    char buffer[1024];
+                    ssize_t bytes_received = recv(server.getClientSocket(), buffer, sizeof(buffer), 0);
+                    buffer[bytes_received] = '\0'; 
+                    std::cout << buffer << std::endl;
                 }
             }
         }
