@@ -12,12 +12,16 @@
 class Server
 {
     private:
-        const std::string _name;
         int _socket;
         struct sockaddr_in _serverAddress;
+        struct sockaddr _clientAddr;
+        int _client_socket;
     public:
         Server(char *port);
-        // const std::string getName() const;
-        // const int getSocket() const;
+        int getSocket() const;
+        struct sockaddr_in getServerAddress() const;
+        struct sockaddr getClientAddr() const;
+        int getClientSocket() const;
+        void setClientSocket(int tmp);
         ~Server();
 };

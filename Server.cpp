@@ -8,17 +8,16 @@ Server::Server(char *av)
     if (i == strlen(av))
     {
         int port = atoi(av);
-        std::cout << port << std::endl;
-
         /*etablit une interface de communication entre le serveur et un client
         (renvoie un descripteur)
         AF_INET = domaine d'adresses, ici: IPv4
         SOCK_STREAM = type de socket
-        0 = protocole a utiliser, pca on s en ballec, le systeme gere
+        0 = protocole a utiliser, 0 pcq on s en ballec, le systeme gere
         */
-       _socket = socket(AF_INET, SOCK_STREAM, 0);
+        _socket = socket(AF_INET, SOCK_STREAM, 0);
+        //checker que socket renvoie pas - 1;
         /*
-        Sockaddr_in contient les informations du serveur
+        _serverAddress contient les informations du serveur
         sin.family specifie le type d'adresse
         inet_addr specifie l'adresse  IP du serveur, ici localhost
         sin.port specifie le port en format reseau
@@ -27,24 +26,44 @@ Server::Server(char *av)
         _serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
         _serverAddress.sin_port = htons(port);
         /*
-        bind associe le socket à une adresse et un port spécifiques donc a mon ordi
+        bind lie la socket à l’addresse IP de mon ordi
         */
         bind(_socket, (struct sockaddr*)&_serverAddress, sizeof(_serverAddress));
+        /*
+        listen ecoute via la socket pour détecter des demandes de connexion
+        5 est un entier qui represente le nb de connexions autorisees dans la file d attente (nb a changer)
+        */
         listen(_socket, 5);
+        //checker que ca renvoit pas -1
     }
     else
-        std::cout << "port not only composed by digit" << std::endl;
+        std::cout << "invalid port format" << std::endl;
 }
 
-// const std::string getName() const
-// {
-//     return _name;
-// }
+int Server::getSocket() const
+{
+    return _socket;
+}
 
-// const int getSocket() const
-// {
-//     return _socket;
-// }
+struct sockaddr_in Server::getServerAddress() const
+{
+    return _serverAddress;
+}
+
+struct sockaddr Server::getClientAddr() const
+{
+    return _clientAddr;
+}
+
+int Server::getClientSocket() const
+{
+    return _client_socket;
+}
+
+void Server::setClientSocket(int tmp)
+{
+    _client_socket = tmp;
+}
 
 Server::~Server()
 {
