@@ -25,7 +25,11 @@ int main(int ac, char **av)
                     ssize_t bytes_received = recv(server.getClientSocket(), buffer, sizeof(buffer), 0);
                     buffer[bytes_received] = '\0'; 
                     std::cout << buffer << std::endl;
+                    const char *buf = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
+                    ssize_t i = send(server.getClientSocket(), buf, strlen(buf), 0);
+                    (void)i;
                 }
+                //msg -> client bien recu
             }
         }
         catch(const std::exception& e)

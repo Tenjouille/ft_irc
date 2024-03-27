@@ -63,6 +63,7 @@ int Server::getClientSocket() const
 void Server::setClientSocket(int tmp)
 {
     _client_socket = tmp;
+    clientSockets_.push_back(_client_socket);
 }
 
 Server::~Server()

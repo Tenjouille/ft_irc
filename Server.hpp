@@ -5,9 +5,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include<stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <vector>
 
 class Server
 {
@@ -16,6 +18,7 @@ class Server
         struct sockaddr_in _serverAddress;
         struct sockaddr _clientAddr;
         int _client_socket;
+        std::vector<int> clientSockets_;
     public:
         Server(char *port);
         int getSocket() const;
