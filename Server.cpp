@@ -66,6 +66,14 @@ void Server::setClientSocket(int tmp)
     clientSockets_.push_back(_client_socket);
 }
 
+// void Server::parser(char *buffer)
+// {
+//     if (buffer)
+//     {
+
+//     }
+// }
+
 Server::~Server()
 {
     close(_socket);

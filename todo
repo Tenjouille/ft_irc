@@ -1,0 +1,5 @@
+-Implementer classe client
+-vector de client dans server
+-classe channel et commande
+-commande, pointeur sur fonction
+-recuperer et stocker nickname etc

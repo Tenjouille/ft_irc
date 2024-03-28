@@ -19,6 +19,7 @@ class Server
         struct sockaddr _clientAddr;
         int _client_socket;
         std::vector<int> clientSockets_;
+//        std::vector<Client> _clientlst;
     public:
         Server(char *port);
         int getSocket() const;
@@ -26,5 +27,6 @@ class Server
         struct sockaddr getClientAddr() const;
         int getClientSocket() const;
         void setClientSocket(int tmp);
+        void parser(char *buffer);
         ~Server();
 };
