@@ -66,6 +66,16 @@ void Server::setClientSocket(int tmp)
     clientSockets_.push_back(_client_socket);
 }
 
+void    Server::parser(char *buffer)
+{
+    //tant que le buffer n'est pas /r/n
+    int i = 0;
+    std::cout << "buffer = " << buffer << "|end buffer" << std::endl;   
+    for (; buffer[i]; i++)
+        std::cout << static_cast<int>(buffer[i]) << " ";
+    std::cout << static_cast<int>(buffer[i]) << std::endl;
+}
+
 // void Server::parser(char *buffer)
 // {
 //     if (buffer)
