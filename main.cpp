@@ -1,11 +1,11 @@
 #include "Server.hpp"
 
-void    Server::execute(char *buffer)
-{
-    Commande    cmd(buffer);
+// void    Server::execute(char *buffer)
+// {
+//     Commande    cmd(buffer);
 
 
-}
+// }
 
 int main(int ac, char **av)
 {
@@ -18,7 +18,6 @@ int main(int ac, char **av)
             struct sockaddr client_addr;
             int tmp = accept(server.getSocket(), (struct sockaddr *)&client_addr, &client_addr_len);
             server.setClientSocket(tmp);
-            ssize_t bytes_received = recv(server.getClientSocket(), buffer, sizeof(buffer), 0);
 
             int i = 0;
             while (true)
@@ -33,6 +32,7 @@ int main(int ac, char **av)
                     //printf("New connection, Socket fd : %d, client fd : %d\n", server.getSocket(), server.getClientSocket());
                     char buffer[1024];
                     i++;
+            ssize_t bytes_received = recv(server.getClientSocket(), buffer, sizeof(buffer), 0);
                     buffer[bytes_received] = '\0'; 
                         std::cout << buffer << std::endl;
                     //parser buffer et foutre dans client
