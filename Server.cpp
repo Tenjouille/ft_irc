@@ -66,15 +66,52 @@ void Server::setClientSocket(int tmp)
     clientSockets_.push_back(_client_socket);
 }
 
+void    defineCmd(std::string cmd, int start, int it)
+{
+    std::string locate;
+
+    locate.append(cmd, start, it - start);
+    if (locate.find("NICK") == 0)
+        std::cout << "!!!NICK COMMAND!!!" << std::endl;
+    else if (locate.find("USER") == 0)
+        std::cout << "!!!USER COMMAND!!!" << std::endl;
+    else if (locate.find("MODE") == 0)
+        std::cout << "!!!MODE COMMAND!!!" << std::endl;
+    else if (locate.find("PASS") == 0)
+        std::cout << "!!!PASS COMMAND!!!" << std::endl;
+    else if (locate.find("JOIN") == 0)
+        std::cout << "!!!JOIN COMMAND!!!" << std::endl;
+    else if (locate.find("PRIVMSG") == 0)
+        std::cout << "!!!PRIVMSG COMMAND!!!" << std::endl;
+    else if (locate.find("MSG") == 0)
+        std::cout << "!!!MSG COMMAND!!!" << std::endl;
+    else if (locate.find("KICK") == 0)
+        std::cout << "!!!KICK COMMAND!!!" << std::endl;
+    else if (locate.find("PING") == 0)
+        std::cout << "!!!PING COMMAND!!!" << std::endl;
+    else if (locate.find("WHOIS") == 0)
+        std::cout << "!!!WHOIS COMMAND!!!" << std::endl;
+    else
+        std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
+}
+
 void    Server::parser(char *buffer)
 {
     //tant que le buffer n'est pas /r/n
-    int i = 0;
-    std::cout << "buffer = " << buffer << "|end buffer" << std::endl;   
-    for (; buffer[i]; i++)
-        std::cout << static_cast<int>(buffer[i]) << " ";
-    std::cout << static_cast<int>(buffer[i]) << std::endl;
+    // int         j = 0;
+    std::string cmd = buffer;
+    int start = 0;
+    for (int i = 0; cmd[i]; i++)
+    {
+        if (cmd[i] == '\r' && cmd[i + 1] == '\n')
+        {
+            defineCmd(cmd, start, i);
+            i += 2;
+            start = i;
+        }
+    }
 }
+
 
 // void Server::parser(char *buffer)
 // {

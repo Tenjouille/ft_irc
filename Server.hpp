@@ -16,7 +16,7 @@ class Server
     private:
         int _socket;
         struct sockaddr_in _serverAddress;
-        struct sockaddr _clientAddr;
+        struct sockaddr     _clientAddr;
         int _client_socket;
         std::vector<int> clientSockets_;
 //        std::vector<Client> _clientlst;
