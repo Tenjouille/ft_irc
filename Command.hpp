@@ -1,4 +1,7 @@
-#include "Server.hpp"
+#ifndef COMMAND_HPP
+# define COMMAND_HPP
+
+# include "Server.hpp"
 
 class Command
 {
@@ -15,3 +18,5 @@ class Command
         //cmd blabla * nb commande   
         ~Command();
 };
+
+#endif

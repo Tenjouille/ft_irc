@@ -50,29 +50,34 @@ struct sockaddr_in Server::getServerAddress() const
     return _serverAddress;
 }
 
-struct sockaddr Server::getClientAddr() const
-{
-    return _clientAddr;
-}
-
 int Server::getClientSocket() const
 {
-    return _client_socket;
+    return _clientSocket;
 }
 
 void Server::setClientSocket(int tmp)
 {
-    _client_socket = tmp;
-    clientSockets_.push_back(_client_socket);
+    _clientSocket = tmp;
+    
 }
 
-void    defineCmd(std::string cmd, int start, int it)
+void    Server::newClient(int socket, struct sockaddr client_addr)
+{
+    _clients.insert(std::pair<int, Client*>(socket, new Client(client_addr)));
+}
+
+void    Server::defineCmd(std::string cmd, int start, int it)
 {
     std::string locate;
 
     locate.append(cmd, start, it - start);
+    std::cout << locate << std::endl;
     if (locate.find("NICK") == 0)
+    {
         std::cout << "!!!NICK COMMAND!!!" << std::endl;
+
+        _clients[_clientSocket]->setNickName()
+    }
     else if (locate.find("USER") == 0)
         std::cout << "!!!USER COMMAND!!!" << std::endl;
     else if (locate.find("MODE") == 0)
@@ -91,6 +96,8 @@ void    defineCmd(std::string cmd, int start, int it)
         std::cout << "!!!PING COMMAND!!!" << std::endl;
     else if (locate.find("WHOIS") == 0)
         std::cout << "!!!WHOIS COMMAND!!!" << std::endl;
+    else if (locate.find("QUIT") == 0)
+        std::cout << "!!!QUIT COMMAND!!!" << std::endl;
     else
         std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
 }
@@ -112,14 +119,36 @@ void    Server::parser(char *buffer)
     }
 }
 
-
-// void Server::parser(char *buffer)
-// {
-//     if (buffer)
-//     {
-
-//     }
-// }
+void    Server::loop()
+{
+    int i = 0;
+    while (true)
+    {
+        /*
+        accepter demande de connexion client
+        client addr = pointeur vers structur ou accept rempli les info de la socket client
+        len = len de la struct
+        */
+        if (_clientSocket != -1)
+        {
+            //printf("New connection, Socket fd : %d, client fd : %d\n", server.getSocket(), server._clientSocket);
+            char buffer[1024];
+            i++;
+            ssize_t bytes_received = recv(_clientSocket, buffer, sizeof(buffer), 0);
+            buffer[bytes_received] = '\0';
+            // std::cout << buffer << std::endl;
+            //parser buffer et foutre dans client
+            parser(buffer);
+            const char *buf = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
+            if (i == 1)
+            {   
+                ssize_t j = send(_clientSocket, buf, strlen(buf), 0);
+                (void)j;
+            }
+            //bytes_received = 0;
+        }
+    }
+}
 
 Server::~Server()
 {
