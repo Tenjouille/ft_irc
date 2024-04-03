@@ -1,7 +1,6 @@
-#ifndef COMMAND_HPP
-# define COMMAND_HPP
+#pragma once
 
-# include "Server.hpp"
+#include "Server.hpp"
 
 class Command
 {
@@ -11,12 +10,10 @@ class Command
         std::string _options;
     public:
         Command(char *buffer);
-        std::string getName() const;
-        std::vector<std::string> getArgs() const;
-        std::string getOptions () const;
+        std::string                 getName() const;
+        std::vector<std::string>    getArgs() const;
+        std::string                 getOptions () const;
         //trouver et executer la bonne commande
         //cmd blabla * nb commande   
         ~Command();
 };
-
-#endif
