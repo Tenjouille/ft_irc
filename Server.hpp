@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <vector>
 #include <map>
+\
 #include "Client.hpp"
 
 class Server
@@ -22,7 +23,7 @@ class Server
         int                     _clientSocket;
         std::map<int, Client*>  _clients;
 //        std::vector<Client> _clientlst;
-        Client _client;
+        //Client _client;
     public:
         Server(char *port);
         // struct sockaddr     getClientAddr() const;
@@ -33,7 +34,6 @@ class Server
         void                nickCmd(std::string str);
         int                 getSocket() const;
         struct sockaddr_in  getServerAddress() const;
-        void                newClient(int socket, struct sockaddr client_addr);
         void                loop();
         ~Server();
 };

@@ -57,14 +57,11 @@ int Server::getClientSocket() const
 
 void Server::setClientSocket(int tmp)
 {
-    _clientSocket = tmp;
-
+    Client* client = new Client(); // Instancier un nouveau client
+    client->setSocket(tmp); // Définir le socket du nouveau client
+    _clients.insert(std::make_pair(tmp, client));
 }
 
-void    Server::newClient(int socket, struct sockaddr client_addr)
-{
-    _clients.insert(std::pair<int, Client*>(socket, new Client(client_addr)));
-}
 
 void    Server::loop()
 {
@@ -87,6 +84,7 @@ void    Server::loop()
             //parser buffer et foutre dans client
             parser(buffer);
             const char *buf = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
+            // std::string buf = ":localhost 001 " + _clients[_clientSocket]. :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
             if (i == 1)
             {   
                 ssize_t j = send(_clientSocket, buf, strlen(buf), 0);

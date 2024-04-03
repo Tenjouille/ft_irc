@@ -2,15 +2,16 @@
 
 Client::Client()
 {
-    std::cout << "New client" << std::endl;
+    std::cout << "2New client" << std::endl;
     _nickcount = 0;
 
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
 {
-    std::cout << "New client" << std::endl;
+    std::cout << "1New client" << std::endl;
 }
+
 std::string Client::getNickName() const
 {
     return _nickname;
