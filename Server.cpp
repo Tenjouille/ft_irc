@@ -58,7 +58,7 @@ int Server::getClientSocket() const
 void Server::setClientSocket(int tmp)
 {
     _clientSocket = tmp;
-    
+
 }
 
 void    Server::newClient(int socket, struct sockaddr client_addr)
@@ -73,11 +73,7 @@ void    Server::defineCmd(std::string cmd, int start, int it)
     locate.append(cmd, start, it - start);
     std::cout << locate << std::endl;
     if (locate.find("NICK") == 0)
-    {
         std::cout << "!!!NICK COMMAND!!!" << std::endl;
-
-        _clients[_clientSocket]->setNickName()
-    }
     else if (locate.find("USER") == 0)
         std::cout << "!!!USER COMMAND!!!" << std::endl;
     else if (locate.find("MODE") == 0)
