@@ -1,3 +1,4 @@
+#pragma once
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <iostream>
@@ -10,6 +11,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <vector>
+#include "Client.hpp"
 
 class Server
 {
@@ -20,6 +22,7 @@ class Server
         int _client_socket;
         std::vector<int> clientSockets_;
 //        std::vector<Client> _clientlst;
+        Client _client;
     public:
         Server(char *port);
         int getSocket() const;
@@ -28,5 +31,7 @@ class Server
         int getClientSocket() const;
         void setClientSocket(int tmp);
         void parser(char *buffer);
+        void defineCmd(std::string cmd, int start, int it);
+        void nickCmd(std::string str);
         ~Server();
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Server.hpp"
 
 class Command
