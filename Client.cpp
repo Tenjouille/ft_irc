@@ -2,9 +2,13 @@
 
 Client::Client()
 {
-
+    std::cout << "New client" << std::endl;
 }
 
+Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
+{
+    std::cout << "New client" << std::endl;
+}
 std::string Client::getNickName() const
 {
     return _nickname;
@@ -20,6 +24,10 @@ std::string Client::getName() const
     return _name;
 }
 
+struct sockaddr Client::getClientAddr() const
+{
+    return (_clientAddr);
+}
 // void Client::setNickName() const
 // {
 
