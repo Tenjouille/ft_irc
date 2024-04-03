@@ -83,3 +83,8 @@ void Client::setNickName(std::string str)
 
 Client::~Client()
 {}
+
+std::string Client::getPassword() const
+{
+    return _password;
+}

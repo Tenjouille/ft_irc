@@ -19,11 +19,13 @@ class Client
         std::string     _nickname;
         std::string     _username;
         std::string     _name;
+        std::string     _password;
         int             _socket;
         int             _nickcount;
 
     public:
         Client();
+        Client(std::string password);
         Client(struct sockaddr client_addr);
         std::string     getNickName() const;
         std::string     getUserName() const;
@@ -38,4 +40,6 @@ class Client
         // void            userCmd(std::string str);
         // void            joinCmd(std::string str);
         ~Client();
+
+        std::string getPassword() const;
 };

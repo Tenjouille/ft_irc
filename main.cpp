@@ -1,50 +1,55 @@
 #include "Server.hpp"
 
+bool    is_valid_password(std::string password)
+{
+    if (password.empty())
+    {
+        std::cout << "Password Cannot Be Empty." << std::endl;
+        return (false);
+    }
+    else if (password.length() < 5)
+    {
+        std::cout << "Password Needs To Be At Least 5 char long." << std::endl;
+        return (false);
+    }
+    else 
+    {
+        size_t i = 0;
+        while (i < password.length())
+        {
+            if (password[i] == ' ' || password[i] == '\n' || password[i] == '\r' || password[i] == '\t')
+            {
+                std::cout << "Forbidden Character in Password : '" << password[i] << "'." << std::endl;
+                return (false);
+            }
+            i++;
+        }
+    }
+    return (true);
+}
+
 int main(int ac, char **av)
 {
-    if (ac == 2)
+    if (ac == 3)
     {
         try
         {
-            Server server(av[1]);
+            std::string tmp_pass = av[2];
+            if (is_valid_password(tmp_pass) == false)
+            {
+                std::cout << "Invalid Password" << std::endl;
+                return (0);
+            }
+            std::cout << "Valide Password" << std::endl;
+
+            Server server(av);
             socklen_t client_addr_len = sizeof(struct sockaddr);
             struct sockaddr client_addr;
             int tmp = accept(server.getSocket(), (struct sockaddr *)&client_addr, &client_addr_len);
             std::cout << "C'est bon !" << std::endl;
             server.setClientSocket(tmp);
             server.loop();
-            // client.setSocket(tmp);
-          //  server.setClientSocket(tmp);
-            // bool sent = false;
-            // // int i = 0;
-            // while (true)
-            // {
-            //     /*
-            //     accepter demande de connexion client
-            //     client addr = pointeur vers structur ou accept rempli les info de la socket client
-            //     len = len de la struct
-            //     */
-            //     if (client.getSocket() != -1)
-            //     {
-            //         //printf("New connection, Socket fd : %d, client fd : %d\n", server.getSocket(), server.getClientSocket());
-            //         char buffer[1024];
-            //       //  i++;
-            //         ssize_t bytes_received = recv(client.getSocket(), buffer, sizeof(buffer), 0);
-            //         buffer[bytes_received] = '\0'; 
-            //             std::cout << buffer << std::endl;
-            //         //parser buffer et foutre dans client
-            //         server.parser(buffer);
-            //         const char *buf = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
-                    
-            //         if (sent == false)
-            //         {   
-            //             ssize_t j = send(server.getClientSocket(), buf, strlen(buf), 0);
-            //             (void)j;
-            //             sent = true;
-            //         }
-            //         //bytes_received = 0;
-            //     }
-            // }
+
         }
         catch(const std::exception& e)
         {
@@ -52,5 +57,5 @@ int main(int ac, char **av)
         }
     }
     else
-        std::cout << "Bad arguments number" << std::endl;
+        std::cout << "Error : Bad Usage\nTry : ./ft_irc <port> <password>" << std::endl;
 }

@@ -1,13 +1,18 @@
 #include "Server.hpp"
 
-Server::Server(char *av)
+Server::Server(char **av)
 {
+    // for (int i = 0; av[i] != NULL; i++)
+    //     std::cout << av[i] << std::endl;
     size_t i;
-    for(i = 0; isdigit(av[i]) != 0; i++)
+    for(i = 0; isdigit(av[1][i]) != 0; i++)
     {}
-    if (i == strlen(av))
+    if (i == strlen(av[1]))
     {
-        int port = atoi(av);
+        int port = atoi(av[1]);
+        //set le password du serveur
+        setServerPassword(av[2]);
+
         /*etablit une interface de communication entre le serveur et un client
         (renvoie un descripteur)
         AF_INET = domaine d'adresses, ici: IPv4
@@ -112,7 +117,10 @@ void    Server::defineCmd(std::string cmd, int start, int it)
     else if (locate.find("MODE") == 0)
         std::cout << "!!!MODE COMMAND!!!" << std::endl;
     else if (locate.find("PASS") == 0)
+    {
         std::cout << "!!!PASS COMMAND!!!" << std::endl;
+        passCmd(locate);
+    }
     else if (locate.find("JOIN") == 0)
         std::cout << "!!!JOIN COMMAND!!!" << std::endl;
     else if (locate.find("PRIVMSG") == 0)
@@ -164,4 +172,56 @@ void Server::nickCmd(std::string str)
 Server::~Server()
 {
     close(_socket);
+}
+
+void    Server::setServerPassword(std::string to_set)
+{
+    _server_password = to_set;
+}
+
+void    Server::passCmd(std::string cmd)
+{
+    std::cout << "CMD :: " << cmd << std::endl;
+    std::cout << "Password du serveur : " << getServerPassword() << std::endl;
+
+    std::string server_pass = getServerPassword();
+
+    //skip PASS
+    int i = 0;
+    while (cmd[i] != '\0' && cmd[i] != ' ')
+        i++;
+    i++;
+    //now at the start of the entered password
+    int start = i;
+    std::string from_client = &cmd[start];
+    std::cout << "TMP FROM STaRT : " << from_client << std::endl;
+    std::cout << "AFTER SKIPPING PASS COMMAND : '" << &cmd[start] << "'" << std::endl;
+    if (from_client.compare(server_pass) != 0)
+    {
+        std::cout << RED << "ERRROOOOOR NOT THE SAME PASSWORD !!!" << RESET << std::endl;
+        std::cout << RED << server_pass << " vs " << from_client << RESET << std::endl;
+        sendToClient("Erreur 464 :Password incorrect\n");
+        //close la connection du coup
+        return ;
+    }
+    else
+    {
+        //continue le processus de connection
+        std::cout << GREEN << "ALL GOOD SAME PASSWORD" << RESET << std::endl;
+    }
+}
+
+ssize_t Server::sendToClient(std::string to_send)
+{
+    //vide for now a remplir temporairement en attendant le nick et tout
+    std::cout << "CLIENT GETNAME VALUE : " << _client.getName() << std::endl;
+    std::string buffer = _client.getName() + to_send;
+
+    ssize_t j = send(getClientSocket(), buffer.c_str(), buffer.length(), 0);
+    return (j);
+}
+
+std::string Server::getServerPassword() const
+{
+    return _server_password;
 }
