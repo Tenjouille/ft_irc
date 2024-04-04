@@ -6,7 +6,6 @@ Command::Command(char *buffer)
     // getcommand( )
 }
 
-//
 
 std::string Command::getName() const
 {

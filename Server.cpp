@@ -10,33 +10,11 @@ Server::Server(char **av)
     if (i == strlen(av[1]))
     {
         int port = atoi(av[1]);
-        /*etablit une interface de communication entre le serveur et un client
-        (renvoie un descripteur)
-        AF_INET = domaine d'adresses, ici: IPv4
-        SOCK_STREAM = type de socket
-        0 = protocole a utiliser, 0 pcq on s en ballec, le systeme gere
-        */
         _socket = socket(AF_INET, SOCK_STREAM, 0);
-        //checker que socket renvoie pas - 1;
-        /*
-        _serverAddress contient les informations du serveur
-        sin.family specifie le type d'adresse
-        inet_addr specifie l'adresse  IP du serveur, ici localhost
-        sin.port specifie le port en format reseau
-        */
         _serverAddress.sin_family = AF_INET;
         _serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
         _serverAddress.sin_port = htons(port);
-        /*
-        bind lie la socket à l’addresse IP de mon ordi
-        */
         bind(_socket, (struct sockaddr*)&_serverAddress, sizeof(_serverAddress));
-        /*
-        listen ecoute via la socket pour détecter des demandes de connexion
-        5 est un entier qui represente le nb de connexions autorisees dans la file d attente (nb a changer)
-        */
-        //listen(_socket, 5);
-        //checker que ca renvoit pas -1
     }
     else
         std::cout << "invalid port format" << std::endl;
@@ -59,43 +37,10 @@ int Server::getClientSocket() const
 
 void Server::setClientSocket(int tmp)
 {
-    Client* client = new Client(); // Instancier un nouveau client
-    client->setSocket(tmp); // Définir le socket du nouveau client
+    Client* client = new Client();
+    client->setSocket(tmp);
     _clients.insert(std::make_pair(tmp, client));
 }
-
-
-// void    Server::loop()
-// {
-//     int i = 0;
-//     while (true)
-//     {
-//         /*
-//         accepter demande de connexion client
-//         client addr = pointeur vers structur ou accept rempli les info de la socket client
-//         len = len de la struct
-//         */
-//         if (_clientSocket != -1)
-//         {
-//             //printf("New connection, Socket fd : %d, client fd : %d\n", server.getSocket(), server._clientSocket);
-//             char buffer[1024];
-//             i++;
-//             ssize_t bytes_received = recv(_clientSocket, buffer, sizeof(buffer), 0);
-//             buffer[bytes_received] = '\0';
-//             // std::cout << buffer << std::endl;
-//             //parser buffer et foutre dans client
-//             parser(buffer);
-//             const char *buf = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
-//             // std::string buf = ":localhost 001 " + _clients[_clientSocket]. :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
-//             if (i == 1)
-//             {   
-//                 ssize_t j = send(_clientSocket, buf, strlen(buf), 0);
-//                 (void)j;
-//             }
-//             //bytes_received = 0;
-//         }
-//     }
-// }
 
 void Server::read_data_from_socket(int socket, fd_set *all_sockets, int fd_max, int server_socket)
 {
@@ -119,12 +64,10 @@ void Server::read_data_from_socket(int socket, fd_set *all_sockets, int fd_max, 
 void Server::accept_new_connection(int server_socket, fd_set *all_sockets, int *fd_max)
 {
     int client_fd;
-    ///char msg_to_send[1024];
-   // int status;
 
     client_fd = accept(server_socket, NULL, NULL);
-    setClientSocket(client_fd); //**
-    FD_SET(client_fd, all_sockets); // Ajoute la socket client à l'ensemble
+    setClientSocket(client_fd);
+    FD_SET(client_fd, all_sockets);
     if (client_fd > *fd_max)
     {
         *fd_max = client_fd;
@@ -147,21 +90,15 @@ void    Server::loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max)
         {
             if (FD_ISSET(i, &read_fds) != 1)
             {
-                // Le fd i n'est pas une socket à surveiller
-                // on s'arrête là et on continue la boucle
                 continue ;
             }
-            // La socket est prête à être lue !
             if (i == _socket)
             {
                 accept_new_connection(_socket, &all_sockets, &fd_max);
-                //rajoute un socket client a all socket
-
             }
             else
             {
                 read_data_from_socket(i, &all_sockets, fd_max, _socket);
-                //sinon on lit le socket
             }
         }
     }
@@ -169,14 +106,13 @@ void    Server::loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max)
 
 ssize_t Server::sendToClient(std::string to_send)
 {
-    //vide for now a remplir temporairement en attendant le nick et tout
-    // std::cout << "CLIENT GETNAME VALUE : " << _clients.getName() << std::endl;
-    // std::string buffer = _clients.getName() + to_send;
-    // std::map<int, Client>::iterator it = *(_clients.begin());
-    // std::cout << "MAP ICI : " << it->second << std::endl;
-//   for (std::map<int, Clients *>::iterator it = _clients.begin(); it != clients.end(); ++it)
-    // std::cout << it->first << " => " << it->second << '\n';
-
+    //  vide for now a remplir temporairement en attendant le nick et tout
+    //  std::cout << "CLIENT GETNAME VALUE : " << _clients.getName() << std::endl;
+    //  std::string buffer = _clients.getName() + to_send;
+    //  std::map<int, Client>::iterator it = *(_clients.begin());
+    //  std::cout << "MAP ICI : " << it->second << std::endl;
+    //  for (std::map<int, Clients *>::iterator it = _clients.begin(); it != clients.end(); ++it)
+    //  std::cout << it->first << " => " << it->second << '\n';
     ssize_t j = send(getClientSocket(), to_send.c_str(), to_send.length(), 0);
     return (j);
 }
