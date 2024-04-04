@@ -58,7 +58,7 @@ int Server::getClientSocket() const
 void Server::setClientSocket(int tmp)
 {
     _clientSocket = tmp;
-
+    // _clients.insert(std::pair<int, Client*>(tmp, new Client()));
 }
 
 void    Server::newClient(int socket, struct sockaddr client_addr)
@@ -86,12 +86,10 @@ void    Server::loop()
             // std::cout << buffer << std::endl;
             //parser buffer et foutre dans client
             parser(buffer);
-            const char *buf = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
+            std::string buf = ":localhost 001 tbourdea :Welcome to the Internet Relay Network tbourdea!tbourdea\r\n";
+            // std::string buf = ":localhost 001 " + _clients[_clientSocket]->getNickName() + " :Welcome to the Internet Relay Network " + _clients[_clientSocket]->getNickName() + "!" + _clients[_clientSocket]->getNickName() + "\r\n";
             if (i == 1)
-            {   
-                ssize_t j = send(_clientSocket, buf, strlen(buf), 0);
-                (void)j;
-            }
+                send(_clientSocket, buf.c_str(), strlen(buf.c_str()), 0);
             //bytes_received = 0;
         }
     }
@@ -105,7 +103,7 @@ void    Server::defineCmd(std::string cmd, int start, int it)
     if (locate.find("NICK") == 0)
     {
         std::cout << "!!!NICK COMMAND!!!" << std::endl;
-        nickCmd (locate);
+        // nickCmd (locate);
     }
     else if (locate.find("USER") == 0)
         std::cout << "!!!USER COMMAND!!!" << std::endl;
@@ -144,22 +142,22 @@ void    Server::parser(char *buffer)
     }
 }
 
-void Server::nickCmd(std::string str)
-{
-    std::string cmd = str.substr(str.find(' ') + 1);
-    std::cout << "cmd = '" << cmd << "'" << std::endl;
-    if (cmd.length() > 9)
-        printf("trop de char pour nick");
-    for (int i = 0; cmd[i]; i++)
-    {
-        if(!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
-        {
-            printf("nickname wrong input");
-        }
-    }
-    _client.setNickName(cmd);
-    std::cout << "client _name = '" << _client.getNickName() << "'" << std::endl;  
-}
+// void Server::nickCmd(std::string str)
+// {
+//     std::string cmd = str.substr(str.find(' ') + 1);
+//     std::cout << "cmd = '" << cmd << "'" << std::endl;
+//     if (cmd.length() > 9)
+//         printf("trop de char pour nick");
+//     for (int i = 0; cmd[i]; i++)
+//     {
+//         if(!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
+//         {
+//             printf("nickname wrong input");
+//         }
+//     }
+//     _clients[_clientSocket]->setNickName(cmd);
+//     std::cout << "client _name = '" << _clients[_clientSocket]->getNickName() << "'" << std::endl;  
+// }
 
 Server::~Server()
 {

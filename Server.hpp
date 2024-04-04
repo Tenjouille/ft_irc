@@ -22,7 +22,6 @@ class Server
         int                     _clientSocket;
         std::map<int, Client*>  _clients;
 //        std::vector<Client> _clientlst;
-        Client _client;
     public:
         Server(char *port);
         // struct sockaddr     getClientAddr() const;
