@@ -39,8 +39,10 @@ class Server
 		void				loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max);
 		void				read_data_from_socket(int socket, fd_set *all_sockets, int fd_max, int server_socket);
 		void				accept_new_connection(int server_socket, fd_set *all_sockets, int *fd_max);
-		void				loop();
-		~Server();
+		void				loop(); 
+        void                caplsCmd(std::string locate, int socket);
+
+        ~Server();
 
 		std::string getServerPassword() const;
 		void	passCmd(std::string cmd, int socket);

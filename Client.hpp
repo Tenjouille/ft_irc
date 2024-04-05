@@ -14,28 +14,30 @@
 
 class Client
 {
-	private:
-		struct sockaddr _clientAddr;
-		std::string	 _nickname;
-		std::string	 _username;
-		std::string	 _name;
-		int			 _socket;
-		int			 _nickcount;
-
-	public:
-		Client();
-		Client(struct sockaddr client_addr);
-		std::string	 getNickName() const;
-		std::string	 getUserName() const;
-		std::string	 getName() const;
-		struct sockaddr getClientAddr() const;
-		int			 getSocket() const;
-		void			setNickName(std::string str);
-		void			setUserName(std::string str);
-		// void			setName();
-		void			setSocket(int tmp);
-		// void			nickCmd(std::string str);
-		void			userCmd(std::string str);
-		// void			joinCmd(std::string str);
-		~Client();
+    private:
+        struct sockaddr _clientAddr;
+        std::string     _nickname;
+        std::string     _username;
+        std::string     _name;
+        int             _socket;
+        int             _nickcount;
+        int             _status;
+    public:
+        Client();
+        Client(struct sockaddr client_addr);
+        std::string     getNickName() const;
+        std::string     getUserName() const;
+        std::string     getName() const;
+        struct sockaddr getClientAddr() const;
+        int             getSocket() const;
+        void            setNickName(std::string str);
+        void            setStatus(int i);
+        int             getStatus();
+        void            setUserName(std::string str);
+        // void            setName();
+        void            setSocket(int tmp);
+        // void            nickCmd(std::string str);
+        // void            userCmd(std::string str);
+        // void            joinCmd(std::string str);
+        ~Client();
 };

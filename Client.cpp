@@ -60,6 +60,20 @@ void Client::setUserName(std::string str)
     std::cout << "USERNAME = " << _username << std::endl;
 }
 
+void    Client::setStatus(int i)
+{
+    _status += i;
+}
+
+int     Client::getStatus()
+{
+    return _status;
+}
+// void Client::setUserName() const
+// {
+
+// }
+
 // void Client::setName() const
 // {
 

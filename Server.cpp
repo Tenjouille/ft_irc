@@ -79,7 +79,10 @@ void	Server::accept_new_connection(int server_socket, fd_set *all_sockets, int *
 	FD_SET(client_fd, all_sockets);
 	if (client_fd > *fd_max)
 		*fd_max = client_fd;
+		 std::string s = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
+		size_t j = send(getClientSocket(client_fd), s.c_str(), s.length(), 0);
    // sendToClient("Erreur 464 :Password incorrect\r\n", socket);
+	(void) j;
 } 
 
 
@@ -111,14 +114,19 @@ ssize_t	Server::sendToClient(std::string to_send, int socket)
 	// j = 0;
 	// if (_flag == 0)
 	// {
-	//	 std::string s = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
-	//	 j = send(getClientSocket(socket), s.c_str(), s.length(), 0);
+	
 	//	 _flag = 1;
 	// }
 	return (j);
 }
 
-void	Server::defineCmd(std::string cmd, int start, int it, int socket)
+void    Server::caplsCmd(std::string locate, int socket)
+{
+    (void)locate;
+    sendToClient("CAP_ACK LS\r\n", socket);
+}
+
+void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 {
 	std::string locate;
 
