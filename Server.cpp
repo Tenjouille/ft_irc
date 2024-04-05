@@ -3,10 +3,11 @@
 Server::Server(char **av)
 {
     size_t i;
+    _flag = 0;
     for(i = 0; isdigit(av[1][i]) != 0; i++)
-    {}
+        continue ;
     _password = av[2];
-    std::cout << "Password Stocke : " << _password << std::endl;
+ //   std::cout << "Password Stocke : " << _password << std::endl;
     if (i == strlen(av[1]))
     {
         int port = atoi(av[1]);
@@ -30,9 +31,17 @@ struct sockaddr_in Server::getServerAddress() const
     return _serverAddress;
 }
 
-int Server::getClientSocket() const
+int Server::getClientSocket(int socket) const
 {
-    return _clientSocket;
+    std::map<int, Client*>::const_iterator it = _clients.find(socket);
+    if (it != _clients.end())
+    {
+        return it->second->getSocket();
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 void Server::setClientSocket(int tmp)
@@ -50,15 +59,15 @@ void Server::read_data_from_socket(int socket, fd_set *all_sockets, int fd_max, 
     int status;
 
     bytes_read = recv(socket, buffer, BUFSIZ, 0);
-    std::cout << "BUFFER COMPLET : " << buffer << std::endl;
     for (int j = 0; j <= fd_max; j++)
     {
         if (FD_ISSET(j, all_sockets) && j != server_socket && j != socket)
         {
+            //send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
             status = send(j, msg_to_send, strlen(msg_to_send), 0);
         }
     }
-    parser(buffer);
+    parser(buffer, socket);
 }
 
 void Server::accept_new_connection(int server_socket, fd_set *all_sockets, int *fd_max)
@@ -69,10 +78,8 @@ void Server::accept_new_connection(int server_socket, fd_set *all_sockets, int *
     setClientSocket(client_fd);
     FD_SET(client_fd, all_sockets);
     if (client_fd > *fd_max)
-    {
         *fd_max = client_fd;
-    }
-    sendToClient("Erreur 464 :Password incorrect\n");
+   // sendToClient("Erreur 464 :Password incorrect\r\n", socket);
 } 
 
 
@@ -89,35 +96,29 @@ void    Server::loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max)
         for (int i = 0; i <= fd_max; i++)
         {
             if (FD_ISSET(i, &read_fds) != 1)
-            {
                 continue ;
-            }
             if (i == _socket)
-            {
                 accept_new_connection(_socket, &all_sockets, &fd_max);
-            }
             else
-            {
                 read_data_from_socket(i, &all_sockets, fd_max, _socket);
-            }
         }
     }
 }
 
-ssize_t Server::sendToClient(std::string to_send)
+ssize_t Server::sendToClient(std::string to_send, int socket)
 {
-    //  vide for now a remplir temporairement en attendant le nick et tout
-    //  std::cout << "CLIENT GETNAME VALUE : " << _clients.getName() << std::endl;
-    //  std::string buffer = _clients.getName() + to_send;
-    //  std::map<int, Client>::iterator it = *(_clients.begin());
-    //  std::cout << "MAP ICI : " << it->second << std::endl;
-    //  for (std::map<int, Clients *>::iterator it = _clients.begin(); it != clients.end(); ++it)
-    //  std::cout << it->first << " => " << it->second << '\n';
-    ssize_t j = send(getClientSocket(), to_send.c_str(), to_send.length(), 0);
+    ssize_t j = send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
+    // j = 0;
+    // if (_flag == 0)
+    // {
+    //     std::string s = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
+    //     j = send(getClientSocket(socket), s.c_str(), s.length(), 0);
+    //     _flag = 1;
+    // }
     return (j);
 }
 
-void    Server::defineCmd(std::string cmd, int start, int it)
+void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 {
     std::string locate;
 
@@ -125,7 +126,7 @@ void    Server::defineCmd(std::string cmd, int start, int it)
     if (locate.find("NICK") == 0)
     {
         std::cout << "!!!NICK COMMAND!!!" << std::endl;
-     //   nickCmd (locate);
+        nickCmd (locate, socket);
     }
     else if (locate.find("USER") == 0)
         std::cout << "!!!USER COMMAND!!!" << std::endl;
@@ -134,7 +135,7 @@ void    Server::defineCmd(std::string cmd, int start, int it)
     else if (locate.find("PASS") == 0)
     {
         std::cout << "!!!PASS COMMAND!!!" << std::endl;
-        passCmd(locate);
+        passCmd(locate, socket);
     }
     else if (locate.find("JOIN") == 0)
         std::cout << "!!!JOIN COMMAND!!!" << std::endl;
@@ -157,39 +158,25 @@ std::string Server::getServerPassword() const
     return _password;
 }
 
-void    Server::passCmd(std::string cmd)
+void    Server::passCmd(std::string cmd, int socket)
 {
-    std::cout << "CMD :: " << cmd << std::endl;
-    std::cout << "Password du serveur : " << getServerPassword() << std::endl;
-
     std::string server_pass = getServerPassword();
-
-    //skip PASS
     int i = 0;
     while (cmd[i] != '\0' && cmd[i] != ' ')
         i++;
     i++;
-    //now at the start of the entered password
     int start = i;
     std::string from_client = &cmd[start];
-    std::cout << "TMP FROM STaRT : " << from_client << std::endl;
-    std::cout << "AFTER SKIPPING PASS COMMAND : '" << &cmd[start] << "'" << std::endl;
     if (from_client.compare(server_pass) != 0)
     {
-        std::cout << "ERRROOOOOR NOT THE SAME PASSWORD !!!" << std::endl;
-        std::cout << server_pass << " vs " << from_client << std::endl;
-        sendToClient("Erreur 464 :Password incorrect\n");
-        //close la connection du coup
+        sendToClient("uaupetit :Password incorrect\r\n", socket);
         return ;
     }
     else
-    {
-        //continue le processus de connection
         std::cout << "ALL GOOD SAME PASSWORD" << std::endl;
-    }
 }
 
-void    Server::parser(char *buffer)
+void    Server::parser(char *buffer, int socket)
 {
     std::string cmd = buffer;
     int start = 0;
@@ -197,29 +184,40 @@ void    Server::parser(char *buffer)
     {
         if (cmd[i] == '\r' && cmd[i + 1] == '\n')
         {
-            defineCmd(cmd, start, i);
+            defineCmd(cmd, start, i, socket);
             i += 2;
             start = i;
         }
     }
 }
 
-// void Server::nickCmd(std::string str)
-// {
-//     std::string cmd = str.substr(str.find(' ') + 1);
-//     std::cout << "cmd = '" << cmd << "'" << std::endl;
-//     if (cmd.length() > 9)
-//         printf("trop de char pour nick");
-//     for (int i = 0; cmd[i]; i++)
-//     {
-//         if(!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
-//         {
-//             printf("nickname wrong input");
-//         }
-//     }
-//     _client.setNickName(cmd);
-//     std::cout << "client _name = '" << _client.getNickName() << "'" << std::endl;  
-// }
+void Server::nickCmd(std::string str, int socket)
+{
+    std::string cmd = str.substr(str.find(' ') + 1);
+    
+    if (cmd.length() > 9)
+    {
+        printf("trop de char pour nick");
+        return;
+    }
+    
+    for (int i = 0; cmd[i]; i++)
+    {
+        if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
+        {
+            printf("nickname wrong input");
+            return;
+        }
+    }
+    
+    std::map<int, Client*>::iterator it = _clients.find(socket);
+    if (it != _clients.end())
+    {
+        it->second->setNickName(cmd);
+    }
+    else
+        std::cerr << "Client not found for socket: " << socket << std::endl;
+}
 
 Server::~Server()
 {

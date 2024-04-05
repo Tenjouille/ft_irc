@@ -13,7 +13,5 @@ class Command
         std::string                 getName() const;
         std::vector<std::string>    getArgs() const;
         std::string                 getOptions () const;
-        //trouver et executer la bonne commande
-        //cmd blabla * nb commande   
         ~Command();
 };

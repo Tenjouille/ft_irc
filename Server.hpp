@@ -22,16 +22,17 @@ class Server
         int                     _clientSocket;
         std::map<int, Client*>  _clients;
         std::string             _password;
+        int _flag;
 //        std::vector<Client> _clientlst;
         //Client _client;
     public:
         Server(char **arguments);
         // struct sockaddr     getClientAddr() const;
-        int                 getClientSocket() const;
+        int                 getClientSocket(int socket) const;
         void                setClientSocket(int tmp);
-        void                parser(char *buffer);
-        void                defineCmd(std::string cmd, int start, int it);
-        void                nickCmd(std::string str);
+        void                parser(char *buffer, int socket);
+        void                defineCmd(std::string cmd, int start, int it, int socket);
+        void                nickCmd(std::string str, int socket);
         int                 getSocket() const;
         struct sockaddr_in  getServerAddress() const;
         void                loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max);
@@ -41,7 +42,7 @@ class Server
         ~Server();
 
         std::string getServerPassword() const;
-        void    passCmd(std::string cmd);
-        ssize_t sendToClient(std::string to_send);
+        void    passCmd(std::string cmd, int socket);
+        ssize_t sendToClient(std::string to_send, int socket);
 
 };

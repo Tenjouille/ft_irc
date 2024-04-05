@@ -2,8 +2,6 @@
 
 Command::Command(char *buffer)
 {
-    //parsing
-    // getcommand( )
 }
 
 
@@ -23,6 +21,4 @@ std::string Command::getOptions () const
 }
 
 Command::~Command()
-{
-
-}
+{}
