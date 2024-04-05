@@ -55,6 +55,15 @@ void Client::setNickName(std::string str)
     _nickname = str;
 }
 
+void    Client::setStatus(int i)
+{
+    _status += i;
+}
+
+int     Client::getStatus()
+{
+    return _status;
+}
 // void Client::setUserName() const
 // {
 

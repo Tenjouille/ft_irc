@@ -118,6 +118,12 @@ ssize_t Server::sendToClient(std::string to_send, int socket)
     return (j);
 }
 
+void    Server::caplsCmd(std::string locate, int socket)
+{
+    (void)locate;
+    sendToClient("CAP_ACK LS\r\n", socket);
+}
+
 void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 {
     std::string locate;
@@ -136,6 +142,11 @@ void    Server::defineCmd(std::string cmd, int start, int it, int socket)
     {
         std::cout << "!!!PASS COMMAND!!!" << std::endl;
         passCmd(locate, socket);
+    }
+    else if (locate.find("CAP LS") == 0)
+    {
+        std::cout << "!!!CAP LS!!!" << std::endl;
+        caplsCmd(locate, socket);
     }
     else if (locate.find("JOIN") == 0)
         std::cout << "!!!JOIN COMMAND!!!" << std::endl;
@@ -214,6 +225,7 @@ void Server::nickCmd(std::string str, int socket)
     if (it != _clients.end())
     {
         it->second->setNickName(cmd);
+       // std::cout << "client _name = '" << it->second->getNickName() << "'" << std::endl;
     }
     else
         std::cerr << "Client not found for socket: " << socket << std::endl;

@@ -21,7 +21,7 @@ class Client
         std::string     _name;
         int             _socket;
         int             _nickcount;
-
+        int             _status;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -31,6 +31,8 @@ class Client
         struct sockaddr getClientAddr() const;
         int             getSocket() const;
         void            setNickName(std::string str);
+        void            setStatus(int i);
+        int             getStatus();
         // void            setUserName();
         // void            setName();
         void            setSocket(int tmp);
