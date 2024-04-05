@@ -60,14 +60,14 @@ void Client::setUserName(std::string str)
     std::cout << "USERNAME = " << _username << std::endl;
 }
 
-void    Client::setStatus(int i)
+void    Client::updateStatus()
 {
-    _status += i;
+    _connection_status++;
 }
 
 int     Client::getStatus()
 {
-    return _status;
+    return _connection_status;
 }
 // void Client::setUserName() const
 // {

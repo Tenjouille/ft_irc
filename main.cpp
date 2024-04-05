@@ -18,7 +18,7 @@ int main(int ac, char **av)
 			FD_ZERO(&read_fds);
 			FD_SET(server.getSocket(), &all_sockets); // Ajout de la socket principale à l'ensemble
 			fd_max = server.getSocket(); // Le descripteur le plus grand est forcément celui de notre seule socket
-			server.loop_bis(all_sockets, read_fds, fd_max);
+			server.loop(all_sockets, read_fds, fd_max);
 		}
 		catch(const std::exception& e)
 		{

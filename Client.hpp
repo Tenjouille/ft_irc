@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <iostream>
@@ -11,6 +13,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <vector>
+#include "Communication.hpp"
 
 class Client
 {
@@ -21,7 +24,7 @@ class Client
         std::string     _name;
         int             _socket;
         int             _nickcount;
-        int             _status;
+        int             _connection_status;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -31,7 +34,7 @@ class Client
         struct sockaddr getClientAddr() const;
         int             getSocket() const;
         void            setNickName(std::string str);
-        void            setStatus(int i);
+        void            updateStatus();
         int             getStatus();
         void            setUserName(std::string str);
         // void            setName();
@@ -41,3 +44,5 @@ class Client
         // void            joinCmd(std::string str);
         ~Client();
 };
+
+#endif

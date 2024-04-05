@@ -4,8 +4,8 @@ CXX = c++
 CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g
 
 DEPS = ${OBJS:.o=.d}
-INC = Server.hpp Client.hpp
-SRCS = main.cpp Server.cpp Client.cpp
+INC = Server.hpp Client.hpp Communication.hpp
+SRCS = main.cpp Server.cpp Client.cpp Communication.cpp
 		
 OBJS_PATH = ./objs
 OBJS_NAMES = $(SRCS:.cpp=.o)

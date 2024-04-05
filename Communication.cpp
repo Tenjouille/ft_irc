@@ -22,45 +22,45 @@ size_t	replyClient(std::string Macros, int socket)
 - Se connecter avec "nc localhost <port>"
 - Si tout marche bien les messages apparaissent sur le client
 */
-int	main(int ac, char **av)
-{
-	(void) ac;
+// int	main(int ac, char **av)
+// {
+// 	(void) ac;
 
-	// VARIABLES
-	std::string servername = "localhost";
-	std::string username = "vgoret";
-	std::string nickname = "le_v";
+// 	// VARIABLES
+// 	std::string servername = "localhost";
+// 	std::string username = "vgoret";
+// 	std::string nickname = "le_v";
 
-	struct sockaddr_in	serverAddress;
-	int port = atoi(av[1]);
-	int	_socket = socket(AF_INET, SOCK_STREAM, 0);
-    serverAddress.sin_family = AF_INET;
-	serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
-    serverAddress.sin_port = htons(port);
-    bind(_socket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+// 	struct sockaddr_in	serverAddress;
+// 	int port = atoi(av[1]);
+// 	int	_socket = socket(AF_INET, SOCK_STREAM, 0);
+//     serverAddress.sin_family = AF_INET;
+// 	serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
+//     serverAddress.sin_port = htons(port);
+//     bind(_socket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
 	
-	// TESTING
-	std::cout << WELCOME_MSG(servername, username, nickname) << std::endl;
-	std::cout << ERROR_INVPASS(username) << std::endl;
+// 	// TESTING
+// 	std::cout << WELCOME_MSG(servername, username, nickname) << std::endl;
+// 	std::cout << ERROR_INVPASS(username) << std::endl;
 
-	// Après la création du socket et le bind, ajoutez la ligne suivante pour configurer le socket à écouter les connexions entrantes
-	listen(_socket, SOMAXCONN);
+// 	// Après la création du socket et le bind, ajoutez la ligne suivante pour configurer le socket à écouter les connexions entrantes
+// 	listen(_socket, SOMAXCONN);
 
-	// Accepter les connexions entrantes
-	int clientSocket = accept(_socket, NULL, NULL);
-	if (clientSocket < 0) {
-	    std::cerr << "Error accepting connection" << std::endl;
-	    close(_socket); // Fermer le socket serveur en cas d'erreur
-	    return 1;
-	}
+// 	// Accepter les connexions entrantes
+// 	int clientSocket = accept(_socket, NULL, NULL);
+// 	if (clientSocket < 0) {
+// 	    std::cerr << "Error accepting connection" << std::endl;
+// 	    close(_socket); // Fermer le socket serveur en cas d'erreur
+// 	    return 1;
+// 	}
 
-	// Ensuite, vous pouvez envoyer les messages au client connecté
-	replyClient(WELCOME_MSG(servername, username, nickname), clientSocket);
-	replyClient(ERROR_INVPASS(username), clientSocket);
+// 	// Ensuite, vous pouvez envoyer les messages au client connecté
+// 	replyClient(WELCOME_MSG(servername, username, nickname), clientSocket);
+// 	replyClient(ERROR_INVPASS(username), clientSocket);
 
-	// N'oubliez pas de fermer les sockets après avoir terminé
-	close(clientSocket);
-	close(_socket);
+// 	// N'oubliez pas de fermer les sockets après avoir terminé
+// 	close(clientSocket);
+// 	close(_socket);
 
-	return (0);
-}
+// 	return (0);
+// }

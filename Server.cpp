@@ -3,7 +3,7 @@
 Server::Server(char **av)
 {
 	size_t i;
-	_flag = 0;
+	_status = 0;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -44,6 +44,19 @@ int	Server::getClientSocket(int socket) const
 	}
 }
 
+Client*	Server::getClient(int socket) const
+{
+	std::map<int, Client*>::const_iterator it = _clients.find(socket);
+	if (it != _clients.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void	Server::setClientSocket(int tmp)
 {
 	Client* client = new Client();
@@ -79,14 +92,10 @@ void	Server::accept_new_connection(int server_socket, fd_set *all_sockets, int *
 	FD_SET(client_fd, all_sockets);
 	if (client_fd > *fd_max)
 		*fd_max = client_fd;
-		 std::string s = ":localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit\r\n";
-		size_t j = send(getClientSocket(client_fd), s.c_str(), s.length(), 0);
-   // sendToClient("Erreur 464 :Password incorrect\r\n", socket);
-	(void) j;
 } 
 
 
-void	Server::loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max)
+void	Server::loop(fd_set all_sockets, fd_set read_fds, int fd_max)
 {
 	struct timeval timer;
 	int status;
@@ -108,22 +117,13 @@ void	Server::loop_bis(fd_set all_sockets, fd_set read_fds, int fd_max)
 	}
 }
 
-ssize_t	Server::sendToClient(std::string to_send, int socket)
-{
-	ssize_t j = send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
-	// j = 0;
-	// if (_flag == 0)
-	// {
-	
-	//	 _flag = 1;
-	// }
-	return (j);
-}
-
 void    Server::caplsCmd(std::string locate, int socket)
 {
     (void)locate;
-    sendToClient("CAP_ACK LS\r\n", socket);
+    if (replyClient(CAP_LS, socket) != static_cast<size_t>(-1))
+	{
+		getClient(socket)->updateStatus();
+	}
 }
 
 void    Server::defineCmd(std::string cmd, int start, int it, int socket)
@@ -135,6 +135,11 @@ void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 	{
 		std::cout << "!!!NICK COMMAND!!!" << std::endl;
 		nickCmd (locate, socket);
+	}
+	else if (locate.find("CAP LS") == 0)
+	{
+		std::cout << "!!!CAP LS COMMAND!!!" << std::endl;
+		caplsCmd(locate, socket);
 	}
 	else if (locate.find("USER") == 0)
     {
@@ -180,11 +185,13 @@ void	Server::passCmd(std::string cmd, int socket)
 	std::string from_client = &cmd[start];
 	if (from_client.compare(server_pass) != 0)
 	{
-		sendToClient("uaupetit :Password incorrect\r\n", socket);
+		std::string username = getClient(socket)->getUserName();
+		replyClient(ERROR_INVPASS(username), socket);
 		return ;
 	}
 	else
 		std::cout << "ALL GOOD SAME PASSWORD" << std::endl;
+	getClient(socket)->updateStatus();
 }
 
 void	Server::parser(char *buffer, int socket)
@@ -220,11 +227,13 @@ void	Server::nickCmd(std::string str, int socket)
 			return;
 		}
 	}
-	
+
 	std::map<int, Client*>::iterator it = _clients.find(socket);
 	if (it != _clients.end())
 	{
 		it->second->setNickName(cmd);
+		// Attention a si meme nickname ya PROBLEMES ou si user essaye de changer de nickname
+		it->second->updateStatus(); //status = 3
 	}
 	else
 		std::cerr << "Client not found for socket: " << socket << std::endl;
@@ -249,7 +258,17 @@ void	Server::userCmd(std::string str, int socket)
 	}
 	std::map<int, Client*>::iterator it = _clients.find(socket);
 	if (it != _clients.end())
+	{
 		it->second->setUserName(cmd);
+		it->second->updateStatus();
+		if (it->second->getStatus() == 4)
+		{
+			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
+			std::string username = it->second->getUserName();
+			std::string nickname = it->second->getNickName();
+			replyClient(WELCOME_MSG(server_name, username, nickname), socket);
+		}
+	}
 	else
 		std::cerr << "Client not found for socket: " << socket << std::endl;
 }
