@@ -1,14 +1,6 @@
--Implementer classe client
--vector de client dans server
--classe channel et commande
--commande, pointeur sur fonction
--recuperer et stocker nickname etc
 
-nick
-cap ls
-user
 mode i t k o l
-pass
+ping pong
 join
 privmsg
 msg

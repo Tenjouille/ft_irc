@@ -8,17 +8,14 @@ int main(int ac, char **av)
 		{
 			int status;
 			Server server(av);
-			fd_set all_sockets; // Ensemble de toutes les sockets du serveur
-			fd_set read_fds;	// Ensemble temporaire pour select()
-			int fd_max;		 // Descripteur de la plus grande socket
 		   // struct timeval timer;
 			status = listen(server.getSocket(), 10);
 			// Préparation des ensembles de sockets pour select()
-			FD_ZERO(&all_sockets);
-			FD_ZERO(&read_fds);
-			FD_SET(server.getSocket(), &all_sockets); // Ajout de la socket principale à l'ensemble
-			fd_max = server.getSocket(); // Le descripteur le plus grand est forcément celui de notre seule socket
-			server.loop(all_sockets, read_fds, fd_max);
+			FD_ZERO(&server.getallSockets());
+			FD_ZERO(&server.getreadFds());
+			FD_SET(server.getSocket(), &server.getallSockets()); // Ajout de la socket principale à l'ensemble
+			server.setfdMax(server.getSocket()); // Le descripteur le plus grand est forcément celui de notre seule socket
+			server.loop();
 		}
 		catch(const std::exception& e)
 		{

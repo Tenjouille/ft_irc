@@ -1,18 +1,18 @@
 #include "Communication.hpp"
 
-size_t	replyClient(std::string Macros, int socket)
+size_t  replyClient(std::string Macros, int socket)
 {
 	size_t bytes_sent = 0;
 
-	std::cout << "before" << std::endl;
+//	std::cout << "before" << std::endl;
 	bytes_sent = send(socket, Macros.c_str(), Macros.size(), 0);
 	if (bytes_sent == static_cast<size_t>(-1))
 	{
 		std::cout << "Something went wrong !" << std::endl;
 		return (bytes_sent);
 	}
-	std::cout << "SENT : \"" << Macros << "\"" << std::endl;
-	std::cout << "of size : " << static_cast<int>(bytes_sent) << " (" << bytes_sent << ")" <<std::endl;
+//	std::cout << "SENT : \"" << Macros << "\"" << std::endl;
+//	std::cout << "of size : " << static_cast<int>(bytes_sent) << " (" << bytes_sent << ")" <<std::endl;
 	return (bytes_sent);
 }
 

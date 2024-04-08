@@ -51,13 +51,13 @@ int Client::getSocket() const
 void Client::setNickName(std::string str)
 {
 	_nickname = str;
-    std::cout << "NICKNAME = " << _nickname << std::endl;
+  ////  std::cout << "NICKNAME = " << _nickname << std::endl;
 }
 
 void Client::setUserName(std::string str)
 {
     _username = str;
-    std::cout << "USERNAME = " << _username << std::endl;
+   // std::cout << "USERNAME = " << _username << std::endl;
 }
 
 void    Client::updateStatus()

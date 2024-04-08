@@ -17,10 +17,10 @@
 
 // OTHER
 
-
+size_t	replyClient(std::string Macros, int socket);
 
 // ## FUNCTIONS ## //
-size_t replyClient(std::string MACROS, int socket);
+// size_t replyClient(std::string MACROS, int socket);
 
 
 #endif
