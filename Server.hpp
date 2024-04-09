@@ -57,6 +57,9 @@ class Server
 		// struct sockaddr	 getClientAddr() const;
 		std::string getServerPassword() const;
 
+		std::string getUsernameFormNick(std::string to_parse);
+
+
 		//SETTERS
 		void				setClientSocket(int tmp);
 
@@ -66,7 +69,7 @@ class Server
 		void				defineCmd(std::string cmd, int start, int it, int socket);
 		void				userCmd(std::string str, int socket);
 		void				nickCmd(std::string str, int socket);
-		void	passCmd(std::string cmd, int socket);
+		void	passCmd(std::string to_parse, std::string cmd, int socket);
 		void 	joinCmd(std::string locate, int socket);
 		ssize_t sendToClient(std::string to_send, int socket);
 
@@ -78,6 +81,9 @@ class Server
 		void	delClient(int socket);
 
         ~Server();
+
+	bool	checkNickName(std::string to_check, int socket);
+
 
 };
 

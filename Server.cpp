@@ -74,6 +74,8 @@ void	Server::read_data_from_socket(int socket)
 	bytes_read = recv(socket, buffer, BUFSIZ, 0);
 	buffer[bytes_read] = '\0';
 	std::cout << RED << "'" << buffer << "'" << std::endl;
+	if (buffer[0] == '\0')
+		return ;
 	for (int j = 0; j <= _fdMax; j++)
 	{
 		if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
@@ -164,15 +166,15 @@ void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 	}
 	else if (locate.find("USER") == 0)
     {
-        userCmd(locate, socket);
 		std::cout << WHITE << "passe dans la fonction user" << std::endl;
+        userCmd(locate, socket);
     }
     // else if (locate.find("MODE") == 0)
 	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 	else if (locate.find("PASS") == 0)
 	{
 		std::cout << WHITE << "passe dans la fonction pass" << std::endl;
-		passCmd(locate, socket);
+		passCmd(cmd, locate, socket);
 	}
 	else if (locate.find("JOIN") == 0)
 	{
@@ -210,7 +212,32 @@ std::string	Server::getServerPassword() const
 	return _password;
 }
 
-void	Server::passCmd(std::string cmd, int socket)
+std::string Server::getUsernameFormNick(std::string to_parse)
+{
+	std::cout << "TO PARSE : '" << to_parse << "'" << std::endl;
+	std::string tmp_name = to_parse;
+
+	size_t pos = tmp_name.find("NICK ");
+	if (pos != std::string::npos)
+	{
+		pos += 5;
+		std::string name;
+
+		while (pos < tmp_name.size() && tmp_name[pos] != '\r' && tmp_name[pos] != '\n')
+		{
+			name += tmp_name[pos];
+			pos++;
+		}
+		return (name);
+	}
+	else
+	{
+		std::cout << "COULDNT FIND IN THE BUFFER" << std::endl;
+		return NULL;
+	}
+}
+
+void	Server::passCmd(std::string to_parse, std::string cmd, int socket)
 {
 	std::string server_pass = getServerPassword();
 	int i = 0;
@@ -221,7 +248,8 @@ void	Server::passCmd(std::string cmd, int socket)
 	std::string from_client = &cmd[start];
 	if (from_client.compare(server_pass) != 0)
 	{
-		std::string username = getClient(socket)->getUserName();
+		std::string username = getUsernameFormNick(to_parse);
+		std::cout << "Sending Username : " << username << std::endl;
 		replyClient(ERROR_INVPASS(username), socket);
 		return ;
 	}
@@ -246,6 +274,30 @@ void	Server::parser(char *buffer, int socket)
 	}
 }
 
+bool	Server::checkNickName(std::string to_check, int socket)
+{
+	std::string tmp_name;
+	(void) socket;
+	
+	std::map<int, Client*>::iterator it = _clients.begin();
+	int i = 0;
+	while (it != _clients.end())
+	{
+		tmp_name = it->second->getNickName();
+		//peut etre check la socket aussi pour s'assurer qu'on compare
+		//pas avec lui meme ?
+		if (to_check == tmp_name && i != 0)
+		{
+			std::cout << RED << "COMPARING : " << to_check << " ET " << tmp_name << RESET << std::endl;
+			// std::cout << RED << NICKNAMEINUSE_ERR(test) << std::endl;
+			return (false);
+		}
+		++it;
+		i++;
+	}
+	return (true);
+}
+
 void	Server::nickCmd(std::string str, int socket)
 {
 	std::string cmd = str.substr(str.find(' ') + 1);
@@ -257,7 +309,7 @@ void	Server::nickCmd(std::string str, int socket)
 	}	
 	for (int i = 0; cmd[i]; i++)
 	{
-		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
+		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9') || cmd[i] == '_'))
 		{
 			printf("nickname wrong input");
 			return;
@@ -266,9 +318,30 @@ void	Server::nickCmd(std::string str, int socket)
 	std::map<int, Client*>::iterator it = _clients.find(socket);
 	if (it != _clients.end())
 	{
-		it->second->setNickName(cmd);
+		//std::cout << YELLOW << "cmd = '" << it->second->getNickName() << "'" << std::endl; 
 		// Attention a si meme nickname ya PROBLEMES ou si user essaye de changer de nickname
-		it->second->updateStatus(); //status = 3
+		std::string nickname = cmd;
+		if (checkNickName(nickname, socket) == false)
+		{
+			replyClient(NICKNAMEINUSE_ERR(nickname), socket);
+		}
+		else
+		{
+			it->second->setNickName(cmd);
+			std::cout << BLUE << "Set : " << cmd << RESET << std::endl;
+			it->second->updateStatus();
+			std::cout << GREEN << "UPDATING :" << it->second->getStatus() << RESET << std::endl;
+		}
+		if (it->second->getStatus() >= 4)
+		{
+			std::cout << BLUE << "SETTING : " << cmd << RESET << std::endl;
+			it->second->setNickName(cmd);
+			std::cout << it->second->getNickName() << std::endl;
+			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
+			std::string username = it->second->getUserName();
+			std::string nickname = it->second->getNickName();
+			replyClient(WELCOME_MSG(server_name, username, nickname), socket);
+		}
 	}
 	else
 		std::cerr << RED << "Client not found for socket: " << socket << std::endl;
@@ -301,7 +374,18 @@ void	Server::userCmd(std::string str, int socket)
 			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
 			std::string username = it->second->getUserName();
 			std::string nickname = it->second->getNickName();
+			if (checkNickName(nickname, socket) == false)
+			{
+				std::string tmp_username = it->second->getUserName();
+				replyClient(NICKNAMEINUSE_ERR(tmp_username), socket);
+			}
 			replyClient(WELCOME_MSG(server_name, username, nickname), socket);
+			std::cout << "sent machin" << std::endl;
+		}
+		else
+		{
+			std::cout << "SETUP UsERNAME ET STATUS UPDATED" << std::endl;
+			return ;
 		}
 	}
 	else
