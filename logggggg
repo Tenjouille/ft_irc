@@ -1,0 +1,10 @@
+<< CAP LS
+<< PASS mdp
+<< NICK tenj
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> :localhost 001 tenj :Welcome to the Internet Relay Network tenj!uaupetit
+<< MODE tenj +i
+<< PING localhost
+>> °δό:victor!localhost PRIVMSG tenj :bonjour le sang
+<< QUIT :Lost terminal

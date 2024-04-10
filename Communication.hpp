@@ -16,6 +16,8 @@
 
 // ERRORS //
 #define ERROR_INVPASS(username) (username + " :Password incorrect\r\n")
+#define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use.")
+
 
 // OTHER
 
