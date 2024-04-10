@@ -4,10 +4,10 @@ int main(int ac, char **av)
 {
 	if (ac == 3)
 	{
+		Server server(av);
 		try
 		{
 			int status;
-			Server server(av);
 		   // struct timeval timer;
 			status = listen(server.getSocket(), 10);
 			// Préparation des ensembles de sockets pour select()
@@ -19,6 +19,7 @@ int main(int ac, char **av)
 		}
 		catch(const std::exception& e)
 		{
+			server.closeSockets();
 			std::cerr << e.what() << '\n';
 		}
 	}

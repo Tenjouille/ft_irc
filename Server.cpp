@@ -35,26 +35,18 @@ int	Server::getClientSocket(int socket) const
 {
 	std::map<int, Client*>::const_iterator it = _clients.find(socket);
 	if (it != _clients.end())
-	{
 		return it->second->getSocket();
-	}
 	else
-	{
 		return -1;
-	}
 }
 
 Client*	Server::getClient(int socket) const
 {
 	std::map<int, Client*>::const_iterator it = _clients.find(socket);
 	if (it != _clients.end())
-	{
 		return it->second;
-	}
 	else
-	{
 		return NULL;
-	}
 }
 
 void	Server::setClientSocket(int tmp)
@@ -71,7 +63,7 @@ void	Server::read_data_from_socket(int socket)
 	int bytes_read;
 	int status;
 
-	bytes_read = recv(socket, buffer, BUFSIZ, 0);
+	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
 	std::cout << RED << "'" << buffer << "'" << std::endl;
 	for (int j = 0; j <= _fdMax; j++)
@@ -80,6 +72,8 @@ void	Server::read_data_from_socket(int socket)
 		{
 			//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
 			status = send(j, msg_to_send, strlen(msg_to_send), 0);
+			if (status == -1)
+				quitCmd(j);
 		}
 	}
 	parser(buffer, socket);
@@ -98,21 +92,22 @@ void	Server::accept_new_connection()
 		_fdMax = client_fd;
 }
 
-void	Server::delClient(int socket)
-{
-	std::map<int,Client*>::iterator it = _clients.find(socket);
-	if (it == _clients.end())
-	{
-		return;
-	}
-	else
-		_clients.erase(it);
-}
+// void	Server::delClient(int socket)
+// {
+// 	std::map<int,Client*>::iterator it = _clients.find(socket);
+// 	if (it == _clients.end())
+// 	{
+// 		return;
+// 	}
+// 	else
+// 		_clients.erase(it);
+// }
 
 void	Server::quitCmd(int socket)
 {
 	FD_CLR(socket, &_allSockets);
-	delClient(socket);
+	_clients.erase(socket);
+	// delClient(socket);
 	_fdMax--;
 }
 
@@ -130,6 +125,8 @@ void	Server::loop()
 		{
 			if (FD_ISSET(i, &_readFds) != 1)
 				continue ;
+			// if (FD_ISSET(i, &_readFds) == -1)
+			// 	return;
 			if (i == _socket)
 				accept_new_connection();
 			else
@@ -138,19 +135,57 @@ void	Server::loop()
 	}
 }
 
-void    Server::caplsCmd(std::string locate, int socket)
+void	Server::caplsCmd(std::string locate, int socket)
 {
-    (void)locate;
-    if (replyClient(CAP_LS, socket) != static_cast<size_t>(-1))
-	{
+	(void)locate;
+	if (replyClient(CAP_LS, socket) != static_cast<size_t>(-1))
 		getClient(socket)->updateStatus();
-	}
 }
 
-void    Server::defineCmd(std::string cmd, int start, int it, int socket)
+void	Server::pingCmd(std::string cmd, int socket)
+{
+	std::string arg = cmd.substr(cmd.find(' ') + 1);
+
+	std::cout << arg << std::endl;
+	replyClient(PONG(arg), socket);
+}
+
+// std::string	Server::defineArgs(std::string cmd, int i)
+// {
+
+// }
+
+std::string		kindOptions(std::string cmd, char sign)
+{
+	std::string	ret = "";
+
+	ret[0] = sign;
+	if (cmd == "")
+		return (NULL);
+	for (size_t i = 0; i < cmd.size(); i++)
+		if (cmd[i] == sign)
+			while(cmd[i] != ' ' && cmd[i])
+				ret += cmd[i++];
+	return (ret);
+}
+
+std::string	Server::defineOptions(std::string cmd)
+{
+	std::string	ret = kindOptions(cmd, '+') + kindOptions(cmd, '-');
+	std::cout << YELLOW << ret << std::endl;
+	return (ret);
+}
+
+void	Server::defineCmd(std::string str, int start, int it, int socket)
 {
 	std::string locate;
-	locate.append(cmd, start, it - start);
+	std::string	options;
+	std::string	args;
+	std::string	cmd;
+	locate.append(str, start, it - start);
+	cmd.append(str, start, str.find(' '));
+	options.append(defineOptions(locate));
+	// args.append(defineArgs(locate, cmd.size()));
 	std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 	{
@@ -163,11 +198,11 @@ void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 		caplsCmd(locate, socket);
 	}
 	else if (locate.find("USER") == 0)
-    {
-        userCmd(locate, socket);
+	{
+		userCmd(locate, socket);
 		std::cout << WHITE << "passe dans la fonction user" << std::endl;
-    }
-    // else if (locate.find("MODE") == 0)
+	}
+	// else if (locate.find("MODE") == 0)
 	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 	else if (locate.find("PASS") == 0)
 	{
@@ -183,6 +218,11 @@ void    Server::defineCmd(std::string cmd, int start, int it, int socket)
 	{
 		quitCmd(socket);
 		std::cout << WHITE << "passe dans la fonction quit" << std::endl;
+	}
+	else if (locate.find("PING") == 0)
+	{
+		pingCmd(locate, socket);
+		std::cout << WHITE << "passe dans la fonction ping" << std::endl;
 	}
 	// else if (locate.find("PRIVMSG") == 0)
 	// 	std::cout << "!!!PRIVMSG COMMAND!!!" << std::endl;
@@ -232,6 +272,8 @@ void	Server::passCmd(std::string cmd, int socket)
 
 void	Server::parser(char *buffer, int socket)
 {
+	if (!buffer)
+		return ;
 	std::string cmd = buffer;
 	int start = 0;
 	std::cout << BLUE << "commande recu par irssi: '" << cmd << "'" << std::endl;
@@ -240,8 +282,8 @@ void	Server::parser(char *buffer, int socket)
 		if (cmd[i] == '\r' && cmd[i + 1] == '\n')
 		{
 			defineCmd(cmd, start, i, socket);
-			i += 2;
-			start = i;
+			i ++;
+			start = i + 1;
 		}
 	}
 }
@@ -282,25 +324,19 @@ Server::~Server()
 void	Server::userCmd(std::string str, int socket)
 {
 	std::string cmd = str.substr(str.find(' ') + 1);
-    cmd = cmd.substr(0, cmd.find(' '));
+	cmd = cmd.substr(0, cmd.find(' '));
 	for (int i = 0; cmd[i]; i++)
-	{
 		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
-		{
-	//		std::cout << "username wrong" << std::endl;
 			return;
-		}
-	}
-	std::map<int, Client*>::iterator it = _clients.find(socket);
-	if (it != _clients.end())
+	if (_clients[socket])
 	{
-		it->second->setUserName(cmd);
-		it->second->updateStatus();
-		if (it->second->getStatus() == 4)
+		_clients[socket]->setUserName(cmd);
+		_clients[socket]->updateStatus();
+		if (_clients[socket]->getStatus() == 4)
 		{
 			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
-			std::string username = it->second->getUserName();
-			std::string nickname = it->second->getNickName();
+			std::string username = _clients[socket]->getUserName();
+			std::string nickname = _clients[socket]->getNickName();
 			replyClient(WELCOME_MSG(server_name, username, nickname), socket);
 		}
 	}
@@ -325,4 +361,10 @@ fd_set& Server::getreadFds()
 int Server::getfdMax()
 {
 	return _fdMax;
+}
+
+void	Server::closeSockets()
+{
+	for(std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		close(it->first);
 }

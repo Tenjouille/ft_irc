@@ -3,6 +3,7 @@
 Client::Client()
 {
 	_nickcount = 0;
+	_connection_status = 0;
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)

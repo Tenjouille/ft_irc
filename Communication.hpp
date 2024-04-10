@@ -12,6 +12,8 @@
 
 #define CAP_LS "CAP_ACK LS\r\n"
 
+#define PONG(servername) ("PONG " + servername)
+
 // ERRORS //
 #define ERROR_INVPASS(username) (username + " :Password incorrect\r\n")
 
