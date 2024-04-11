@@ -1,5 +1,10 @@
 #pragma once
 #include "Server.hpp"
+#include "Client.hpp"
+#include "Server.hpp"
+
+class Server;
+class Client;
 
 class Channel
 {
@@ -10,5 +15,6 @@ class Channel
         Channel(std::string str);
         void setName(std::string str);
         void addClient(int socket);
-        std::string getName();
+        const std::string getName();
+        void addClient(int socket, Client *client);
 };

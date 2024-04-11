@@ -1,0 +1,18 @@
+<< CAP LS
+<< PASS mdp
+<< NICK victor
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> Password accepted.
+>> You're now known as victor.
+>> :localhost 001 victor :Welcome to the Internet Relay Network victor!uaupetit
+<< MODE victor +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PRIVMSG uaupetit :bonjour ca va
+>> :uaupetit!localhost PRIVMSG victor :oui et toi ?
+<< QUIT :Lost terminal

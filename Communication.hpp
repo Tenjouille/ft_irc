@@ -16,7 +16,7 @@
 #define PONG(servername, token) (":" + token + "PONG " + servername + "\r\n")
 
 #define PRIVMSG(nickname, envoyeur, msg) (":" + nickname + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n")
-
+#define CREATECHANNEL(nickname, username, name) (":" + nickname+ "!" + username + "@localhost JOIN " + name + "/r/n")
 // ERRORS //
 #define ERROR_INVPASS(username) (username + " :Password incorrect\r\n")
 #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use.")

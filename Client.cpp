@@ -41,6 +41,12 @@ int Client::getSocket() const
 	return _socket;
 }
 
+std::vector<std::string> Client::getChannel()
+{
+	return _channel;
+}
+
+
 // Parameters: <username> <hostname> <servername> :<realname>
 
 

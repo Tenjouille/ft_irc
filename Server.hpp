@@ -26,8 +26,10 @@
 #include <map>
 #include "Client.hpp"
 #include "Communication.hpp"
+#include "Channel.hpp"
 
 class Client;
+class Channel;
 
 class Server
 {
@@ -41,6 +43,7 @@ class Server
 		fd_set					_allSockets;
 		fd_set					_readFds;
 		int						_fdMax;
+		std::map<std::string, Channel*> _channelLst;
 
 	public:
 		Server(char **arguments);
@@ -80,6 +83,7 @@ class Server
 		void				pingCmd(std::string cmd, int socket);
 		void 				msgCmd(std::string locate, int socket);
 		ssize_t				sendToClient(std::string to_send, int socket);
+		void				createChannel(std::string name, int socket);
 
 		// void				delClient(int socket);
 
