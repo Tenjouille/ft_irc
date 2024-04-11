@@ -4,7 +4,8 @@ size_t  replyClient(std::string Macros, int socket)
 {
 	size_t bytes_sent = 0;
 
-//	std::cout << "before" << std::endl;
+	std::cout << RED << "REPLYYYYYYY : " << std::endl;
+	std::cout << RED << Macros << std::endl;
 	bytes_sent = send(socket, Macros.c_str(), Macros.size(), 0);
 	if (bytes_sent == static_cast<size_t>(-1))
 	{

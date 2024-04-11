@@ -6,4 +6,5 @@
 >> :localhost 001 tbourdea :Welcome to the Internet Relay Network tbourdea!tbourdea
 << MODE tbourdea +i
 << PING localhost
-<< QUIT :Lost terminal
+<< NICK tenj
+<< MODE tenj ++ijkl -asdf

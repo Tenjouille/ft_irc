@@ -68,13 +68,13 @@ class Server
 		//////////////PARSING///////////////
 		void				parser(char *buffer, int socket);
 		void				defineCmd(std::string cmd, int start, int it, int socket);
-		std::string			defineArgs(std::string cmd, int i);
+		std::string			defineArgs(std::string cmd);
 		std::string			defineOptions(std::string cmd);
 		//////////////COMMANDS//////////////
 		void				caplsCmd(std::string locate, int socket);
 		void				userCmd(std::string str, int socket);
 		void				nickCmd(std::string str, int socket);
-		void				passCmd(std::string cmd, std::string locate, int socket);
+		void				passCmd(std::string cmd, int socket);
 		void				joinCmd(std::string locate, int socket);
 		void				quitCmd(int socket);
 		void				pingCmd(std::string cmd, int socket);
