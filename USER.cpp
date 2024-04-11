@@ -25,6 +25,7 @@ void	Server::userCmd(std::string str, int socket)
 			std::string username = it->second->getUserName();
 			std::string nickname = it->second->getNickName();
 			replyClient(WELCOME_MSG(server_name, nickname, username), socket);
+
 		}
 	}
 	else

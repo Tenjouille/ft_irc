@@ -11,8 +11,11 @@
 	" :Welcome to the Internet Relay Network " + username + "!" + nickname + "\r\n")
 
 #define CAP_LS "CAP_ACK LS\r\n"
+// #define PRIVMSG(argument_to_send, servername) ()
+// #define PONG(servername, token) (":PONG " + token + " " + servername + "\r\n")
+#define PONG(servername, token) (":" + token + "PONG " + servername + "\r\n")
 
-#define PONG(servername) ("PONG " + servername)
+#define PRIVMSG(nickname, envoyeur, msg) (":" + nickname + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n")
 
 // ERRORS //
 #define ERROR_INVPASS(username) (username + " :Password incorrect\r\n")

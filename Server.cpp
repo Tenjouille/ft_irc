@@ -147,9 +147,15 @@ void	Server::caplsCmd(std::string locate, int socket)
 void	Server::pingCmd(std::string cmd, int socket)
 {
 	std::string arg = cmd.substr(cmd.find(' ') + 1);
-
+	std::cout << "CMD : " << cmd << std::endl;
 	std::cout << arg << std::endl;
-	replyClient(PONG(arg), socket);
+	std::string arg2 = "\0";
+	sleep(1);
+	std::cout << "Sending : '" << PONG(arg, arg2) << "'" << std::endl;
+	// replyClient(PONG(arg, arg2), socket);
+	replyClient(PONG(arg2, arg2), socket);
+	// std::string test_msg = "PONGGGG";
+	// replyClient(test_msg, socket);
 }
 
 // std::string	Server::defineArgs(std::string cmd, int i)
@@ -188,6 +194,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	cmd.append(str, start, str.find(' '));
 	options.append(defineOptions(locate));
 	// args.append(defineArgs(locate, cmd.size()));
+	std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
 	std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 	{
@@ -223,11 +230,14 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("PING") == 0)
 	{
-		pingCmd(locate, socket);
 		std::cout << WHITE << "passe dans la fonction ping" << std::endl;
+		pingCmd(locate, socket);
 	}
-	// else if (locate.find("PRIVMSG") == 0)
-	// 	std::cout << "!!!PRIVMSG COMMAND!!!" << std::endl;
+	else if (locate.find("PRIVMSG") == 0)
+	{
+		std::cout << WHITE << "passe dans la fonction privmsg" << std::endl;
+		msgCmd(locate, socket);
+	}
 	// else if (locate.find("MSG") == 0)
 	// 	std::cout << "!!!MSG COMMAND!!!" << std::endl;
 	// else if (locate.find("KICK") == 0)
@@ -328,7 +338,7 @@ bool	Server::checkNickName(std::string to_check, int socket)
 		tmp_name = it->second->getNickName();
 		//peut etre check la socket aussi pour s'assurer qu'on compare
 		//pas avec lui meme ?
-		if (to_check == tmp_name && i != 0)
+		if (to_check == tmp_name && socket != it->first)
 		{
 			std::cout << RED << "COMPARING : " << to_check << " ET " << tmp_name << RESET << std::endl;
 			// std::cout << RED << NICKNAMEINUSE_ERR(test) << std::endl;
@@ -382,7 +392,7 @@ void	Server::nickCmd(std::string str, int socket)
 			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
 			std::string username = it->second->getUserName();
 			std::string nickname = it->second->getNickName();
-			replyClient(WELCOME_MSG(server_name, username, nickname), socket);
+			replyClient(WELCOME_MSG(server_name, nickname, username), socket);
 		}
 	}
 	else
@@ -415,7 +425,8 @@ void	Server::userCmd(std::string str, int socket)
 				std::string tmp_username = _clients[socket]->getUserName();
 				replyClient(NICKNAMEINUSE_ERR(tmp_username), socket);
 			}
-			replyClient(WELCOME_MSG(server_name, username, nickname), socket);
+			replyClient(WELCOME_MSG(server_name, nickname, username), socket);
+
 			std::cout << "sent machin" << std::endl;
 		}
 		else

@@ -84,7 +84,7 @@ class Server
 		// void				delClient(int socket);
 
 		~Server();
-
+	// bool	isPing(std::string locate);
 	bool	checkNickName(std::string to_check, int socket);
 
 
