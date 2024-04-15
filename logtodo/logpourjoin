@@ -1,0 +1,63 @@
+<< CAP LS
+<< PASS mdp
+<< NICK uaupetit
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> Password accepted.
+>> You're now known as uaupetit.
+>> :localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit
+<< MODE uaupetit +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #chanjl
+>> :localhost 403 #chanjl :No such channel
+>> :uaupetit!uaupetit@localhost JOIN #chanjl
+>> :localhost 331 uaupetit #chanjl :No topic is set
+>> :localhost 353 uaupetit = #chanjl :@uaupetit
+>> :localhost 366 uaupetit #chanjl :End of /NAMES list
+<< MODE #chanjl
+>> :localhost 324 uaupetit #chanjl +
+--> chanquery mode
+<< WHO #chanjl
+>> 
+<< PRIVMSG #chanjl :hello
+<< PRIVMSG chanjl :salut
+>> :localhost 401 chanjl :No such nick/channel
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED who: chanquery abort
+<< WHO #chanjl
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED who: chanquery abort
+<< MODE #chanjl b
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED mode b: chanquery abort
+<< MODE #chanjl b
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED mode b: chanquery abort
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong

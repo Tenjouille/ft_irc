@@ -20,7 +20,7 @@ std::map<int, Client*> Channel::getClientlst()
     return _clientslst;
 }
 
-// std::string Channel::getName()
-// {
-//     return _name;
-// }
+std::string Channel::getName()
+{
+    return _name;
+}

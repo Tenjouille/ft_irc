@@ -20,41 +20,6 @@ Server::Server(char **av)
 		std::cout << "invalid port format" << std::endl;
 }
 
-int	Server::getSocket() const
-{
-	return _socket;
-}
-
-struct sockaddr_in	Server::getServerAddress() const
-{
-	return _serverAddress;
-}
-
-int	Server::getClientSocket(int socket) const
-{
-	std::map<int, Client*>::const_iterator it = _clients.find(socket);
-	if (it != _clients.end())
-		return it->second->getSocket();
-	else
-		return -1;
-}
-
-Client*	Server::getClient(int socket) const
-{
-	std::map<int, Client*>::const_iterator it = _clients.find(socket);
-	if (it != _clients.end())
-		return it->second;
-	else
-		return NULL;
-}
-
-void	Server::setClientSocket(int tmp)
-{
-	Client* client = new Client();
-	client->setSocket(tmp);
-	_clients.insert(std::make_pair(tmp, client));
-}
-
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
@@ -64,7 +29,7 @@ void	Server::read_data_from_socket(int socket)
 
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
-	std::cout << RED << "'" << buffer << "'" << std::endl;
+	//std::cout << RED << "'" << buffer << "'" << std::endl;
 	if (buffer[0] == '\0')
 		return ;
 	for (int j = 0; j <= _fdMax; j++)
@@ -93,25 +58,6 @@ void	Server::accept_new_connection()
 		_fdMax = client_fd;
 }
 
-// void	Server::delClient(int socket)
-// {
-// 	std::map<int,Client*>::iterator it = _clients.find(socket);
-// 	if (it == _clients.end())
-// 	{
-// 		return;
-// 	}
-// 	else
-// 		_clients.erase(it);
-// }
-
-void	Server::quitCmd(int socket)
-{
-	FD_CLR(socket, &_allSockets);
-	_clients.erase(socket);
-	// delClient(socket);
-	_fdMax--;
-}
-
 void	Server::loop()
 {
 	struct timeval timer;
@@ -136,13 +82,6 @@ void	Server::loop()
 	}
 }
 
-
-
-// std::string	Server::defineArgs(std::string cmd, int i)
-// {
-
-// }
-
 std::string		kindOptions(std::string cmd, char sign)
 {
 	std::string	ret = "";
@@ -160,7 +99,7 @@ std::string		kindOptions(std::string cmd, char sign)
 std::string	Server::defineOptions(std::string cmd)
 {
 	std::string	ret = kindOptions(cmd, '+') + kindOptions(cmd, '-');
-	std::cout << YELLOW << ret << std::endl;
+	//std::cout << YELLOW << ret << std::endl;
 	return (ret);
 }
 
@@ -230,71 +169,12 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	// 	std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
 }
 
-// void Server::joinCmd(std::string locate, int socket)
-// {
-// 	(void)socket;
-// 	(void)locate;
-// 	std::cout << RED << "ici" << std::endl;
-// }
-
-std::string	Server::getServerPassword() const
-{
-	return _password;
-}
-
-std::string Server::getUsernameFormNick(std::string to_parse)
-{
-	// std::cout << "TO PARSE : '" << to_parse << "'" << std::endl;
-	std::string tmp_name = to_parse;
-
-	size_t pos = tmp_name.find("NICK ");
-	if (pos != std::string::npos)
-	{
-		pos += 5;
-		std::string name;
-
-		while (pos < tmp_name.size() && tmp_name[pos] != '\r' && tmp_name[pos] != '\n')
-		{
-			name += tmp_name[pos];
-			pos++;
-		}
-		return (name);
-	}
-	else
-	{
-		std::cout << "COULDNT FIND IN THE BUFFER" << std::endl;
-		return NULL;
-	}
-}
-
-void	Server::passCmd(std::string to_parse, std::string cmd, int socket)
-{
-	std::string server_pass = getServerPassword();
-	int i = 0;
-	while (cmd[i] != '\0' && cmd[i] != ' ')
-		i++;
-	i++;
-	int start = i;
-	std::string from_client = &cmd[start];
-	if (from_client.compare(server_pass) != 0)
-	{
-		std::string username = getUsernameFormNick(to_parse);
-		// std::cout << "Sending Username : " << username << std::endl;
-		replyClient(ERROR_INVPASS(username), socket);
-		return ;
-	}
-	// else
-	// 	std::cout << "ALL GOOD SAME PASSWORD" << std::endl;
-	getClient(socket)->updateStatus();
-}
-
 void	Server::parser(char *buffer, int socket)
 {
 	if (!buffer)
 		return ;
 	std::string cmd = buffer;
 	int start = 0;
-	// std::cout << BLUE << "commande recu par irssi: '" << cmd << "'" << std::endl;
 	for (int i = 0; cmd[i]; i++)
 	{
 		if (cmd[i] == '\r' && cmd[i + 1] == '\n')
@@ -306,140 +186,24 @@ void	Server::parser(char *buffer, int socket)
 	}
 }
 
-bool	Server::checkNickName(std::string to_check, int socket)
-{
-	std::string tmp_name;
-	(void) socket;
-	
-	std::map<int, Client*>::iterator it = _clients.begin();
-	int i = 0;
-	while (it != _clients.end())
-	{
-		tmp_name = it->second->getNickName();
-		//peut etre check la socket aussi pour s'assurer qu'on compare
-		//pas avec lui meme ?
-		if (to_check == tmp_name && socket != it->first)
-		{
-			// std::cout << RED << "COMPARING : " << to_check << " ET " << tmp_name << RESET << std::endl;
-			// std::cout << RED << NICKNAMEINUSE_ERR(test) << std::endl;
-			return (false);
-		}
-		++it;
-		i++;
-	}
-	return (true);
-}
-
-void	Server::nickCmd(std::string str, int socket)
-{
-	std::string cmd = str.substr(str.find(' ') + 1);
-	
-	if (cmd.length() > 9)
-	{
-		printf("trop de char pour nick");
-		return;
-	}	
-	for (int i = 0; cmd[i]; i++)
-	{
-		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9') || cmd[i] == '_'))
-		{
-			printf("nickname wrong input");
-			return;
-		}
-	}
-	std::map<int, Client*>::iterator it = _clients.find(socket);
-	if (it != _clients.end())
-	{
-		//std::cout << YELLOW << "cmd = '" << it->second->getNickName() << "'" << std::endl; 
-		// Attention a si meme nickname ya PROBLEMES ou si user essaye de changer de nickname
-		std::string nickname = cmd;
-		if (checkNickName(nickname, socket) == false)
-		{
-			replyClient(NICKNAMEINUSE_ERR(nickname), socket);
-		}
-		else
-		{
-			it->second->setNickName(cmd);
-			// std::cout << BLUE << "Set : " << cmd << RESET << std::endl;
-			it->second->updateStatus();
-			// std::cout << GREEN << "UPDATING :" << it->second->getStatus() << RESET << std::endl;
-		}
-		if (it->second->getStatus() >= 4)
-		{
-			// std::cout << BLUE << "SETTING : " << cmd << RESET << std::endl;
-			it->second->setNickName(cmd);
-			std::cout << it->second->getNickName() << std::endl;
-			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
-			std::string username = it->second->getUserName();
-			std::string nickname = it->second->getNickName();
-			replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-		}
-	}
-	else
-		std::cerr << RED << "Client not found for socket: " << socket << std::endl;
-}
-
-Server::~Server()
-{
-	close(_socket);
-}
-
-void	Server::userCmd(std::string str, int socket)
-{
-	std::string cmd = str.substr(str.find(' ') + 1);
-	cmd = cmd.substr(0, cmd.find(' '));
-	for (int i = 0; cmd[i]; i++)
-		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
-			return;
-	if (_clients[socket])
-	{
-		_clients[socket]->setUserName(cmd);
-		_clients[socket]->updateStatus();
-		if (_clients[socket]->getStatus() == 4)
-		{
-			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
-			std::string username = _clients[socket]->getUserName();
-			std::string nickname = _clients[socket]->getNickName();
-			if (checkNickName(nickname, socket) == false)
-			{
-				std::string tmp_username = _clients[socket]->getUserName();
-				replyClient(NICKNAMEINUSE_ERR(tmp_username), socket);
-			}
-			replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-
-			// std::cout << "sent machin" << std::endl;
-		}
-		else
-		{
-			std::cout << "SETUP UsERNAME ET STATUS UPDATED" << std::endl;
-			return ;
-		}
-	}
-	else
-		std::cerr << "Client not found for socket: " << socket << std::endl;
-}
-
-void	Server::setfdMax(int socket)
-{
-	_fdMax = socket;
-}
-
-fd_set& Server::getallSockets()
-{
-	return _allSockets;
-}
-
-fd_set& Server::getreadFds()
-{
-	return _readFds;
-}
-int Server::getfdMax()
-{
-	return _fdMax;
-}
+// void	Server::delClient(int socket)
+// {
+// 	std::map<int,Client*>::iterator it = _clients.find(socket);
+// 	if (it == _clients.end())
+// 	{
+// 		return;
+// 	}
+// 	else
+// 		_clients.erase(it);
+// }
 
 void	Server::closeSockets()
 {
 	for(std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 		close(it->first);
+}
+
+Server::~Server()
+{
+	close(_socket);
 }

@@ -38,12 +38,8 @@ class Client
         void            updateStatus();
         int             getStatus();
         void            setUserName(std::string str);
-        // void            setName();
         void            setSocket(int tmp);
         std::vector<std::string> getChannel();
-        // void            nickCmd(std::string str);
-        // void            userCmd(std::string str);
-        // void            joinCmd(std::string str);
         ~Client();
 };
 

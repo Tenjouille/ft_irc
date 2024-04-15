@@ -14,8 +14,7 @@ class Channel
     public:
         Channel(std::string str);
         void setName(std::string str);
-        void addClient(int socket);
-        const std::string getName();
-        std::map<int, Client*> getClientlst();
         void addClient(int socket, Client *client);
+        std::map<int, Client*> getClientlst();
+        std::string getName();
 };

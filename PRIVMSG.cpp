@@ -13,7 +13,7 @@ int Server::getSocketFromUser(std::string to_find)
             if (it->second->getNickName() == to_find)
             {
                 socket = it->first;
-                std::cout << "Socket to send to : " << socket << std::endl;
+              //  std::cout << "Socket to send to : " << socket << std::endl;
                 return (socket);
             }
             ++it;
@@ -32,53 +32,53 @@ void Server::msgCmd(std::string locate, int socket)
 {
     std::string user;
     std::string msg;
-	std::cout << RED << "locate = " << locate << RESET << std::endl;    
-    std::cout << "On est ici : '" << locate << "'" << std::endl; 
+	// std::cout << RED << "locate = " << locate << RESET << std::endl;    
+    // std::cout << "On est ici : '" << locate << "'" << std::endl; 
     int is_channel = 0;
     
-    size_t ping_pos = locate.find("PING");
-    if (ping_pos != std::string::npos)
-    {
-        std::string dest;
-        std::string token;
+    // size_t ping_pos = locate.find("PING");
+    // if (ping_pos != std::string::npos)
+    // {
+    //     std::string dest;
+    //     std::string token;
 
-        size_t privmsg_pos = locate.find("PRIVMSG");
-        if (privmsg_pos != std::string::npos)
-        {
-            size_t dest_start = privmsg_pos + 8;
-            size_t dest_end = locate.find(" ", dest_start);
-            if (dest_end != std::string::npos)
-            {
-                dest = locate.substr(dest_start, dest_end - dest_start);
-            }
-            else 
-            {
-                dest = locate.substr(dest_start);
-            }
-            std::cout << GREEN << dest << RESET << std::endl;
-    }
-    size_t token_start = ping_pos + 5;
-    size_t token_end = locate.find("\r", token_start);
-    if (token_end != std::string::npos)
-    {
-        token = locate.substr(token_start, token_end - token_start);
-    }
-    else
-    {
-        token = locate.substr(token_start);
-    }
-    if (dest.empty())
-    {
-        dest = "localhost";
-    }
-    std::string pong_message = PONG(dest, token);
-    std::cout << "Sending : '" << pong_message << "'" << std::endl;
-    replyClient(pong_message, socket);
-    return;
-    }
-    std::cout << "on est revenus ici ?" << std::endl;
+    //     size_t privmsg_pos = locate.find("PRIVMSG");
+    //     if (privmsg_pos != std::string::npos)
+    //     {
+    //         size_t dest_start = privmsg_pos + 8;
+    //         size_t dest_end = locate.find(" ", dest_start);
+    //         if (dest_end != std::string::npos)
+    //         {
+    //             dest = locate.substr(dest_start, dest_end - dest_start);
+    //         }
+    //         else 
+    //         {
+    //             dest = locate.substr(dest_start);
+    //         }
+    //         std::cout << GREEN << dest << RESET << std::endl;        // void            setName();::endl;
+    // }
+    // size_t token_start = ping_pos + 5;
+    // size_t token_end = locate.find("\r", token_start);
+    // if (token_end != std::string::npos)
+    // {
+    //     token = locate.substr(token_start, token_end - token_start);
+    // }
+    // else
+    // {
+    //     token = locate.substr(token_start);
+    // }
+    // if (dest.empty())
+    // {
+    //     dest = "localhost";
+    // }
+    // std::string pong_message = PONG(dest, token);
+    // // std::cout << "Sending : '" << pong_message << "'" << std::endl;
+    // replyClient(pong_message, socket);
+    // return;
+    // }
+    // std::cout << "on est revenus ici ?" << std::endl;
 	size_t start = locate.find("PRIVMSG ");
-	std::cout << GREEN << "start = " << start << std::endl;
+	// std::cout << GREEN << "start = " << start << std::endl;
 	if (start != std::string::npos)
 	{
         start += 8;
@@ -96,8 +96,8 @@ void Server::msgCmd(std::string locate, int socket)
             msg = locate.substr(end + 2); // +2 pour ignorer ": "
             // user[user.length()] = '\0';
             // msg[msg.length()] = '\0';
-            std::cout << MAGENTA "User: '" << user << "'" << std::endl;
-            std::cout << MAGENTA "Message: '" << msg << "'" << std::endl;
+            // std::cout << MAGENTA "User: '" << user << "'" << std::endl;
+            // std::cout << MAGENTA "Message: '" << msg << "'" << std::endl;
         }
 		else
 		{
@@ -122,9 +122,10 @@ void Server::msgCmd(std::string locate, int socket)
     std::string msg_to_send = PRIVMSG(s_nick, user, msg);
     if (is_channel == 0)
     {
+        std::cout << "ici" << std::endl;
         std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
         std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
-        std::cout << socket_to_send_to << " et " << socket << std::endl;
+        // std::cout << socket_to_send_to << " et " << socket << std::endl;
         replyClient(msg_to_send, socket_to_send_to);
         (void) socket;
     }

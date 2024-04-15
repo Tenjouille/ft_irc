@@ -1,0 +1,11 @@
+voir les logs
+mode
+commande nick si 2 nickname pareil a modifier
+
+pourquoi si un deuxieme client fail, le premier s'arrete ?
+
+pour quit sans boucle infinie
+il faut delete un socket de all socket
+changer fd max
+et il faut que tout ca soit accessible depuis la classe server
+et delete un maillon du conteneur 

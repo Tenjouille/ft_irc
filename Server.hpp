@@ -84,13 +84,13 @@ class Server
 		void 				msgCmd(std::string locate, int socket);
 		ssize_t				sendToClient(std::string to_send, int socket);
 		void				createChannel(std::string name, int socket);
-		void    send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send);
+		void    			send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send);
+		bool				checkNickName(std::string to_check, int socket);
 
 		// void				delClient(int socket);
 
 		~Server();
 	// bool	isPing(std::string locate);
-	bool	checkNickName(std::string to_check, int socket);
 
 
 };
