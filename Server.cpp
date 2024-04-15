@@ -7,7 +7,6 @@ Server::Server(char **av)
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
- //   std::cout << "Password Stocke : " << _password << std::endl;
 	if (i == strlen(av[1]))
 	{
 		int port = atoi(av[1]);
@@ -137,26 +136,7 @@ void	Server::loop()
 	}
 }
 
-void	Server::caplsCmd(std::string locate, int socket)
-{
-	(void)locate;
-	if (replyClient(CAP_LS, socket) != static_cast<size_t>(-1))
-		getClient(socket)->updateStatus();
-}
 
-void	Server::pingCmd(std::string cmd, int socket)
-{
-	std::string arg = cmd.substr(cmd.find(' ') + 1);
-	std::cout << "CMD : " << cmd << std::endl;
-	std::cout << arg << std::endl;
-	std::string arg2 = "\0";
-	sleep(1);
-	std::cout << "Sending : '" << PONG(arg, arg2) << "'" << std::endl;
-	// replyClient(PONG(arg, arg2), socket);
-	replyClient(PONG(arg2, arg2), socket);
-	// std::string test_msg = "PONGGGG";
-	// replyClient(test_msg, socket);
-}
 
 // std::string	Server::defineArgs(std::string cmd, int i)
 // {

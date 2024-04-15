@@ -15,6 +15,11 @@ void Channel::setName(std::string str)
     _name = str;
 }
 
+std::map<int, Client*> Channel::getClientlst()
+{
+    return _clientslst;
+}
+
 // std::string Channel::getName()
 // {
 //     return _name;

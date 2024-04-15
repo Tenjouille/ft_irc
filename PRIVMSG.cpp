@@ -34,7 +34,7 @@ void Server::msgCmd(std::string locate, int socket)
     std::string msg;
 	std::cout << RED << "locate = " << locate << RESET << std::endl;    
     std::cout << "On est ici : '" << locate << "'" << std::endl; 
-	//string = "PRIVMSG uaupetit :salut ca va";
+    int is_channel = 0;
     
     size_t ping_pos = locate.find("PING");
     if (ping_pos != std::string::npos)
@@ -42,11 +42,10 @@ void Server::msgCmd(std::string locate, int socket)
         std::string dest;
         std::string token;
 
-        // Trouver le destinataire
         size_t privmsg_pos = locate.find("PRIVMSG");
         if (privmsg_pos != std::string::npos)
         {
-            size_t dest_start = privmsg_pos + 8; // Pour sauter "PRIVMSG "
+            size_t dest_start = privmsg_pos + 8;
             size_t dest_end = locate.find(" ", dest_start);
             if (dest_end != std::string::npos)
             {
@@ -58,9 +57,7 @@ void Server::msgCmd(std::string locate, int socket)
             }
             std::cout << GREEN << dest << RESET << std::endl;
     }
-
-    // Trouver le token
-    size_t token_start = ping_pos + 5; // Pour sauter "PING "
+    size_t token_start = ping_pos + 5;
     size_t token_end = locate.find("\r", token_start);
     if (token_end != std::string::npos)
     {
@@ -70,18 +67,15 @@ void Server::msgCmd(std::string locate, int socket)
     {
         token = locate.substr(token_start);
     }
-
     if (dest.empty())
     {
         dest = "localhost";
     }
-    
     std::string pong_message = PONG(dest, token);
     std::cout << "Sending : '" << pong_message << "'" << std::endl;
     replyClient(pong_message, socket);
     return;
-}
-
+    }
     std::cout << "on est revenus ici ?" << std::endl;
 	size_t start = locate.find("PRIVMSG ");
 	std::cout << GREEN << "start = " << start << std::endl;
@@ -94,6 +88,11 @@ void Server::msgCmd(std::string locate, int socket)
             user = '\0';
             msg = '\0';
             user = locate.substr(start, end - start); //destinataire
+            if (user[0] == '#')
+            {
+                user = user.substr(1);
+                is_channel = 1;
+            }
             msg = locate.substr(end + 2); // +2 pour ignorer ": "
             // user[user.length()] = '\0';
             // msg[msg.length()] = '\0';
@@ -120,10 +119,39 @@ void Server::msgCmd(std::string locate, int socket)
     // std::cout << MSG_TO_SEND(user, servername, sender, msg) << std::endl;
     std::string s_user = _clients[socket]->getUserName();
     std::string s_nick = _clients[socket]->getNickName();
-    std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
     std::string msg_to_send = PRIVMSG(s_nick, user, msg);
-    std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
-    std::cout << socket_to_send_to << " et " << socket << std::endl;
-    replyClient(msg_to_send, socket_to_send_to);
-    (void) socket;
+    if (is_channel == 0)
+    {
+        std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
+        std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
+        std::cout << socket_to_send_to << " et " << socket << std::endl;
+        replyClient(msg_to_send, socket_to_send_to);
+        (void) socket;
+    }
+    else
+    {
+        send_in_channel(user, s_nick, s_user, msg);
+    }
+}
+
+void Server::send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send)
+{
+    (void)s_user;
+    std::string final_user = "#" + user;
+    std::string msg = PRIVMSG(s_nick, final_user, msg_to_send);
+    for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+    {
+        std::string channel_name = it->first;
+        Channel* channel = it->second;
+        if (channel_name == user)
+        {
+            std::map<int, Client*> client_list = channel->getClientlst();
+            // Itérez sur la copie de la liste des clients
+            for (std::map<int, Client*>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
+            {
+                std::cout << YELLOW << msg << std::endl;
+                replyClient(msg, it_clt->first);
+            }
+        }
+    }
 }

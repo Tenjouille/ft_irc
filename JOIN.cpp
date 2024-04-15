@@ -2,31 +2,51 @@
 
 void Server::joinCmd(std::string locate, int socket)
 {
-    (void)socket;
-    // string = join #channel
     size_t start = locate.find("#");
-    if (start != std::string::npos) { // Vérifie si le symbole '#' est trouvé
-        size_t end = locate.find(" ", start); // Trouve le prochain espace après le symbole '#'
-        if (end != std::string::npos) { // Vérifie si un espace est trouvé
-            std::string channelName = locate.substr(start + 1, end - start - 1); // Extrait le nom du canal
-            std::cout << "Nom du canal : " << channelName << std::endl;
-        } else { // Si aucun espace n'est trouvé après le symbole '#', le reste de la chaîne est le nom du canal
-            std::string channelName = locate.substr(start + 1);
+    if (start != std::string::npos)
+    {
+        size_t end = locate.find(" ", start);
+        if (end != std::string::npos)
+        {
+            std::string channelName = locate.substr(start + 1, end - start - 1);
             std::cout << "Nom du canal : " << channelName << std::endl;
         }
-    } else
+        else
+        {
+            std::string channelName = locate.substr(start + 1);
+            std::cout << "Nom du canal : " << channelName << std::endl;
+            createChannel(channelName, socket);
+        }
+    }
+    else
 	{
         std::cout << "Aucun symbole '#' trouvé dans la chaîne." << std::endl;
     }
-	//creer channel
-	//y ajouter le client
+    
 }
 
-void Server::createChannel(std::string name, int socket)
+/*void Server::createChannel(std::string name, int socket)
 {
 	Channel* channel = new Channel(name);
 	_channelLst.insert(std::make_pair(name, channel));
 	channel->addClient(socket, getClient(socket));
 	getClient(socket)->getChannel().push_back(name);
 	replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);
+}*/
+
+void Server::createChannel(std::string name, int socket)
+{
+    if (_channelLst.find(name) == _channelLst.end())
+    {
+        replyClient(NOT_EXISTING_CHANNEL(name), socket);
+    }
+    Channel* channel = new Channel(name);
+    _channelLst.insert(std::make_pair(name, channel));
+    channel->addClient(socket, getClient(socket));
+    getClient(socket)->getChannel().push_back(name);
+    replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);
 }
+
+    //verifier si le channel existe deja 
+	//creer channel
+	//y ajouter le client
