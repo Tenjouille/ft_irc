@@ -9,7 +9,8 @@
 << MODE uaupetit_ +i
 << WHOIS uaupetit
 << PING localhost
->> : PONG localhost
+>> PONG localhost
 --> lag pong
 << PING localhost
->> : PONG localhost
+>> PONG localhost
+>> 

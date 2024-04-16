@@ -9,6 +9,5 @@
 >> : PONG localhost
 --> lag pong
 << PING localhost
->> P�YR�P�YR�P�YR�P�YR�P�YR�: PONG localhost
-<< PRIVMSG uaupetit_ :"_ to uau"
-<< QUIT :Lost terminal
+>> : PONG localhost
+>> 

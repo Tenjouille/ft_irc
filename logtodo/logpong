@@ -6,11 +6,12 @@
 >> :localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit
 << MODE uaupetit +i
 << PING localhost
->> : PONG localhost
+>> PONG localhost
+--> lag pong
+>> ûMûMûMûMûMûMûM:uaupetit!@localhost PRIVMSG uaupetit_ :jsakfjsa
+<< PING localhost
+>> PONG localhost
 --> lag pong
 << PING localhost
->> : PONG localhost
---> lag pong
-<< PING localhost
->> : PONG localhost
-<< PRIVMSG uaupetit_ :wasssuuuuuup !
+>> ûMPONG localhost
+>> ûMûM

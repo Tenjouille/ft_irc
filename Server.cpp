@@ -23,9 +23,9 @@ Server::Server(char **av)
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
-	char msg_to_send[1024];
+	//char msg_to_send[1024];
 	int bytes_read;
-	int status;
+	//int status;
 
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
@@ -36,12 +36,17 @@ void	Server::read_data_from_socket(int socket)
 	{
 		if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
 		{
+			std::cout << GREEN << "ICI" << RESET << std::endl;
 			//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
-			status = send(j, msg_to_send, strlen(msg_to_send), 0);
-			if (status == -1)
-				quitCmd(j);
+			// status = send(j, msg_to_send, strlen(msg_to_send), 0);
+			// if (status == -1)
+			// {
+			// 	std::cout << GREEN << "LA" << RESET << std::endl;
+			// 	quitCmd(j);
+			// }
 		}
 	}
+	std::cout << GREEN << "HERE" << RESET << std::endl;
 	parser(buffer, socket);
 	// for (int i = 0; i  1024)
 	buffer[0] = '\0';

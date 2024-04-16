@@ -1,0 +1,52 @@
+<< CAP LS
+<< PASS mdp
+<< NICK uaupetit
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> :localhost 433 * uaupetit :Nickname is already in use.
+<< NICK uaupetit_
+>> :localhost 001 uaupetit_ :Welcome to the Internet Relay Network uaupetit_!uaupetit
+<< MODE uaupetit_ +i
+<< WHOIS uaupetit
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #ul
+>> :localhost 403 #ul :No such channel
+>> :!uaupetit@localhost JOIN ul
+<< PING localhost
+>> PONG localhost
+--> FAILED whois
+--> lag pong
+<< PRIVMSG #ul :hey
+>> :#ul!@localhost PRIVMSG uaupetit_ :hey
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong

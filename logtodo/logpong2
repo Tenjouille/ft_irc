@@ -9,9 +9,8 @@
 << MODE uaupetit_ +i
 << WHOIS uaupetit
 << PING localhost
->> : PONG localhost
+>> PONG localhost
 --> lag pong
+<< PRIVMSG uaupetit :jsakfjsa
 << PING localhost
->> : PONG localhost
->> :uaupetit_!localhost PRIVMSG uaupetit :wasssuuuuuup !
->> 
+>> ûMPONG localhost
