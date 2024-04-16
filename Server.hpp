@@ -26,8 +26,10 @@
 #include <map>
 #include "Client.hpp"
 #include "Communication.hpp"
-
+#include "Channel.hpp"
+//mode = conteneur set
 class Client;
+class Channel;
 
 class Server
 {
@@ -35,12 +37,15 @@ class Server
 		int						_socket;
 		struct sockaddr_in		_serverAddress;
 		int					 	_clientSocket;
+		//liste de clients existant
 		std::map<int, Client*>	_clients;
 		std::string				_password;
 		int						_status;
 		fd_set					_allSockets;
 		fd_set					_readFds;
 		int						_fdMax;
+		//liste de channels existant
+		std::map<std::string, Channel*> _channelLst;
 
 	public:
 		Server(char **arguments);
@@ -74,18 +79,20 @@ class Server
 		void				caplsCmd(std::string locate, int socket);
 		void				userCmd(std::string str, int socket);
 		void				nickCmd(std::string str, int socket);
-		void				passCmd(std::string cmd, int socket);
+		void				passCmd(std::string to_parse, std::string cmd, int socket);
 		void				joinCmd(std::string locate, int socket);
 		void				quitCmd(int socket);
 		void				pingCmd(std::string cmd, int socket);
 		void 				msgCmd(std::string locate, int socket);
 		ssize_t				sendToClient(std::string to_send, int socket);
+		void				createChannel(std::string name, int socket);
+		void    			send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send);
+		bool				checkNickName(std::string to_check, int socket);
 
-		// void				delClient(int socket);
+		void				delClient(int socket);
 
 		~Server();
-
-	bool	checkNickName(std::string to_check, int socket);
+	// bool	isPing(std::string locate);
 
 
 };

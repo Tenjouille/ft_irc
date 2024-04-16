@@ -1,0 +1,17 @@
+<< CAP LS
+<< PASS mdp
+<< NICK uaupetit
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> :localhost 433 * uaupetit :Nickname is already in use.
+<< NICK uaupetit_
+>> :localhost 001 uaupetit_ :Welcome to the Internet Relay Network uaupetit_!uaupetit
+<< MODE uaupetit_ +i
+<< WHOIS uaupetit
+<< PING localhost
+>> : PONG localhost
+--> lag pong
+<< PING localhost
+>> PÇYRš: PONG localhost
+>> PÇYRš:uaupetit_!localhost PRIVMSG uaupetit :"_ to uau"
+<< QUIT :Lost terminal

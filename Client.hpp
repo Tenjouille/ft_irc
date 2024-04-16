@@ -25,6 +25,8 @@ class Client
         int             _socket;
         int             _nickcount;
         int             _connection_status;
+        //listes de channels dans lequel est le client
+        std::vector<std::string> _channel;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -37,11 +39,8 @@ class Client
         void            updateStatus();
         int             getStatus();
         void            setUserName(std::string str);
-        // void            setName();
         void            setSocket(int tmp);
-        // void            nickCmd(std::string str);
-        // void            userCmd(std::string str);
-        // void            joinCmd(std::string str);
+        std::vector<std::string> getChannel();
         ~Client();
 };
 
