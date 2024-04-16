@@ -23,7 +23,7 @@ void	Server::nickCmd(std::string str, int socket)
     {
         if (it->second->getNickName() == cmd)
         {
-			_nickcount++;
+			// _nickcount++;
 			std::cout << "ICI" << std::endl;
 			replyClient(NICKNAMEINUSE_ERR(cmd), socket);
             //getClient(socket)->gettmpNick() = cmd;

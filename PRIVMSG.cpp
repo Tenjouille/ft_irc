@@ -124,6 +124,9 @@ void Server::msgCmd(std::string locate, int socket)
     std::string msg_to_send = PRIVMSG(s_nick, user, msg);
     std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
     std::cout << socket_to_send_to << " et " << socket << std::endl;
+    // std::string servername = "localhost";
+    std::cout << YELLOW << "SOCKET DU SERVER : " << _socket << RESET << std::endl;
+    // replyClient(DEFAULTPONG(s_nick), socket_to_send_to);
     replyClient(msg_to_send, socket_to_send_to);
     (void) socket;
 }

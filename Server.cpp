@@ -59,9 +59,9 @@ void	Server::setClientSocket(int tmp)
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
-	char msg_to_send[1024];
+	// char msg_to_send[1024];
 	int bytes_read;
-	int status;
+	// int status;
 
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
@@ -73,13 +73,13 @@ void	Server::read_data_from_socket(int socket)
 		if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
 		{
 			//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
-			status = send(j, msg_to_send, strlen(msg_to_send), 0);
-			if (status == -1)
-				quitCmd(j);
+			// status = send(j, msg_to_send, strlen(msg_to_send), 0);
+			// if (status == -1)
+			// 	quitCmd(j);
+			std::cout << "COUCOU" << std::endl;
 		}
 	}
 	parser(buffer, socket);
-	// for (int i = 0; i  1024)
 	buffer[0] = '\0';
 }
 
@@ -146,22 +146,11 @@ void	Server::caplsCmd(std::string locate, int socket)
 
 void	Server::pingCmd(std::string cmd, int socket)
 {
-	std::string arg = cmd.substr(cmd.find(' ') + 1);
-	std::cout << "CMD : " << cmd << std::endl;
-	std::cout << arg << std::endl;
-	std::string arg2 = "\0";
+	(void) cmd;
+	std::string servername = "localhost";
 	sleep(1);
-	std::cout << "Sending : '" << PONG(arg, arg2) << "'" << std::endl;
-	// replyClient(PONG(arg, arg2), socket);
-	replyClient(PONG(arg2, arg2), socket);
-	// std::string test_msg = "PONGGGG";
-	// replyClient(test_msg, socket);
+    replyClient(DEFAULTPONG(servername), socket);
 }
-
-// std::string	Server::defineArgs(std::string cmd, int i)
-// {
-
-// }
 
 std::string		kindOptions(std::string cmd, char sign)
 {
@@ -216,7 +205,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	else if (locate.find("PASS") == 0)
 	{
 		std::cout << WHITE << "passe dans la fonction pass" << std::endl;
-		passCmd(cmd, locate, socket);
+		passCmd(str, locate, socket);
 	}
 	else if (locate.find("JOIN") == 0)
 	{
@@ -283,11 +272,11 @@ std::string Server::getUsernameFormNick(std::string to_parse)
 	else
 	{
 		std::cout << "COULDNT FIND IN THE BUFFER" << std::endl;
-		return NULL;
+		return ("<default_nickname>");
 	}
 }
 
-void	Server::passCmd(std::string to_parse, std::string cmd, int socket)
+void	Server::passCmd(std::string str, std::string cmd, int socket)
 {
 	std::string server_pass = getServerPassword();
 	int i = 0;
@@ -298,9 +287,10 @@ void	Server::passCmd(std::string to_parse, std::string cmd, int socket)
 	std::string from_client = &cmd[start];
 	if (from_client.compare(server_pass) != 0)
 	{
-		std::string username = getUsernameFormNick(to_parse);
+		std::string username = getUsernameFormNick(str);
 		std::cout << "Sending Username : " << username << std::endl;
 		replyClient(ERROR_INVPASS(username), socket);
+		//ct ici
 		return ;
 	}
 	// else
@@ -373,7 +363,7 @@ void	Server::nickCmd(std::string str, int socket)
 		//std::cout << YELLOW << "cmd = '" << it->second->getNickName() << "'" << std::endl; 
 		// Attention a si meme nickname ya PROBLEMES ou si user essaye de changer de nickname
 		std::string nickname = cmd;
-		if (checkNickName(nickname, socket) == false)
+		if (checkNickName(nickname, socket) == false && _clients[socket]->getStatus() >= 4)
 		{
 			replyClient(NICKNAMEINUSE_ERR(nickname), socket);
 		}
@@ -432,6 +422,7 @@ void	Server::userCmd(std::string str, int socket)
 		else
 		{
 			std::cout << "SETUP UsERNAME ET STATUS UPDATED" << std::endl;
+			std::cout << _clients[socket]->getStatus() << std::endl;
 			return ;
 		}
 	}

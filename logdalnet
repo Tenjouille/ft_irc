@@ -1,0 +1,83 @@
+<< CAP LS
+<< NICK vgoret
+<< USER vgoret vgoret irc.dal.net :Victor GORET
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Checking Ident
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** No Ident response
+>> :atw.hu.eu.dal.net 001 vgoret :Welcome to the DALnet IRC Network vgoret!~vgoret@62.210.32.230
+<< MODE vgoret +i
+>> :atw.hu.eu.dal.net 002 vgoret :Your host is atw.hu.eu.dal.net, running version bahamut-2.2.3
+>> :atw.hu.eu.dal.net 003 vgoret :This server was created Tue Dec 12 2023 at 01:47:04 AM CET
+>> :atw.hu.eu.dal.net 004 vgoret atw.hu.eu.dal.net bahamut-2.2.3 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :atw.hu.eu.dal.net 005 vgoret NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :atw.hu.eu.dal.net 005 vgoret CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :atw.hu.eu.dal.net 251 vgoret :There are 63 users and 7953 invisible on 37 servers
+>> :atw.hu.eu.dal.net 252 vgoret 84 :IRC Operators online
+>> :atw.hu.eu.dal.net 254 vgoret 3764 :channels formed
+>> :atw.hu.eu.dal.net 255 vgoret :I have 1268 clients and 1 servers
+>> :atw.hu.eu.dal.net 265 vgoret :Current local users: 1268 Max: 2113
+>> :atw.hu.eu.dal.net 266 vgoret :Current global users: 8016 Max: 12060
+>> :atw.hu.eu.dal.net NOTICE vgoret :*** Notice -- motd was last changed at 20/1/2021 6:02
+>> :atw.hu.eu.dal.net 375 vgoret :- atw.hu.eu.dal.net Message of the Day - 
+>> :atw.hu.eu.dal.net 372 vgoret :-20/1/2021 6:02
+>> :atw.hu.eu.dal.net 372 vgoret :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :atw.hu.eu.dal.net 372 vgoret :- by its acceptable use policy, available here: http://www.dal.net/aup
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :- Server Policies:
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :-    *   We reserve the right to deny access to this server without
+>> :atw.hu.eu.dal.net 372 vgoret :-        warning or explanation
+>> :atw.hu.eu.dal.net 372 vgoret :-    *   No malicious bots, including flood and nick/channel chasers
+>> :atw.hu.eu.dal.net 372 vgoret :-    *   No channel filler bots/clients/psybncs
+>> :atw.hu.eu.dal.net 372 vgoret :-          - A channel filler is a client, bnc, or bot which is
+>> :atw.hu.eu.dal.net 372 vgoret :-            connected just to fill a channel and make it look
+>> :atw.hu.eu.dal.net 372 vgoret :-            bigger
+>> :atw.hu.eu.dal.net 372 vgoret :-    *   Operator impersonation, spamming, or any other abuse will
+>> :atw.hu.eu.dal.net 372 vgoret :-        cause you to be banned from this server
+>> :atw.hu.eu.dal.net 372 vgoret :-    *   Abide by DALnet's AUP (www.dal.net/aup)
+>> :atw.hu.eu.dal.net 372 vgoret :-    *   Please have fun and enjoy DALnet!
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :-      ///admins////////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 vgoret :-      //                                             //
+>> :atw.hu.eu.dal.net 372 vgoret :-      //  [ Hidden  - administrator             ]    //
+>> :atw.hu.eu.dal.net 372 vgoret :-      //                                             // 
+>> :atw.hu.eu.dal.net 372 vgoret :-      //  [ koszik  - assistant administrator   ]    //
+>> :atw.hu.eu.dal.net 372 vgoret :-      //                                             //
+>> :atw.hu.eu.dal.net 372 vgoret :-      ///operators/////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 vgoret :-      //                                             //
+>> :atw.hu.eu.dal.net 372 vgoret :-      //                                             //
+>> :atw.hu.eu.dal.net 372 vgoret :-      //                                             //
+>> :atw.hu.eu.dal.net 372 vgoret :-      /////////////////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :- For IRCop assistance, please /join #operhelp or message one of our
+>> :atw.hu.eu.dal.net 372 vgoret :- friendly server staff listed above.
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :- For multilingual information:  <http://docs.dal.net/>
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 372 vgoret :- Thank you for using DALnet!  We hope you have a pleasant day.
+>> :atw.hu.eu.dal.net 372 vgoret :- 
+>> :atw.hu.eu.dal.net 376 vgoret :End of /MOTD command.
+>> :vgoret MODE vgoret :+iH
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :vgoret
+--> lag pong
+<< PRIVMSG localhost :PING 1713197234 983395
+>> :atw.hu.eu.dal.net 401 vgoret localhost :No such nick/channel
+<< PRIVMSG dalnet :PING 1713197237 776867
+>> :atw.hu.eu.dal.net 401 vgoret dalnet :No such nick/channel
+<< PRIVMSG :atw.hu.eu.dal.net :PING 1713197251 752074
+>> :atw.hu.eu.dal.net 412 vgoret :No text to send
+<< PRIVMSG :atw.hu.eu.dal.net :TEST PING 1713197259 272362
+>> :atw.hu.eu.dal.net 412 vgoret :No text to send
+<< PRIVMSG test ::ATW.HU.EU.DAL.NET PING 1713197266 785019
+>> :atw.hu.eu.dal.net 401 vgoret test :No such nick/channel
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :vgoret
+--> lag pong
+<< PRIVMSG vgoret :PING 1713197276 689338
+>> :vgoret!~vgoret@3942-f08e-29be-267d-67ed.210.62.ip PRIVMSG vgoret :PING 1713197276 689338
+<< NOTICE vgoret :PING 1713197276 689338
+>> :vgoret!~vgoret@3942-f08e-29be-267d-67ed.210.62.ip NOTICE vgoret :PING 1713197276 689338
+<< QUIT :leaving

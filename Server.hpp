@@ -86,6 +86,10 @@ class Server
 		~Server();
 	// bool	isPing(std::string locate);
 	bool	checkNickName(std::string to_check, int socket);
+	
+	//full connection
+	bool	full_connection(int socket, char *buffer);
+
 
 
 };
