@@ -186,16 +186,16 @@ void	Server::parser(char *buffer, int socket)
 	}
 }
 
-// void	Server::delClient(int socket)
-// {
-// 	std::map<int,Client*>::iterator it = _clients.find(socket);
-// 	if (it == _clients.end())
-// 	{
-// 		return;
-// 	}
-// 	else
-// 		_clients.erase(it);
-// }
+void	Server::delClient(int socket)
+{
+	std::map<int,Client*>::iterator it = _clients.find(socket);
+	if (it == _clients.end())
+	{
+		return;
+	}
+	else
+		_clients.erase(it);
+}
 
 void	Server::closeSockets()
 {

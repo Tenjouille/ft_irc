@@ -19,7 +19,6 @@
 // 	// 	std::cout << "ALL GOOD SAME PASSWORD" << std::endl;
 // 	getClient(socket)->updateStatus();
 // }
-
 // std::string	Server::getServerPassword() const
 // {
 // 	return _password;

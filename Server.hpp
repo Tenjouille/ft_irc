@@ -37,12 +37,14 @@ class Server
 		int						_socket;
 		struct sockaddr_in		_serverAddress;
 		int					 	_clientSocket;
+		//liste de clients existant
 		std::map<int, Client*>	_clients;
 		std::string				_password;
 		int						_status;
 		fd_set					_allSockets;
 		fd_set					_readFds;
 		int						_fdMax;
+		//liste de channels existant
 		std::map<std::string, Channel*> _channelLst;
 
 	public:
@@ -87,7 +89,7 @@ class Server
 		void    			send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send);
 		bool				checkNickName(std::string to_check, int socket);
 
-		// void				delClient(int socket);
+		void				delClient(int socket);
 
 		~Server();
 	// bool	isPing(std::string locate);

@@ -25,6 +25,7 @@ class Client
         int             _socket;
         int             _nickcount;
         int             _connection_status;
+        //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
     public:
         Client();

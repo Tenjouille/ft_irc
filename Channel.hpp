@@ -10,6 +10,7 @@ class Channel
 {
     private:
         std::string _name;
+        //liste des clients dans le channel + leurs socket
         std::map<int, Client*>  _clientslst;
     public:
         Channel(std::string str);

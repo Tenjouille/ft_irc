@@ -1,8 +1,9 @@
 #include "Command.hpp"
 
-Command::Command(char *buffer)
-{
-}
+// Command::Command(char *buffer)
+// {
+
+// }
 
 
 std::string Command::getName() const
