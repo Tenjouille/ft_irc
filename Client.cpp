@@ -48,6 +48,11 @@ std::string Client::getName() const
 	return _name;
 }
 
+std::vector<std::string> Client::getChannel()
+{
+	return _channel;
+}
+
 struct sockaddr	Client::getClientAddr() const
 {
 	return (_clientAddr);
@@ -78,11 +83,6 @@ void Client::setNickName(std::string str)
 void Client::setUserName(std::string str)
 {
     _username = str;
-}
-
-void    Client::updateStatus()
-{
-    _connection_status++;
 }
 
 /* ==== DESTRUCTEUR ==== */
