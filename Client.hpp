@@ -25,6 +25,7 @@ class Client
         int             _socket;
         int             _nickcount;
         int             _connection_status;
+        bool            _dont_set_user;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -43,6 +44,11 @@ class Client
         // void            userCmd(std::string str);
         // void            joinCmd(std::string str);
         ~Client();
+
+        //to know if we set the user or not depending on value
+        void    dont_set_user(bool value);
+        bool    do_we_set_or_not() const;
+
 };
 
 #endif

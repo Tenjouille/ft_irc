@@ -4,10 +4,29 @@ Client::Client()
 {
 	_nickcount = 0;
 	_connection_status = 0;
+	_dont_set_user = false;
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
 {}
+
+/*//! TMP NOT SURE IF USEFULL !//*/
+
+void	Client::dont_set_user(bool value)
+{
+	if (value == true)
+		_dont_set_user = true;
+	else
+		_dont_set_user = false;
+}
+
+bool	Client::do_we_set_or_not() const
+{
+	return _dont_set_user;
+}
+
+
+/* ==== GETTERS ====*/
 
 std::string Client::getNickName() const
 {
@@ -29,36 +48,31 @@ struct sockaddr Client::getClientAddr() const
 	return (_clientAddr);
 }
 
-// void Client::setNickName() const
+int Client::getSocket() const
+{
+	return _socket;
+}
+
+int     Client::getStatus()
+{
+    return _connection_status;
+}
+
+/* ==== SETTERS ==== */
 
 void Client::setSocket(int tmp)
 {
 	_socket = tmp;
 }
 
-int Client::getSocket() const
-{
-	return _socket;
-}
-
-// Parameters: <username> <hostname> <servername> :<realname>
-
-
-// void Client::joinCmd(std::string str)
-// {
-
-// }
-
 void Client::setNickName(std::string str)
 {
 	_nickname = str;
-  ////  std::cout << "NICKNAME = " << _nickname << std::endl;
 }
 
 void Client::setUserName(std::string str)
 {
     _username = str;
-   // std::cout << "USERNAME = " << _username << std::endl;
 }
 
 void    Client::updateStatus()
@@ -66,19 +80,7 @@ void    Client::updateStatus()
     _connection_status++;
 }
 
-int     Client::getStatus()
-{
-    return _connection_status;
-}
-// void Client::setUserName() const
-// {
-
-// }
-
-// void Client::setName() const
-// {
-
-// }
+/* ==== DESTRUCTEUR ==== */
 
 Client::~Client()
 {}
