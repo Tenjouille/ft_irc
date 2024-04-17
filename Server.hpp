@@ -93,8 +93,7 @@ class Server
 
 		~Server();
 	// bool	isPing(std::string locate);
-
-
+	bool	checkNickName(std::string to_check, int socket);
 };
 
 #endif

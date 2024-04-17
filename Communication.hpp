@@ -16,6 +16,19 @@
 // ERRORS //
 #define ERROR_INVPASS(username) (username + " :Password incorrect\r\n")
 #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use.\r\n")
+// #define PRIVMSG(argument_to_send, servername) ()
+// #define PONG(servername, token) (":PONG " + token + " " + servername + "\r\n")
+#define PONG(servername, token) (":" + token + "PONG " + servername + "\r\n")
+#define DEFAULTPONG(servername) ("PONG " + servername + "\r\n")
+
+#define PRIVMSG(nickname, envoyeur, msg) (":" + nickname + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n")
+
+// ERRORS //
+#define ERROR_INVPASS(nickname) (nickname + " :Password incorrect\r\n")
+#define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use.")
+
+
+// OTHER
 
 size_t	replyClient(std::string Macros, int socket);
 
