@@ -64,11 +64,13 @@ int	Server::getClientSocket(int socket) const
 		return -1;
 }
 
-Client*	Server::getClient(int socket) const
+Client*	Server::getClient(int socket)
 {
 	std::map<int, Client*>::const_iterator it = _clients.find(socket);
 	if (it != _clients.end())
+	{
 		return it->second;
+	}
 	else
 		return NULL;
 }

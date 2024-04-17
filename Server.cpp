@@ -36,7 +36,7 @@ void	Server::read_data_from_socket(int socket)
 	{
 		if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
 		{
-			std::cout << GREEN << "ICI" << RESET << std::endl;
+			//std::cout << GREEN << "ICI" << RESET << std::endl;
 			//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
 			// status = send(j, msg_to_send, strlen(msg_to_send), 0);
 			// if (status == -1)
@@ -46,7 +46,7 @@ void	Server::read_data_from_socket(int socket)
 			// }
 		}
 	}
-	std::cout << GREEN << "HERE" << RESET << std::endl;
+	//std::cout << GREEN << "HERE" << RESET << std::endl;
 	parser(buffer, socket);
 	// for (int i = 0; i  1024)
 	buffer[0] = '\0';
@@ -144,7 +144,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("JOIN") == 0)
 	{
-		std::cout << WHITE << "passe dans la fonction join" << std::endl;
+		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)

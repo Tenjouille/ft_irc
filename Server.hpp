@@ -53,7 +53,7 @@ class Server
 		//////////////GETTERS///////////////
 		int					getSocket() const;
 		int					getClientSocket(int socket) const;
-		Client*				getClient(int socket) const;
+		Client*				getClient(int socket); //! A REMETTRE CONST !!!!!//
 		struct sockaddr_in  getServerAddress() const;
 		// struct sockaddr	 getClientAddr() const;
 		std::string			getServerPassword() const;
@@ -86,7 +86,7 @@ class Server
 		void 				msgCmd(std::string locate, int socket);
 		ssize_t				sendToClient(std::string to_send, int socket);
 		void				createChannel(std::string name, int socket);
-		void    			send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send);
+		void    			send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send, int socket);
 		bool				checkNickName(std::string to_check, int socket);
 
 		void				delClient(int socket);
