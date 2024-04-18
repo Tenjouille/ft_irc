@@ -27,6 +27,7 @@ class Client
         int             _connection_status;
         //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
+        bool            _dont_set_user;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -42,6 +43,11 @@ class Client
         void            setSocket(int tmp);
         std::vector<std::string> getChannel();
         ~Client();
+
+        //to know if we set the user or not depending on value
+        void    dont_set_user(bool value);
+        bool    do_we_set_or_not() const;
+
 };
 
 #endif

@@ -20,6 +20,12 @@ Server::Server(char **av)
 		std::cout << "invalid port format" << std::endl;
 }
 
+/* ==== GETTERS ==== */
+
+int	Server::getSocket() const
+{
+	return _socket;
+}
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
@@ -42,21 +48,65 @@ void	Server::read_data_from_socket(int socket)
 		// 	// 	quitCmd(j);
 		// }
 	}
+	//std::cout << GREEN << "HERE" << RESET << std::endl;
 	parser(buffer, socket);
 	// for (int i = 0; i  1024)
 	buffer[0] = '\0';
 }
 
-void	Server::accept_new_connection()
+struct sockaddr_in	Server::getServerAddress() const
 {
-	int client_fd;
-
-	client_fd = accept(_socket, NULL, NULL);
-	setClientSocket(client_fd);
-	FD_SET(client_fd, &_allSockets);
-	if (client_fd > _fdMax)
-		_fdMax = client_fd;
+	return _serverAddress;
 }
+
+int	Server::getClientSocket(int socket) const
+{
+	std::map<int, Client*>::const_iterator it = _clients.find(socket);
+	if (it != _clients.end())
+		return it->second->getSocket();
+	else
+		return -1;
+}
+
+Client*	Server::getClient(int socket) const
+{
+	std::map<int, Client*>::const_iterator it = _clients.find(socket);
+	if (it != _clients.end())
+		return it->second;
+	else
+		return NULL;
+}
+
+fd_set& Server::getallSockets()
+{
+	return _allSockets;
+}
+
+fd_set& Server::getreadFds()
+{
+	return _readFds;
+}
+
+int Server::getfdMax()
+{
+	return _fdMax;
+}
+
+/* ==== SETTERS ==== */
+
+void	Server::setfdMax(int socket)
+{
+	_fdMax = socket;
+}
+
+void	Server::setClientSocket(int tmp)
+{
+	Client* client = new Client();
+	client->setSocket(tmp);
+	_clients.insert(std::make_pair(tmp, client));
+}
+
+/* //? ==== MAIN FUNCTIONS ==== ?// */
 
 void	Server::loop()
 {
@@ -80,6 +130,18 @@ void	Server::loop()
 				read_data_from_socket(i);
 		}
 	}
+}
+
+
+void	Server::accept_new_connection()
+{
+	int client_fd;
+
+	client_fd = accept(_socket, NULL, NULL);
+	setClientSocket(client_fd);
+	FD_SET(client_fd, &_allSockets);
+	if (client_fd > _fdMax)
+		_fdMax = client_fd;
 }
 
 std::string		kindOptions(std::string cmd, char sign)
@@ -127,7 +189,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		passCmd(cmd, locate, socket);
 	else if (locate.find("JOIN") == 0)
 	{
-		std::cout << WHITE << "passe dans la fonction join" << std::endl;
+		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)

@@ -2,12 +2,12 @@
 
 size_t  replyClient(std::string Macros, int socket)
 {
-	size_t bytes_sent = 0;
+	ssize_t bytes_sent = 0;
 
 //	std::cout << "before" << std::endl;
 
 	bytes_sent = send(socket, Macros.c_str(), Macros.size(), 0);
-	if (bytes_sent == static_cast<size_t>(-1))
+	if (bytes_sent == static_cast<ssize_t>(-1))
 	{
 		std::cout << "Something went wrong !" << std::endl;
 		return (bytes_sent);
