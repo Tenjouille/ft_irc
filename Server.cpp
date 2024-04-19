@@ -4,6 +4,7 @@ Server::Server(char **av)
 {
 	size_t i;
 	_status = 0;
+	_nb_channels = 0;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -223,8 +224,12 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		// std::cout << WHITE << "passe dans la fonction privmsg" << std::endl;
 		msgCmd(locate, socket);
 	}
-	// else if (locate.find("MSG") == 0)
-	// 	std::cout << "!!!MSG COMMAND!!!" << std::endl;
+	else if (locate.find("INVITE") == 0)
+	{
+		std::cout << "LETS GO INVITE BOYS" << std::endl;
+		inviteCmd(locate, socket);
+	}
+	std::cout << RED << "SKIPPED WITH : " << locate << RESET << std::endl;
 	// else if (locate.find("KICK") == 0)
 	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
 	// else if (locate.find("PING") == 0)

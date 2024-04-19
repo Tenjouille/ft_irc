@@ -17,10 +17,11 @@ void Server::joinCmd(std::string locate, int socket)
         //     i++;
         // }
         // channel_name += '\0';
-            size_t start = locate.find("#");
-            std::string channelName = locate.substr(start + 1);
+        size_t start = locate.find("#");
+        std::string channelName = locate.substr(start + 1);
         std::cout << "CHANNEL NAME MIEUX : " << channelName << std::endl;
         // std::string channelName = locate.substr(start + 1, end - start - 1);
+        Client *client = getClient(socket);
         for (std::map<std::string,
 		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
 	    {
@@ -30,6 +31,8 @@ void Server::joinCmd(std::string locate, int socket)
 		    if (tmp == channelName)
             {
                 std::cout << "added one client" << std::endl;
+                //ajouter le channel au client
+                client->addChannel(channelName);
                 channel->addClient(socket, getClient(socket));
                 return; 
             }
@@ -40,6 +43,8 @@ void Server::joinCmd(std::string locate, int socket)
         // {
             std::cout << "Nom du canal : " << channelName << std::endl;
             createChannel(channelName, socket);
+            client->addChannel(channelName);
+
     //    }
        
 
@@ -72,6 +77,8 @@ void Server::createChannel(std::string name, int socket)
     channel->addClient(socket, getClient(socket));
     getClient(socket)->getChannel().push_back(name);
     replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);
+    _nb_channels++;
+    std::cout << "NOMBRE DE CHANNELS SUR LE SERVER : " << _nb_channels << std::endl;
 }
 
     //verifier si le channel existe deja 

@@ -46,6 +46,7 @@ class Server
 		int						_fdMax;
 		//liste de channels existant
 		std::map<std::string, Channel*> _channelLst;
+		int								_nb_channels;
 
 	public:
 		Server(char **arguments);
@@ -90,6 +91,10 @@ class Server
 		bool				checkNickName(std::string to_check, int socket);
 
 		void				delClient(int socket);
+
+		void				inviteCmd(std::string locate, int socket);
+		bool				fillinBuffer(std::string locate, std::string& servername, std::string& invited, std::string& nickname, int socket);
+
 
 		~Server();
 	// bool	isPing(std::string locate);

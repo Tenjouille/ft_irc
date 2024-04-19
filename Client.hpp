@@ -14,6 +14,9 @@
 #include <fcntl.h>
 #include <vector>
 #include "Communication.hpp"
+#include "Channel.hpp"
+
+class Channel;
 
 class Client
 {
@@ -47,6 +50,9 @@ class Client
         //to know if we set the user or not depending on value
         void    dont_set_user(bool value);
         bool    do_we_set_or_not() const;
+
+        void    addChannel(std::string to_add);
+        void	printChannels();
 
 };
 

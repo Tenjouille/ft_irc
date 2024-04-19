@@ -26,6 +26,18 @@ bool	Client::do_we_set_or_not() const
 }
 
 
+void	Client::printChannels()
+{
+	std::vector<std::string>::iterator it = _channel.begin();
+	std::vector<std::string>::iterator itend = _channel.end();
+	
+	while (it != itend)
+	{
+		std::cout << *it << std::endl;
+		++it;
+	}
+}
+
 /* ==== GETTERS ====*/
 
 std::string Client::getNickName() const
@@ -69,6 +81,12 @@ int     Client::getStatus()
 }
 
 /* ==== SETTERS ==== */
+
+void    Client::addChannel(std::string channelname_to_add)
+{
+	_channel.push_back(channelname_to_add);
+	std::cout << "ADDED " << channelname_to_add << " into client's vector" << std::endl;
+}
 
 void Client::setSocket(int tmp)
 {
