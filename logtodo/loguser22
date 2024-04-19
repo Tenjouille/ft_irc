@@ -1,0 +1,13 @@
+<< CAP LS
+<< PASS mdp
+<< NICK user3
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> :localhost 001 user3 :Welcome to the Internet Relay Network user3!uaupetit
+<< MODE user3 +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #cha
+<< PING localhost
+<< QUIT :Lost terminal

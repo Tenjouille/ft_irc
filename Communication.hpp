@@ -12,7 +12,7 @@
 //#define PONG(servername) ("PONG " + servername + "\r\n")
 //#define PRIVMSG(nickname, envoyeur, msg) (":" + nickname + "!" + "@localhost" + " PRIVMSG " + nickname + " :" + msg + "\r\n")
 #define PRIVMSG(nickname, envoyeur, msg) (":" + nickname + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n")
-
+#define TOPIC(nickname, channelName, topic) (":" + nickname + "!" + "uaupetit@localhost" + " TOPIC #" + channelName + " :" + topic + "\r\n") 
 #define CREATECHANNEL(nickname, username, name) (":" + nickname+ "!" + username + "@localhost JOIN " + name + "\r\n")
 #define NOT_EXISTING_CHANNEL(channelName) (":localhost 403 #" + channelName + " :No such channel\r\n")
 #define SENDINCHANNEL(sender, receiver, msg, channelname) (":" + sender + "!" + "uaupetit" + "@localhost PRIVMSG #" + channelname + " :" + msg + "\r\n")
@@ -31,6 +31,9 @@
 // #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use.")
 
 
+#define NOTOPIC(nickname, channelName) (":localhost 331 " + nickname + " " + channelName + " :No topic is set\r\n")
+#define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName +  " " + topicName + "\r\n")
+#define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 // OTHER
 
 size_t	replyClient(std::string Macros, int socket);

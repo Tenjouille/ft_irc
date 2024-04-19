@@ -42,6 +42,7 @@ class Client
         void            setUserName(std::string str);
         void            setSocket(int tmp);
         std::vector<std::string> getChannel();
+        // Client* cloneClient();
         ~Client();
 
         //to know if we set the user or not depending on value

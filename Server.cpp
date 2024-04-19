@@ -205,7 +205,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("JOIN") == 0)
 	{
-		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
+		// std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
@@ -223,8 +223,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		// std::cout << WHITE << "passe dans la fonction privmsg" << std::endl;
 		msgCmd(locate, socket);
 	}
-	// else if (locate.find("MSG") == 0)
-	// 	std::cout << "!!!MSG COMMAND!!!" << std::endl;
+	else if (locate.find("TOPIC") == 0)
+	{
+		topicCmd(locate, socket);
+	}
 	// else if (locate.find("KICK") == 0)
 	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
 	// else if (locate.find("PING") == 0)

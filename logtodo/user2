@@ -1,0 +1,29 @@
+<< CAP LS
+<< PASS mdp
+<< NICK user2
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> Password accepted.
+>> You're now known as user2.
+>> :localhost 001 user2 :Welcome to the Internet Relay Network user2!uaupetit
+<< MODE user2 +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #cha
+>> :user2!uaupetit@localhost JOIN #cha
+>> :localhost 331 user2 #cha :No topic is set
+>> :localhost 353 user2 = #cha :@user1 user2
+>> :localhost 366 user2 #cha :End of /NAMES list
+<< MODE #cha
+>> :localhost 324 user2 #cha +
+--> chanquery mode
+<< WHO #cha
+>> 
+>> :user1!uaupetit@localhost TOPIC #cha :toooop
+>> :user3!uaupetit@localhost JOIN #cha
+<< PING localhost
+>> PONG localhost
+--> lag pong
+>> :user1!uaupetit@localhost QUIT Quit: :Lost terminal
+<< QUIT :Lost terminal

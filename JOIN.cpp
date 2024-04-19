@@ -1,79 +1,76 @@
 #include "Server.hpp"
 
-void Server::joinCmd(std::string locate, int socket)
-{
-    // size_t start = locate.find("#");
-    // if (start != std::string::npos)
-    // {
-    //     size_t end = locate.find(" ", start);
-    //     if (end != std::string::npos)
-    //     {
-
-        // std::string channel_name;
-        // size_t i = 5; //skip JOIN #
-        // while (locate[i] != '\0')
-        // {
-        //     channel_name += locate[i];
-        //     i++;
-        // }
-        // channel_name += '\0';
-            size_t start = locate.find("#");
-            std::string channelName = locate.substr(start + 1);
-        std::cout << "CHANNEL NAME MIEUX : " << channelName << std::endl;
-        // std::string channelName = locate.substr(start + 1, end - start - 1);
-        for (std::map<std::string,
-		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
-	    {
-            std::cout << "iteration" << std::endl;
-		    std::string tmp = it->first;
-		    Channel *channel = it->second;
-		    if (tmp == channelName)
-            {
-                std::cout << "added one client" << std::endl;
-                channel->addClient(socket, getClient(socket));
-                return; 
-            }
-            // getClient(socket)->getChannel().push_back(name);
-            // replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket)
-        }
-        // else
-        // {
-            std::cout << "Nom du canal : " << channelName << std::endl;
-            createChannel(channelName, socket);
-    //    }
-       
-
     ///ATTENTON CHECK SI # A UN MOMENT
     // else
 	// {
     //     std::cout << "Aucun symbole '#' trouvé dans la chaîne." << std::endl;
     // }
-}
 
-/*void Server::createChannel(std::string name, int socket)
+void Server::joinCmd(std::string locate, int socket)
 {
-	Channel* channel = new Channel(name);
-	_channelLst.insert(std::make_pair(name, channel));
-	channel->addClient(socket, getClient(socket));
-	getClient(socket)->getChannel().push_back(name);
-	replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);
-}*/
+        int flag = 0;
+        size_t start = locate.find("#");
+        std::string channelName = locate.substr(start + 1);
+        for (std::map<std::string,
+		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+	    {
+		    std::string tmp = it->first;
+		    Channel *channel = it->second;
+		    if (tmp == channelName)
+            {
+                flag = 1;
+                channel->addClient(socket, getClient(socket));
+                if (findChannel(channelName)->second->getTopicStatus() == 1)
+                    replyClient(ALREADYTOPIC(getClient(socket)->getName(), channelName,findChannel(channelName)->second->getTopic()), socket);
+                else
+                    replyClient(NOTOPIC(getClient(socket)->getName(), channelName), socket);
+                return; 
+            }
+        }
+        if (flag == 1)
+        {
+            std::map<std::string, Channel*>::iterator channelIt = findChannel(channelName);
+            if (channelIt != _channelLst.end())
+            {
+                std::map<int, Client*> clientMap = channelIt->second->getClientlst();
+                std::string userlst;
+                for (std::map<int, Client*>::iterator it = clientMap.begin(); it != clientMap.end(); ++it)
+                {
+                    userlst += it->second->getNickName() + " ";
+                }
+                replyClient(LISTUSERS(getClient(socket)->getNickName(), channelName, userlst), socket);
+            }
+        }
+        else if (flag == 0)
+            createChannel(channelName, socket);
+        //il faudra envoyer un reply avec la liste des clients du channel dans tout les cas
+        
+        // std::string userlst;
+}
 
 void Server::createChannel(std::string name, int socket)
 {
-    std::cout << "here i am" << std::endl;
     if (_channelLst.find(name) == _channelLst.end())
     {
         replyClient(NOT_EXISTING_CHANNEL(name), socket);
     }
     Channel* channel = new Channel(name);
     _channelLst.insert(std::make_pair(name, channel));
-    std::cout << "CHANNEL ADDED" << std::endl;
     channel->addClient(socket, getClient(socket));
     getClient(socket)->getChannel().push_back(name);
     replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);
+    if (findChannel(name)->second->getTopicStatus() == 0)
+        replyClient(NOTOPIC(getClient(socket)->getNickName(), name), socket);
+    std::cout << "imprime ca :'" << getClient(socket)->getName() << "'" << std::endl;
+    replyClient(LISTUSERS(getClient(socket)->getNickName(), name, getClient(socket)->getNickName()), socket);
 }
 
-    //verifier si le channel existe deja 
-	//creer channel
-	//y ajouter le client
+std::map<std::string, Channel*>::iterator Server::findChannel(std::string channelName)
+{
+    for(std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+    {
+        if (it->second->getName() == channelName)
+            return it;
+    }
+    return _channelLst.end();
+}

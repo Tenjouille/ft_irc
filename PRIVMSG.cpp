@@ -137,12 +137,11 @@
 // 		send_in_channel(user, s_nick, s_user, msg);
 // 	}
 // }
-
+/*
 void Server::send_in_channel(std::string user, std::string s_nick,
-		std::string s_user, std::string msg_to_send, int socket)
+		std::string msg_to_send, int socket, std::string macro)
 {
-    
-	(void)s_user;
+    //std::string msg = NULL;
 //	std::string final_user = "#" + user;
     std::string final_user = user;
 	//std::string msg = PRIVMSG(s_nick, final_user, msg_to_send);
@@ -159,16 +158,58 @@ void Server::send_in_channel(std::string user, std::string s_nick,
 			for (std::map<int,
 					Client *>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
 			{
-				std::cout << "CLIENTS DU CHANNEL : " << it_clt->second->getNickName() << std::endl;
+			//	std::cout << "CLIENTS DU CHANNEL : " << it_clt->second->getNickName() << std::endl;
 				if (it_clt->first != socket)
                 {
-					std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
-					std::cout << YELLOW << "socket = " << it_clt->first << std::endl;
-					replyClient(msg, it_clt->first);
-				}
+					if (macro == "send")
+                    {    
+                        std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
+					    replyClient(msg, it_clt->first);
+                    }
+                }
+                else if (macro == "topic")
+                {
+                    std::string msg1 = TOPIC(it_clt->second->getNickName(), user, msg_to_send);
+                    replyClient(msg1, it_clt->first);
+                }
+                    //     msg = TOPIC(it_clt->second->getNickName(), user, msg_to_send);
+                    //std::cout << YELLOW << "socket = " << it_clt->first << std::endl;
 			}
 		}
 	}
+}*/
+
+void Server::send_in_channel(std::string user, std::string s_nick, std::string msg_to_send, int socket, std::string macro)
+{
+    std::string final_user = user;
+    for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+    {
+        std::string channel_name = it->first;
+        Channel *channel = it->second;
+        if (channel_name == user)
+        {
+            std::map<int, Client*> client_list = channel->getClientlst();
+            if (macro == "send")
+            {
+                for (std::map<int, Client*>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
+                {
+                    if (it_clt->first != socket)
+                    {
+                        std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
+                        replyClient(msg, it_clt->first);
+                    }
+                }
+            }
+            else if (macro == "topic")
+            {
+                for (std::map<int, Client*>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
+                {
+                    std::string msg = TOPIC(it_clt->second->getNickName(), user, msg_to_send);
+                    replyClient(msg, it_clt->first);
+                }
+            }
+        }
+    }
 }
 
 int Server::getSocketFromUser(std::string to_find)
@@ -184,7 +225,7 @@ int Server::getSocketFromUser(std::string to_find)
             if (it->second->getNickName() == to_find)
             {
                 socket = it->first;
-                std::cout << "Socket to send to : " << socket << std::endl;
+              //  std::cout << "Socket to send to : " << socket << std::endl;
                 return (socket);
             }
             ++it;
@@ -204,8 +245,8 @@ void Server::msgCmd(std::string locate, int socket)
 	int is_channel = 0;
     std::string user;
     std::string msg;
-	std::cout << RED << "locate = " << locate << RESET << std::endl;    
-    std::cout << "On est ici : '" << locate << "'" << std::endl; 
+	// std::cout << RED << "locate = " << locate << RESET << std::endl;    
+    // std::cout << "On est ici : '" << locate << "'" << std::endl; 
 	//string = "PRIVMSG uaupetit :salut ca va";
     
     size_t ping_pos = locate.find("PING");
@@ -253,9 +294,9 @@ void Server::msgCmd(std::string locate, int socket)
     return;
 	}
 
-    std::cout << "on est revenus ici ?" << std::endl;
+ //   std::cout << "on est revenus ici ?" << std::endl;
 	size_t start = locate.find("PRIVMSG ");
-	std::cout << GREEN << "start = " << start << std::endl;
+	//std::cout << GREEN << "start = " << start << std::endl;
 	if (start != std::string::npos)
 	{
         start += 8;
@@ -273,8 +314,8 @@ void Server::msgCmd(std::string locate, int socket)
  			}
 			// user[user.length()] = '\0';
             // msg[msg.length()] = '\0';
-            std::cout << MAGENTA "User: '" << user << "'" << std::endl;
-            std::cout << MAGENTA "Message: '" << msg << "'" << std::endl;
+          //  std::cout << MAGENTA "User: '" << user << "'" << std::endl;
+            //std::cout << MAGENTA "Message: '" << msg << "'" << std::endl;
         }
 		else
 		{
@@ -295,7 +336,7 @@ void Server::msgCmd(std::string locate, int socket)
     // std::string msg_to_send = MSG_TO_SEND(user, servername, sender, msg);
     // std::cout << MSG_TO_SEND(user, servername, sender, msg) << std::endl;
 	/**********************printt client   */
-	std::cout << YELLOW << "channel name = " << user << RESET << std::endl;
+	//std::cout << YELLOW << "channel name = " << user << RESET << std::endl;
 	for (std::map<std::string,
 			Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
 	{
@@ -318,21 +359,21 @@ void Server::msgCmd(std::string locate, int socket)
     std::string s_nick = _clients[socket]->getNickName();
 	if (is_channel == 0)
  	{
-		std::cout << RED << "LALALALAAAA" << RESET << std::endl;
-		std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
+		// std::cout << RED << "LALALALAAAA" << RESET << std::endl;
+		// std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
 		std::string msg_to_send = PRIVMSG(s_nick, user, msg);
-		std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
-		std::cout << socket_to_send_to << " et " << socket << std::endl;
+		//std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
+		//std::cout << socket_to_send_to << " et " << socket << std::endl;
 		// std::string servername = "localhost";
-		std::cout << YELLOW << "SOCKET DU SERVER : " << _socket << RESET << std::endl;
+		//std::cout << YELLOW << "SOCKET DU SERVER : " << _socket << RESET << std::endl;
 		// replyClient(DEFAULTPONG(s_nick), socket_to_send_to);
 		replyClient(msg_to_send, socket_to_send_to);
 		(void) socket;
 	}
 	else
 	{
-		std::cout << RED << "ICICICIIIIC" << RESET << std::endl;
-		std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
-		send_in_channel(user, s_nick, s_user, msg, socket);
+	//	std::cout << RED << "ICICICIIIIC" << RESET << std::endl;
+	//	std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
+		send_in_channel(user, s_nick, msg, socket, "send");
 	}
 }
