@@ -5,10 +5,21 @@ Client::Client()
 	_nickcount = 0;
 	_connection_status = 0;
 	_dont_set_user = false;
+	_is_connected = false;
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
 {}
+
+void	Client::change_connected()
+{
+	_is_connected = true;
+}
+
+bool	Client::getConnectedStatus() const
+{
+	return (_is_connected);
+}
 
 /*//! TMP NOT SURE IF USEFULL !//*/
 
@@ -48,6 +59,7 @@ std::string Client::getNickName() const
 void    Client::updateStatus()
 {
     _connection_status++;
+	std::cout << "STATUS UPDATED TO : " << _connection_status << std::endl;
 }
 
 std::string Client::getUserName() const

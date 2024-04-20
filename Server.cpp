@@ -27,13 +27,13 @@ int	Server::getSocket() const
 {
 	return _socket;
 }
+
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
 	//char msg_to_send[1024];
 	int bytes_read;
 	//int status;
-
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
 	//std::cout << RED << "'" << buffer << "'" << std::endl;
@@ -179,29 +179,22 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	locate.append(str, start, it - start);
 	cmd.append(str, start, str.find(' '));
 	options.append(defineOptions(locate));
-	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
 	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction nick" << std::endl;
 		nickCmd (locate, socket);
 	}
 	else if (locate.find("CAP LS") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction capls" << std::endl;
 		caplsCmd(locate, socket);
 	}
 	else if (locate.find("USER") == 0)
     {
-		// std::cout << WHITE << "passe dans la fonction user" << std::endl;
         userCmd(locate, socket);
     }
-    // else if (locate.find("MODE") == 0)
-	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 	else if (locate.find("PASS") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction pass" << std::endl;
 		passCmd(cmd, locate, socket);
 	}
 	else if (locate.find("JOIN") == 0)
@@ -212,16 +205,13 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	else if (locate.find("QUIT") == 0)
 	{
 		quitCmd(socket);
-		// std::cout << WHITE << "passe dans la fonction quit" << std::endl;
 	}
 	else if (locate.find("PING") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction ping" << std::endl;
 		pingCmd(locate, socket);
 	}
 	else if (locate.find("PRIVMSG") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction privmsg" << std::endl;
 		msgCmd(locate, socket);
 	}
 	else if (locate.find("INVITE") == 0)
@@ -229,15 +219,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		std::cout << "LETS GO INVITE BOYS" << std::endl;
 		inviteCmd(locate, socket);
 	}
-	std::cout << RED << "SKIPPED WITH : " << locate << RESET << std::endl;
-	// else if (locate.find("KICK") == 0)
-	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
-	// else if (locate.find("PING") == 0)
-	// 	std::cout << "!!!PING COMMAND!!!" << std::endl;
-	// else if (locate.find("WHOIS") == 0)
-	// 	std::cout << "!!!WHOIS COMMAND!!!" << std::endl;
-	// else
-	// 	std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
+	std::cout << GREEN << locate << RESET << std::endl;
 }
 
 void	Server::parser(char *buffer, int socket)

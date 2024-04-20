@@ -31,6 +31,7 @@ class Client
         //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
         bool            _dont_set_user;
+        bool            _is_connected;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -53,6 +54,10 @@ class Client
 
         void    addChannel(std::string to_add);
         void	printChannels();
+
+        //to change connected status
+        void	change_connected();
+        bool	getConnectedStatus() const;
 
 };
 
