@@ -8,6 +8,7 @@
 
 void Server::joinCmd(std::string locate, int socket)
 {
+        std::cout << RED << "locate = " << locate << std::endl;
         int flag = 0;
         size_t start = locate.find("#");
         std::string channelName = locate.substr(start + 1);
@@ -21,10 +22,10 @@ void Server::joinCmd(std::string locate, int socket)
                 flag = 1;
                 channel->addClient(socket, getClient(socket));
                 if (findChannel(channelName)->second->getTopicStatus() == 1)
-                    replyClient(ALREADYTOPIC(getClient(socket)->getName(), channelName,findChannel(channelName)->second->getTopic()), socket);
+                    replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, findChannel(channelName)->second->getTopic()), socket);
                 else
-                    replyClient(NOTOPIC(getClient(socket)->getName(), channelName), socket);
-                return; 
+                    replyClient(NOTOPIC(getClient(socket)->getNickName(), channelName), socket);
+                break; 
             }
         }
         if (flag == 1)
@@ -39,6 +40,7 @@ void Server::joinCmd(std::string locate, int socket)
                     userlst += it->second->getNickName() + " ";
                 }
                 replyClient(LISTUSERS(getClient(socket)->getNickName(), channelName, userlst), socket);
+                replyClient(NAMELIST(getClient(socket)->getNickName(), channelName), socket);
             }
         }
         else if (flag == 0)
@@ -63,6 +65,7 @@ void Server::createChannel(std::string name, int socket)
         replyClient(NOTOPIC(getClient(socket)->getNickName(), name), socket);
     std::cout << "imprime ca :'" << getClient(socket)->getName() << "'" << std::endl;
     replyClient(LISTUSERS(getClient(socket)->getNickName(), name, getClient(socket)->getNickName()), socket);
+    replyClient(NAMELIST(getClient(socket)->getNickName(), name), socket);
 }
 
 std::map<std::string, Channel*>::iterator Server::findChannel(std::string channelName)
