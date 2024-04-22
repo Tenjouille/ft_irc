@@ -32,12 +32,12 @@
 #define ERR_NOSUCHCHANNEL(channelName) (":localhost 403 " + channelName + " :No such channel" + "\r\n") //NEEDS A # IN THE CHANNEL NAME !!
 #define ERR_USERONCHANNEL(client, nickname , channelname) (":localhost 403 " + client + " " + nickname + " " \
 + channelname + " :is already on channel" + "\r\t") //TRYING TO INVITE SOMEONE THAT IS ALREADY IN THE CHANNEL
+#define ERR_CHANOPRIVSNEEDED(client_nickname, channel_name) (client_nickname + " " + channel_name + " :You're not channel operator" + "\r\n") //OPERTORS CAN INVITE ONLY
 
 // JOIN ERRORS //
-
+//!\\ #define ERR_BADCHANNELKEY(client_nickanme, channel_name) (client_nickname + " " + channel_name + " :Cannot join channel (+k)" + "\r\n") //TRYING TO JOIN A CHANNEL WITH BAD KEY
 #define ERR_CHANNELISFULL(client_nickname, channel_name) (client_nickname + " " + channel_name + " :Cannot join channel (+l)" + "\r\n") //TRYING TO JOIN A CHANNEL THAT IS FULL
 #define NOT_EXISTING_CHANNEL(channelName) (":localhost 403 #" + channelName + " :No such channel\r\n") //TRYING TO JOIN A CHANNEL THAT DOESNT EXIST
-
 #define userID(nickname, username) (":" + nickname + "!" + username + "@localhost")
 // FUNCTION 
 

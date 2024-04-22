@@ -173,7 +173,14 @@ void	Server::inviteCmd(std::string locate, int socket)
 		replyClient(error_msg, socket);
 		return ;
 	}
-
+	else if (sender_in_channel == true) //need to add the permission check
+	{
+		std::string error_msg = ERR_CHANOPRIVSNEEDED(nickname, channel_name);
+		std::cout << YELLOW << "SENDER CANT INVITE" << RESET << std::endl;
+		std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
+		replyClient(error_msg, socket);
+		return ;
+	}
 	//SENDING MESSAGE NO ERROR DETECTED
 	std::string username = sender->getUserName();
 	std::string userID = ":" + nickname + "!" + username + "@localhost";
