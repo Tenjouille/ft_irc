@@ -178,6 +178,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	locate.append(str, start, it - start);
 	cmd.append(str, start, str.find(' '));
 	options.append(defineOptions(locate));
+	//std::cout << GREEN << "locate = '" << locate << "' \n cmd = '" << cmd << "'" << RESET << std::endl;
 	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
 	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
@@ -205,7 +206,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("JOIN") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
+		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
@@ -215,6 +216,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("PING") == 0)
 	{
+		std::cout << "on est pas rentres si " << std::endl;
 		// std::cout << WHITE << "passe dans la fonction ping" << std::endl;
 		pingCmd(locate, socket);
 	}

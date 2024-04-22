@@ -1,13 +1,15 @@
 << CAP LS
 << PASS mdp
-<< NICK ulysse
+<< NICK uaupetit
 << USER uaupetit uaupetit localhost :Ulysse AUPETIT
 >> CAP_ACK LS
->> Password accepted.
->> You're now known as ulysse.
->> :localhost 001 ulysse :Welcome to the Internet Relay Network ulysse!uaupetit
-<< MODE ulysse +i
+>> :localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit
+<< MODE uaupetit +i
 << PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+<< PRIVMSG ul :PING 1713791781 133959
 >> PONG localhost
 --> lag pong
 << PING localhost
@@ -28,10 +30,3 @@
 << PING localhost
 >> PONG localhost
 --> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< QUIT :Lost terminal

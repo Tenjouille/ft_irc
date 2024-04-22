@@ -29,10 +29,14 @@
 // ERRORS //
 #define ERROR_INVPASS(nickname) (nickname + " :Password incorrect\r\n")
 // #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use.")
+#define ERR_NEEDMOREPARAMS(nickname, cmd) (nickname + " " + cmd + " :Not enough parameters\r\n")
+#define ALREADYREGISTERED(nickname) (nickname + " :You may not reregister\r\n")
 
-
-#define NOTOPIC(nickname, channelName) (":localhost 331 " + nickname + " #" + channelName + " :No topic is set\r\n")
-#define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " " + topicName + "\r\n")
+//#define NOTOPIC(nickname, channelName) (":localhost 331 " + nickname + " #" + channelName + " :No topic is set\r\n")
+#define NOTOPIC(nickname, channelName) (nickname + " #" + channelName + " :No topic is set\r\n")
+#define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " :" + topicName + "\r\n")
+#define ERR_NOSUCHNICK(client, dest) (client + " " + dest + " :No such nick/channel\r\n") 
+//#define ALREADYTOPIC(nickname, channelName, topicName) (nickname + " " + channelName + " " + topicName + "\r\n")
 #define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
 // OTHER

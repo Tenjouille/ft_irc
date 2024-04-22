@@ -32,16 +32,26 @@ void	Server::passCmd(std::string str, std::string cmd, int socket)
 {
 	std::string server_pass = getServerPassword();
 	int i = 0;
+	if (getClient(socket)->getStatus() == 4)
+	{
+		replyClient(ALREADYREGISTERED(getClient(socket)->getNickName()), socket);
+		return;
+	}
 	while (cmd[i] != '\0' && cmd[i] != ' ')
 		i++;
 	i++;
+	if (cmd == "PASS" || cmd == "PASS ")
+	{
+		std::string dn = "<default_nickname>";
+		replyClient(ERR_NEEDMOREPARAMS(dn, "PASS"), socket);
+		return;
+	}
 	int start = i;
 	std::string from_client = &cmd[start];
 	if (from_client.compare(server_pass) != 0)
 	{
 		std::string username = getUsernameFormNick(str);
 		_clients[socket]->dont_set_user(true);
-		std::cout << "Sending Username : " << username << std::endl;
 		replyClient(ERROR_INVPASS(username), socket);
 		return ;
 	}

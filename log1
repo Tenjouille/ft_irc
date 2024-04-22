@@ -10,27 +10,9 @@
 << PING localhost
 >> PONG localhost
 --> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
-<< PING localhost
->> PONG localhost
---> lag pong
+<< PRIVMSG ul :PING 1713791453 515834
+>> :ul!localhost NOTICE uaupetit :PING 1713791453 515834
+>> :ul!localhost PRIVMSG uaupetit :pong
 << PING localhost
 >> PONG localhost
 --> lag pong

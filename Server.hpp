@@ -37,6 +37,7 @@ class Server
 		int						_socket;
 		struct sockaddr_in		_serverAddress;
 		int					 	_clientSocket;
+		std::string				_serverName;
 		//liste de clients existant
 		std::map<int, Client*>	_clients;
 		std::string				_password;
@@ -91,6 +92,7 @@ class Server
 		void				topicCmd(std::string locate, int socket);
 		void				delClient(int socket);
 		std::map<std::string, Channel*>::iterator findChannel(std::string channelName);
+		int     isUser(std::string str);
 		~Server();
 	// bool	isPing(std::string locate);
 };

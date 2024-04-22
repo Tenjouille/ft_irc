@@ -10,8 +10,17 @@ void Server::joinCmd(std::string locate, int socket)
 {
         std::cout << RED << "locate = " << locate << std::endl;
         int flag = 0;
-        size_t start = locate.find("#");
+        size_t start = 0;
+        start = locate.find("#");
         std::string channelName = locate.substr(start + 1);
+        bool em = channelName.empty();
+        std::cout << "start = " << start << "isempty = " << em << std::endl;
+        if (start == std::string::npos || channelName.empty())
+        {
+            replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "JOIN"), socket);
+            //std::cout << ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "JOIN") << std::endl;
+            return;
+        }
         for (std::map<std::string,
 		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
 	    {
@@ -22,7 +31,13 @@ void Server::joinCmd(std::string locate, int socket)
                 flag = 1;
                 channel->addClient(socket, getClient(socket));
                 if (findChannel(channelName)->second->getTopicStatus() == 1)
-                    replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, findChannel(channelName)->second->getTopic()), socket);
+                {
+                    std::cout << "ici topic = " << findChannel(channelName)->second->getTopic() << std::endl;
+                    std::string tn = findChannel(channelName)->second->getTopic();
+                    //replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, findChannel(channelName)->second->getTopic()), socket);
+                    std::cout << "tn = " << tn << std::endl;
+                    replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, tn), socket);
+                }
                 else
                     replyClient(NOTOPIC(getClient(socket)->getNickName(), channelName), socket);
                 break; 
@@ -46,8 +61,15 @@ void Server::joinCmd(std::string locate, int socket)
         else if (flag == 0)
             createChannel(channelName, socket);
         //il faudra envoyer un reply avec la liste des clients du channel dans tout les cas
-        
         // std::string userlst;
+        //combien de channel max peut recevoir un client?
+        //set les key pour envoyer la bonne erreur si key incorrect
+        //si on est ban
+        //si client.limit
+        //si le client est banni du channel
+        //si le channel est sur invite uniquement
+        //topic avec la valeur 333
+        //353
 }
 
 void Server::createChannel(std::string name, int socket)
