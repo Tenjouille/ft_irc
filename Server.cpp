@@ -4,6 +4,7 @@ Server::Server(char **av)
 {
 	size_t i;
 	_status = 0;
+	_nb_channels = 0;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -26,13 +27,13 @@ int	Server::getSocket() const
 {
 	return _socket;
 }
+
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
 	// char msg_to_send[1024];
 	int bytes_read;
-	// int status;
-
+	//int status;
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
 	//std::cout << RED << "'" << buffer << "'" << std::endl;
@@ -169,7 +170,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		passCmd(cmd, locate, socket);
 	else if (locate.find("JOIN") == 0)
 	{
-		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
+		// std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
@@ -178,11 +179,17 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		pingCmd(locate, socket);
 	else if (locate.find("PRIVMSG") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction privmsg" << std::endl;
 		msgCmd(locate, socket);
 	}
-	// else if (locate.find("MSG") == 0)
-	// 	std::cout << "!!!MSG COMMAND!!!" << std::endl;
+	else if (locate.find("INVITE") == 0)
+	{
+		std::cout << "LETS GO INVITE BOYS" << std::endl;
+		inviteCmd(locate, socket);
+	}
+	else if (locate.find("TOPIC") == 0)
+	{
+		topicCmd(locate, socket);
+	}
 	// else if (locate.find("KICK") == 0)
 	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
 	// else if (locate.find("PING") == 0)

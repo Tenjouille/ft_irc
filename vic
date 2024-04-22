@@ -1,0 +1,37 @@
+<< CAP LS
+<< PASS mdp
+<< NICK uaupetit
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> Password accepted.
+>> You're now known as uaupetit.
+>> :localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit
+<< MODE uaupetit +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< QUIT :Lost terminal

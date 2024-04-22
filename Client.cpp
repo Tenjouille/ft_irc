@@ -5,10 +5,21 @@ Client::Client()
 	_nickcount = 0;
 	_connection_status = 0;
 	_dont_set_user = false;
+	_is_connected = false;
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
 {}
+
+void	Client::change_connected()
+{
+	_is_connected = true;
+}
+
+bool	Client::getConnectedStatus() const
+{
+	return (_is_connected);
+}
 
 /*//! TMP NOT SURE IF USEFULL !//*/
 
@@ -26,6 +37,18 @@ bool	Client::do_we_set_or_not() const
 }
 
 
+void	Client::printChannels()
+{
+	std::vector<std::string>::iterator it = _channel.begin();
+	std::vector<std::string>::iterator itend = _channel.end();
+	
+	while (it != itend)
+	{
+		std::cout << *it << std::endl;
+		++it;
+	}
+}
+
 /* ==== GETTERS ====*/
 
 std::string Client::getNickName() const
@@ -36,6 +59,7 @@ std::string Client::getNickName() const
 void    Client::updateStatus()
 {
     _connection_status++;
+	std::cout << "STATUS UPDATED TO : " << _connection_status << std::endl;
 }
 
 std::string Client::getUserName() const
@@ -69,6 +93,12 @@ int     Client::getStatus()
 }
 
 /* ==== SETTERS ==== */
+
+void    Client::addChannel(std::string channelname_to_add)
+{
+	_channel.push_back(channelname_to_add);
+	std::cout << "ADDED " << channelname_to_add << " into client's vector" << std::endl;
+}
 
 void Client::setSocket(int tmp)
 {

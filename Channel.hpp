@@ -13,6 +13,7 @@ class Channel
         std::string _key;
         int         _limit;
         bool        _inviteonly;
+        int _topicStatus;
         //liste des clients dans le channel + leurs socket
         std::map<int, Client*>  _clientslst;
         std::map<int, Client*>  _operators;
@@ -29,7 +30,10 @@ class Channel
         void    changeLimit(char sign, std::vector<std::string>& args);
         void	execMode(std::string options, std::vector<std::string>& args);
         void    defineMode(char sign, char option, std::vector<std::string>& args);
-        // void    Channel::kickClient(int socket, std::string name);
+        void setTopic(std::string str);
+        int getTopicStatus();
+        std::string getTopic();
+
         std::map<int, Client*> getClientlst();
         std::string getName();
 };
