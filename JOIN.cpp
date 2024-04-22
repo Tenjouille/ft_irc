@@ -17,8 +17,8 @@ void Server::joinCmd(std::string locate, int socket)
         //     i++;
         // }
         // channel_name += '\0';
-            size_t start = locate.find("#");
-            std::string channelName = locate.substr(start + 1);
+        size_t start = locate.find("#");
+        std::string channelName = locate.substr(start + 1);
         std::cout << "CHANNEL NAME MIEUX : " << channelName << std::endl;
         // std::string channelName = locate.substr(start + 1, end - start - 1);
         for (std::map<std::string,
@@ -69,6 +69,7 @@ void Server::createChannel(std::string name, int socket)
     Channel* channel = new Channel(name);
     _channelLst.insert(std::make_pair(name, channel));
     std::cout << "CHANNEL ADDED" << std::endl;
+    channel->newOperator(socket, getClient(socket));
     channel->addClient(socket, getClient(socket));
     getClient(socket)->getChannel().push_back(name);
     replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);

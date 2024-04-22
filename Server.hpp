@@ -78,6 +78,7 @@ class Server
 		//////////////COMMANDS//////////////
 		void				caplsCmd(std::string locate, int socket);
 		void				userCmd(std::string str, int socket);
+		void				modeCmd(std::string locate, int socket);
 		void				nickCmd(std::string str, int socket);
 		void				passCmd(std::string to_parse, std::string cmd, int socket);
 		void				joinCmd(std::string locate, int socket);

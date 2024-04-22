@@ -144,27 +144,6 @@ void	Server::accept_new_connection()
 		_fdMax = client_fd;
 }
 
-std::string		kindOptions(std::string cmd, char sign)
-{
-	std::string	ret = "";
-
-	ret[0] = sign;
-	if (cmd == "")
-		return (NULL);
-	for (size_t i = 0; i < cmd.size(); i++)
-		if (cmd[i] == sign)
-			while(cmd[i] != ' ' && cmd[i])
-				ret += cmd[i++];
-	return (ret);
-}
-
-std::string	Server::defineOptions(std::string cmd)
-{
-	std::string	ret = kindOptions(cmd, '+') + kindOptions(cmd, '-');
-	//std::cout << YELLOW << ret << std::endl;
-	return (ret);
-}
-
 void	Server::defineCmd(std::string str, int start, int it, int socket)
 {
 	std::string locate;
@@ -173,7 +152,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	std::string	cmd;
 	locate.append(str, start, it - start);
 	cmd.append(str, start, str.find(' '));
-	options.append(defineOptions(locate));
+	// options.append(defineOptions(locate));
 	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
 	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
@@ -183,7 +162,8 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		caplsCmd(locate, socket);
 	else if (locate.find("USER") == 0)
         userCmd(locate, socket);
-    // else if (locate.find("MODE") == 0)
+    else if (locate.find("MODE") == 0)
+		modeCmd(locate, socket);
 	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 	else if (locate.find("PASS") == 0)
 		passCmd(cmd, locate, socket);
