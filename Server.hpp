@@ -87,15 +87,16 @@ class Server
 		void 				msgCmd(std::string locate, int socket);
 		ssize_t				sendToClient(std::string to_send, int socket);
 		void				createChannel(std::string name, int socket);
-		void    			send_in_channel(std::string user, std::string s_nick, std::string s_user, std::string msg_to_send, int socket);
+		void    			send_in_channel(std::string user, std::string s_nick, std::string msg_to_send, int socket, std::string macro);
 		bool				checkNickName(std::string to_check, int socket);
-
+		void				topicCmd(std::string locate, int socket);
 		void				delClient(int socket);
 
 		void				inviteCmd(std::string locate, int socket);
 		bool				fillinBuffer(std::string locate, std::string& servername, std::string& invited, std::string& nickname, int socket);
 
 
+		std::map<std::string, Channel*>::iterator findChannel(std::string channelName);
 		~Server();
 	// bool	isPing(std::string locate);
 };

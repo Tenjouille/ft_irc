@@ -18,8 +18,8 @@
 
 // NICK ERRORS //
 #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use." + "\r\n")
-// #define NICKNAMEINUSE_ERR(nickname) (":localhost 433 " + nickname + ":Nickname is already in use" + "\r\n") //NICKNAME ALREADY USED BY SOMEONE
 #define ERR_ERRONEUSNICKNAME(client_username, nick) (client_username + " " + nick + " :Erroneus nickname" + "\r\n") //THERE IS A FORDBIDEN CHAR IN THE NICKNAME
+#define TOPIC(nickname, channelName, topic) (":" + nickname + "!" + "uaupetit@localhost" + " TOPIC #" + channelName + " :" + topic + "\r\n") 
 
 // PRIVMSG ERRORS
 #define ERR_NOSUCHNICK(client_nickname, target_nickname) (client_nickname + " " + target_nickname + " :No such nick/channel" + "\r\n")
@@ -39,8 +39,13 @@
 #define ERR_CHANNELISFULL(client_nickname, channel_name) (client_nickname + " " + channel_name + " :Cannot join channel (+l)" + "\r\n") //TRYING TO JOIN A CHANNEL THAT IS FULL
 #define NOT_EXISTING_CHANNEL(channelName) (":localhost 403 #" + channelName + " :No such channel\r\n") //TRYING TO JOIN A CHANNEL THAT DOESNT EXIST
 #define userID(nickname, username) (":" + nickname + "!" + username + "@localhost")
-// FUNCTION 
+#define NOTOPIC(nickname, channelName) (":localhost 331 " + nickname + " #" + channelName + " :No topic is set\r\n")
+#define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " " + topicName + "\r\n")
+#define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
+#define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
+// OTHER
 
+//FUNCTIONS
 size_t	replyClient(std::string Macros, int socket);
 
 #endif

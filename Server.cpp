@@ -199,7 +199,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("JOIN") == 0)
 	{
-		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
+		// std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
@@ -219,7 +219,18 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		std::cout << "LETS GO INVITE BOYS" << std::endl;
 		inviteCmd(locate, socket);
 	}
-	std::cout << GREEN << locate << RESET << std::endl;
+	else if (locate.find("TOPIC") == 0)
+	{
+		topicCmd(locate, socket);
+	}
+	// else if (locate.find("KICK") == 0)
+	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
+	// else if (locate.find("PING") == 0)
+	// 	std::cout << "!!!PING COMMAND!!!" << std::endl;
+	// else if (locate.find("WHOIS") == 0)
+	// 	std::cout << "!!!WHOIS COMMAND!!!" << std::endl;
+	// else
+	// 	std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
 }
 
 void	Server::parser(char *buffer, int socket)
