@@ -1,11 +1,5 @@
 #include "Server.hpp"
 
-    ///ATTENTON CHECK SI # A UN MOMENT
-    // else
-	// {
-    //     std::cout << "Aucun symbole '#' trouvé dans la chaîne." << std::endl;
-    // }
-
 void Server::joinCmd(std::string locate, int socket)
 {
         std::cout << RED << "locate = " << locate << std::endl;
@@ -80,6 +74,8 @@ void Server::createChannel(std::string name, int socket)
     }
     Channel* channel = new Channel(name);
     _channelLst.insert(std::make_pair(name, channel));
+    std::cout << "CHANNEL ADDED" << std::endl;
+    channel->newOperator(socket, getClient(socket));
     channel->addClient(socket, getClient(socket));
     getClient(socket)->getChannel().push_back(name);
     replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);

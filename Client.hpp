@@ -14,6 +14,9 @@
 #include <fcntl.h>
 #include <vector>
 #include "Communication.hpp"
+#include "Channel.hpp"
+
+class Channel;
 
 class Client
 {
@@ -28,6 +31,7 @@ class Client
         //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
         bool            _dont_set_user;
+        bool            _is_connected;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -48,6 +52,13 @@ class Client
         //to know if we set the user or not depending on value
         void    dont_set_user(bool value);
         bool    do_we_set_or_not() const;
+
+        void    addChannel(std::string to_add);
+        void	printChannels();
+
+        //to change connected status
+        void	change_connected();
+        bool	getConnectedStatus() const;
 
 };
 

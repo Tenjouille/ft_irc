@@ -26,8 +26,11 @@ void	Server::userCmd(std::string str, int socket)
 				std::string tmp_username = _clients[socket]->getUserName();
 				replyClient(NICKNAMEINUSE_ERR(tmp_username), socket);
 			}
-			replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-			// std::cout << "sent machin" << std::endl;
+			if (_clients[socket]->getConnectedStatus() == false)
+			{
+				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
+				_clients[socket]->change_connected(); //true
+			}
 		}
 		else
 		{

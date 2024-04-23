@@ -4,6 +4,7 @@ Server::Server(char **av)
 {
 	size_t i;
 	_status = 0;
+	_nb_channels = 0;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -26,13 +27,13 @@ int	Server::getSocket() const
 {
 	return _socket;
 }
+
 void	Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
-	//char msg_to_send[1024];
+	// char msg_to_send[1024];
 	int bytes_read;
 	//int status;
-
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
 	//std::cout << RED << "'" << buffer << "'" << std::endl;
@@ -40,17 +41,13 @@ void	Server::read_data_from_socket(int socket)
 		return ;
 	for (int j = 0; j <= _fdMax; j++)
 	{
-		if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
-		{
-			//std::cout << GREEN << "ICI" << RESET << std::endl;
-			//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
-			// status = send(j, msg_to_send, strlen(msg_to_send), 0);
-			// if (status == -1)
-			// {
-			// 	std::cout << GREEN << "LA" << RESET << std::endl;
-			// 	quitCmd(j);
-			// }
-		}
+		// if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
+		// {
+		// 	//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
+		// 	// status = send(j, msg_to_send, strlen(msg_to_send), 0);
+		// 	// if (status == -1)
+		// 	// 	quitCmd(j);
+		// }
 	}
 	//std::cout << GREEN << "HERE" << RESET << std::endl;
 	parser(buffer, socket);
@@ -148,27 +145,6 @@ void	Server::accept_new_connection()
 		_fdMax = client_fd;
 }
 
-std::string		kindOptions(std::string cmd, char sign)
-{
-	std::string	ret = "";
-
-	ret[0] = sign;
-	if (cmd == "")
-		return (NULL);
-	for (size_t i = 0; i < cmd.size(); i++)
-		if (cmd[i] == sign)
-			while(cmd[i] != ' ' && cmd[i])
-				ret += cmd[i++];
-	return (ret);
-}
-
-std::string	Server::defineOptions(std::string cmd)
-{
-	std::string	ret = kindOptions(cmd, '+') + kindOptions(cmd, '-');
-	//std::cout << YELLOW << ret << std::endl;
-	return (ret);
-}
-
 void	Server::defineCmd(std::string str, int start, int it, int socket)
 {
 	std::string locate;
@@ -177,53 +153,38 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	std::string	cmd;
 	locate.append(str, start, it - start);
 	cmd.append(str, start, str.find(' '));
-	options.append(defineOptions(locate));
-	//std::cout << GREEN << "locate = '" << locate << "' \n cmd = '" << cmd << "'" << RESET << std::endl;
+	// options.append(defineOptions(locate));
 	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
 	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
-	{
-		std::cout << WHITE << "passe dans la fonction nick" << std::endl;
 		nickCmd (locate, socket);
-	}
 	else if (locate.find("CAP LS") == 0)
-	{
-		// std::cout << WHITE << "passe dans la fonction capls" << std::endl;
 		caplsCmd(locate, socket);
-	}
 	else if (locate.find("USER") == 0)
-    {
-		// std::cout << WHITE << "passe dans la fonction user" << std::endl;
         userCmd(locate, socket);
-    }
-    // else if (locate.find("MODE") == 0)
+    else if (locate.find("MODE") == 0)
+		modeCmd(locate, socket);
 	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 	else if (locate.find("PASS") == 0)
-	{
-		// std::cout << WHITE << "passe dans la fonction pass" << std::endl;
 		passCmd(cmd, locate, socket);
-	}
 	else if (locate.find("JOIN") == 0)
 	{
 		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
-	{
 		quitCmd(socket);
-		// std::cout << WHITE << "passe dans la fonction quit" << std::endl;
-	}
 	else if (locate.find("PING") == 0)
-	{
-		std::cout << "on est pas rentres si " << std::endl;
-		// std::cout << WHITE << "passe dans la fonction ping" << std::endl;
 		pingCmd(locate, socket);
-	}
 	else if (locate.find("PRIVMSG") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction privmsg" << std::endl;
 		msgCmd(locate, socket);
+	}
+	else if (locate.find("INVITE") == 0)
+	{
+		std::cout << "LETS GO INVITE BOYS" << std::endl;
+		inviteCmd(locate, socket);
 	}
 	else if (locate.find("TOPIC") == 0)
 	{

@@ -47,6 +47,7 @@ class Server
 		int						_fdMax;
 		//liste de channels existant
 		std::map<std::string, Channel*> _channelLst;
+		int								_nb_channels;
 
 	public:
 		Server(char **arguments);
@@ -74,13 +75,14 @@ class Server
 		//////////////PARSING///////////////
 		void				parser(char *buffer, int socket);
 		void				defineCmd(std::string cmd, int start, int it, int socket);
-		std::string			defineArgs(std::string cmd, int i);
+		std::string			defineArgs(std::string cmd);
 		std::string			defineOptions(std::string cmd);
 		//////////////COMMANDS//////////////
 		void				caplsCmd(std::string locate, int socket);
 		void				userCmd(std::string str, int socket);
+		void				modeCmd(std::string locate, int socket);
 		void				nickCmd(std::string str, int socket);
-		void				passCmd(std::string cmd, std::string locate, int socket);
+		void				passCmd(std::string to_parse, std::string cmd, int socket);
 		void				joinCmd(std::string locate, int socket);
 		void				quitCmd(int socket);
 		void				pingCmd(std::string cmd, int socket);
@@ -91,6 +93,11 @@ class Server
 		bool				checkNickName(std::string to_check, int socket);
 		void				topicCmd(std::string locate, int socket);
 		void				delClient(int socket);
+
+		void				inviteCmd(std::string locate, int socket);
+		bool				fillinBuffer(std::string locate, std::string& servername, std::string& invited, std::string& nickname, int socket);
+
+
 		std::map<std::string, Channel*>::iterator findChannel(std::string channelName);
 		int     isUser(std::string str);
 		~Server();

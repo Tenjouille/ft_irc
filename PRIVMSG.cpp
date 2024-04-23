@@ -146,8 +146,18 @@ void Server::msgCmd(std::string locate, int socket)
 	{
         std::cerr << "Erreur: Chaîne ne contient pas 'PRIVMSG '" << std::endl;
     }
-    int socket_to_send_to = getSocketFromUser(user);
-	for (std::map<std::string, Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+    // int socket_to_send_to = _clients
+    
+	// std::map<int,Client*>::iterator it = _clients.find(socket);
+
+    // std::string sender = it->second->getNickName(); 
+    // std::string servername = "localhost";
+    // std::string msg_to_send = MSG_TO_SEND(user, servername, sender, msg);
+    // std::cout << MSG_TO_SEND(user, servername, sender, msg) << std::endl;
+	/**********************printt client   */
+	//std::cout << YELLOW << "channel name = " << user << RESET << std::endl;
+	for (std::map<std::string,
+			Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
 	{
 		std::string channel_name = it->first;
 		Channel *channel = it->second;
@@ -165,7 +175,23 @@ void Server::msgCmd(std::string locate, int socket)
     std::string s_nick = _clients[socket]->getNickName();
 	if (is_channel == 0)
  	{
+        int socket_to_send_to = getSocketFromUser(user);
+        //USER TO SEND TO NOT FOUND
+        if (socket_to_send_to == -666)
+        {
+            std::cout << "ERROR : TARGET NOT FOUND !" << std::endl;
+            std::string no_such_nick = ERR_NOSUCHNICK(s_nick, user);
+            std::cout << "Sending error message : " << no_such_nick << std::endl;
+            replyClient(no_such_nick, socket);
+            return ;
+        }
+
+		std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
+
 		std::string msg_to_send = PRIVMSG(s_nick, user, msg);
+		std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
+
+		std::cout << socket_to_send_to << " et " << socket << std::endl;
 		replyClient(msg_to_send, socket_to_send_to);
 		(void) socket;
 	}
