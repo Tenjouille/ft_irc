@@ -21,8 +21,6 @@ Server::Server(char **av)
 		std::cout << "invalid port format" << std::endl;
 }
 
-/* ==== GETTERS ==== */
-
 int	Server::getSocket() const
 {
 	return _socket;
@@ -49,8 +47,20 @@ void	Server::read_data_from_socket(int socket)
 		// 	// 	quitCmd(j);
 		// }
 	}
+	//test ctrl+D
+	// std::string cmd1 = buffer;
+	// if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
+	// 	std::cout << "cmd1 = '" << cmd1 << "'" << std::endl;
 	//std::cout << GREEN << "HERE" << RESET << std::endl;
-	parser(buffer, socket);
+	getClient(socket)->setTempBuffer(buffer, 0);
+	//std::cout << "buffer client = '" << getClient(socket)->getTempBuffer() << "'" << std::endl;
+	std::string cmd = getClient(socket)->getTempBuffer();
+	if (cmd[cmd.size() - 2] == '\r' && cmd[cmd.size() - 1] == '\n')
+	{
+		//std::cout << "cmd = '" << cmd << "'" << std::endl;
+		parser(getClient(socket)->getTempBuffer(), socket);
+		getClient(socket)->setTempBuffer(NULL, 1);
+	}
 	// for (int i = 0; i  1024)
 	buffer[0] = '\0';
 }
@@ -92,8 +102,6 @@ int Server::getfdMax()
 {
 	return _fdMax;
 }
-
-/* ==== SETTERS ==== */
 
 void	Server::setfdMax(int socket)
 {
@@ -192,11 +200,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	// else if (locate.find("KICK") == 0)
 	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
-	// else if (locate.find("PING") == 0)
-	// 	std::cout << "!!!PING COMMAND!!!" << std::endl;
-	// else if (locate.find("WHOIS") == 0)
-	// 	std::cout << "!!!WHOIS COMMAND!!!" << std::endl;
-	// else
 	// 	std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
 }
 

@@ -21,7 +21,18 @@ bool	Client::getConnectedStatus() const
 	return (_is_connected);
 }
 
-/*//! TMP NOT SURE IF USEFULL !//*/
+char *	Client::getTempBuffer()
+{
+	return _tempBuffer;
+}
+
+void  Client::setTempBuffer(char* str, int flag)
+{
+	if (flag == 0)
+		strcat(_tempBuffer, str);
+	else if (flag == 1)
+		strcpy(_tempBuffer, "\0");
+}
 
 void	Client::dont_set_user(bool value)
 {
