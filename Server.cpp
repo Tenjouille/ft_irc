@@ -184,7 +184,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction nick" << std::endl;
+		std::cout << WHITE << "passe dans la fonction nick" << std::endl;
 		nickCmd (locate, socket);
 	}
 	else if (locate.find("CAP LS") == 0)

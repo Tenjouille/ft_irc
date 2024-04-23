@@ -36,6 +36,8 @@
 #define NOTOPIC(nickname, channelName) (nickname + " #" + channelName + " :No topic is set\r\n")
 #define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " :" + topicName + "\r\n")
 #define ERR_NOSUCHNICK(client, dest) (client + " " + dest + " :No such nick/channel\r\n") 
+#define ERR_NONICKNAMEGIVE(nickname) (nickname + " :No nickname given\r\n")
+#define ERRONEUSNICKNAME_ERR(nickname) (":localhost 432 " + nickname + " :Erroneous nickname" + "\r\n")
 //#define ALREADYTOPIC(nickname, channelName, topicName) (nickname + " " + channelName + " " + topicName + "\r\n")
 #define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
