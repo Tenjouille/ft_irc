@@ -13,7 +13,7 @@ class Channel
         std::string _key;
         int         _limit;
         bool        _inviteonly;
-        int _topicStatus;
+        int         _topicStatus;
         //liste des clients dans le channel + leurs socket
         std::map<int, Client*>  _clientslst;
         std::map<int, Client*>  _operators;
@@ -36,4 +36,10 @@ class Channel
 
         std::map<int, Client*> getClientlst();
         std::string getName();
+
+        int getLimit() const;
+        bool getInvitOnly() const;
+        std::string getKey() const;
+
+        void    printChannelUsers();
 };

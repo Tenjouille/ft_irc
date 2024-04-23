@@ -153,10 +153,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	std::string	cmd;
 	locate.append(str, start, it - start);
 	cmd.append(str, start, str.find(' '));
-	// options.append(defineOptions(locate));
-	// args.append(defineArgs(locate, cmd.size()));
-	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
-	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 		nickCmd (locate, socket);
 	else if (locate.find("CAP LS") == 0)
@@ -165,12 +161,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
         userCmd(locate, socket);
     else if (locate.find("MODE") == 0)
 		modeCmd(locate, socket);
-	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 	else if (locate.find("PASS") == 0)
 		passCmd(cmd, locate, socket);
 	else if (locate.find("JOIN") == 0)
 	{
-		// std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)

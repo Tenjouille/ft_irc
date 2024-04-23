@@ -1,11 +1,55 @@
 #include "Server.hpp"
 
+bool    Server::isInsideChannel(Channel *channel, int socket)
+{
+    std::map<int, Client*>client_list = channel->getClientlst();
+    std::map<int, Client *>::iterator it = client_list.begin();
+    std::map<int, Client *>::iterator ite = client_list.end();
+    
+    while (it != ite)
+    {
+        if (it->first == socket)
+        {
+            std::cout << GREEN << "Client's SOCKEt found !" << RESET << std::endl;
+            return (true);
+        }
+        ++it;
+    }
+
+    return (false);
+}
+
+void extractStringAndFill(std::string& input, std::string& afterSpace)
+{
+    size_t pos = input.find(' ');
+    if (pos != std::string::npos && pos + 1 < input.size()) // Vérifie si un espace est trouvé et qu'il y a du texte après
+    {
+        afterSpace = input.substr(pos + 1); // Remplit la chaîne après l'espace
+        input.resize(pos); // Coupe la chaîne d'entrée au niveau de l'espace
+    }
+    // Si aucun espace n'est trouvé ou s'il se trouve à la fin de la chaîne, la chaîne d'entrée reste inchangée
+}
+
+
 void Server::joinCmd(std::string locate, int socket)
 {
         std::cout << RED << "locate = " << locate << std::endl;
         int flag = 0;
         size_t start = locate.find("#");
         std::string channelName = locate.substr(start + 1);
+        std::cout << "LEN : " << channelName.length() << " For : '" << channelName << "'" << std::endl;
+        
+        std::string key;
+        //CUT STRING IF THERE IS A " " IN THE CHANNEL NAME AND ADDS INTO KEY
+        if (channelName.find(" ") != std::string::npos)
+        {
+            extractStringAndFill(channelName, key);
+            std::cout << "Channelname : " << channelName << std::endl;
+            if (key != "")
+                std::cout << "Key : " << key << std::endl;
+        }
+
+        std::cout << GREEN << "LEN : " << channelName.length() << " For : '" << channelName << "'" << RESET << std::endl;
         for (std::map<std::string,
 		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
 	    {
@@ -13,6 +57,36 @@ void Server::joinCmd(std::string locate, int socket)
 		    Channel *channel = it->second;
 		    if (tmp == channelName)
             {
+                // INVITE ONLY && CLIENT IS NOT INSIDE OR IS NOT INVITED
+                if (channel->getInvitOnly() == true && isInsideChannel(channel, socket) == false)
+                {
+                    std::cout << channel->getInvitOnly() << " and : " << isInsideChannel(channel, socket) << std::endl;
+                    std::string err_msg = ERR_INVITEONLYCHAN(_clients[socket]->getNickName(), channelName);
+                    std::cout << "SENDING : " << err_msg << std::endl;
+                    replyClient(err_msg, socket);
+                    return ;    
+                }
+                if (channel->getKey() != "")
+                {
+                    std::cout << "THERE IS A KEY" << std::endl;
+                    std::string mdp = channel->getKey();
+                    std::cout << "mdp enregistre : " << mdp << " ET : " << key << std::endl;
+                    if (mdp != key)
+                    {
+                        std::string err_msg = ERR_BADCHANNELKEY(_clients[socket]->getNickName(), channelName);
+                        std::cout << "SENDING : " << err_msg << std::endl;
+                        replyClient(err_msg, socket);
+                        return ;
+                    }
+                }
+                if ((static_cast<size_t>(channel->getLimit())) < (channel->getClientlst().size() + 1))
+                {
+                    std::cout << (static_cast<size_t>(channel->getLimit())) << " and " << channel->getClientlst().size() + 1 << std::endl;
+                    std::string err_msg = ERR_CHANNELISFULL(_clients[socket]->getNickName(), channelName);
+                    std::cout << "SENDING : " << err_msg << std::endl;
+                    replyClient(err_msg, socket);
+                    return ;
+                }
                 flag = 1;
                 channel->addClient(socket, getClient(socket));
                 if (findChannel(channelName)->second->getTopicStatus() == 1)
@@ -38,10 +112,10 @@ void Server::joinCmd(std::string locate, int socket)
             }
         }
         else if (flag == 0)
+        {
+         std::cout << "DIRECTEMENT RENTRE LA DEDEANS << <<< " << std::endl;
             createChannel(channelName, socket);
-        //il faudra envoyer un reply avec la liste des clients du channel dans tout les cas
-        
-        // std::string userlst;
+        }
 }
 
 void Server::createChannel(std::string name, int socket)

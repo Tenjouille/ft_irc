@@ -68,6 +68,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 	std::string invited_nickname;
 	std::string channel_name;
 	std::string nickname;
+	Channel *channel_class;
 
 	if (fillinBuffer(locate, channel_name, invited_nickname, nickname, socket) == true)
 	{
@@ -95,6 +96,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 	std::map<std::string, Channel*>::iterator it1 = _channelLst.begin();
 	std::map<std::string, Channel*>::iterator ite1 = _channelLst.end();
 	bool	channel_exist = false;
+	bool	sender_in_channel = false;
 	bool	already_on = false;
 	std::string tmp_username_invited;
 	while (it1 != ite1)
@@ -106,6 +108,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 		{
 			std::cout << "CHANNEL EXISTS : " << tmp_name << std::endl;
 			channel_exist = true;
+			channel_class = it1->second;
 			std::map<int, Client*> client_list = it1->second->getClientlst();
 			std::map<int, Client *>::iterator first = client_list.begin();
 			std::map<int, Client *>::iterator end = client_list.end();
@@ -115,7 +118,11 @@ void	Server::inviteCmd(std::string locate, int socket)
 				{
 					already_on = true;
 					tmp_username_invited = first->second->getUserName();
-					break;
+				}
+				else if (first->second->getNickName() == _clients[socket]->getNickName())
+				{
+					std::cout << _clients[socket]->getNickName() << " WAS FOUND !" << std::endl;
+					sender_in_channel = true;
 				}
 				++first;
 			}
@@ -124,7 +131,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 		++it1;
 	}
 
-	//CHANNEL DOESNT EXISTS
+	// CHANNEL DOESNT EXISTS
 	if (channel_exist == false)
 	{
 		std::string doesnt_exist = ERR_NOSUCHCHANNEL(channel_name);
@@ -134,7 +141,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 		return ;
 	}
 
-	//CHECK THAT THE INVITED IS NOT ALREADY INSIDE CHANNEL
+	// CHECK THAT THE INVITED IS NOT ALREADY INSIDE CHANNEL
 	if (already_on == true)
 	{
 		//! NEED TO DETERMINE WHAT CLIENt IS FOR NOW USERNAME??? !//
@@ -144,27 +151,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 		replyClient(already_on, socket);
 		return ;
 	}
-
-	//CHECK THAT THE INVITEUUUR IS ON THE CHANNEL
-	std::cout << "\n\n";
-	std::vector<std::string>channels = sender->getChannel();
-	std::vector<std::string>::iterator it = channels.begin();
-	std::vector<std::string>::iterator itend = channels.end();
-	bool	sender_in_channel = false;
-	while (it != itend)
-	{
-		std::string tmp_name = "#" + * it;
-		std::cout << "Chann : " << tmp_name << std::endl;
-		std::cout << YELLOW << "COMPARING : " << channel_name << " et " << tmp_name << RESET << std::endl;
-		if (channel_name == tmp_name)
-		{
-			sender_in_channel = true;
-			break;
-		}
-		++it;
-	}
-	
-	//CHANNEL WAS NOT FOUND IN THE CLIENT'S CHANNEL CONTAINER
+	// CHECK THAT THE INVITEUR IS IN THE CHANNEL
 	if (sender_in_channel == false)
 	{
 		std::string error_msg = ERR_NOTONCHANNEL(nickname, channel_name);
@@ -173,19 +160,27 @@ void	Server::inviteCmd(std::string locate, int socket)
 		replyClient(error_msg, socket);
 		return ;
 	}
-	else if (sender_in_channel == true) //need to add the permission check
-	{
-		std::string error_msg = ERR_CHANOPRIVSNEEDED(nickname, channel_name);
-		std::cout << YELLOW << "SENDER CANT INVITE" << RESET << std::endl;
-		std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
-		replyClient(error_msg, socket);
-		return ;
-	}
+	std::cout << "\n\n";
+
+	// CHECK PERMISSION DE L'INVITEUR
+	// else if (sender_in_channel == true) //need to add the permission check
+	// {
+		// std::string error_msg = ERR_CHANOPRIVSNEEDED(nickname, channel_name);
+	// 	std::cout << YELLOW << "SENDER CANT INVITE" << RESET << std::endl;
+	// 	std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
+	// 	replyClient(error_msg, socket);
+	// 	return ;
+	// }
+
 	//SENDING MESSAGE NO ERROR DETECTED
 	std::string username = sender->getUserName();
 	std::string userID = ":" + nickname + "!" + username + "@localhost";
 	std::string msg = RPL_INVITING(userID,  nickname, invited_nickname, channel_name);
 	int socket_to_send_to = getSocketFromUser(invited_nickname);
+	
+	Client *invited = getClient(socket_to_send_to);
+	channel_class->addClient(socket_to_send_to, invited);
+
 	std::cout << BLUE << "MSG TO SEND : " << msg << RESET << std::endl;	
 	replyClient(msg, socket_to_send_to);
 	

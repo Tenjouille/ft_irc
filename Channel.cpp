@@ -11,6 +11,21 @@ void    notOp()
     std::cout << "Message d'erreur si client n'est pas operateur" << std::endl;
 }
 
+int Channel::getLimit() const
+{
+    return (_limit);
+}
+
+bool Channel::getInvitOnly() const
+{
+    return _inviteonly;
+}
+
+std::string Channel::getKey() const
+{
+    return _key;
+}
+
 // void    Channel::kickClient(int socket, std::string name)
 // {
 //     if (_operators.find(socket) == _operators.end())
@@ -22,9 +37,29 @@ void    notOp()
 //             _clientslst.erase(it->second->getSocket());
 // }
 
+void    Channel::printChannelUsers()
+{
+    // std::map<int, Client *liste> client_list = _clientslst;
+    std::map<int, Client *>::iterator it = _clientslst.begin();
+    std::map<int, Client *>::iterator ite = _clientslst.end();
+
+    int i = 0;
+
+    std::cout << BLUE << "[ CLIENT LISTE ]" << RESET << std::endl;
+    while (it != ite)
+    {
+        
+        std::cout << "Client[" << i << "] :" << it->second->getNickName() << std::endl;
+        i++;
+        ++it;
+    }
+}
+
+
 void    Channel::addClient(int socket, Client *client)
 {
-    std::string welcome2Channel = "Welcome in " + _name + " server.\nSay hello to :\n";
+    std::cout << YELLOW << "ADDED : " << client->getNickName() << " and socket : " << socket << RESET << std::endl;
+    std::string welcome2Channel = "Welcome in " + _name + " channel.\nSay hello to :\n";
     for(std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
         welcome2Channel += "    " + it->second->getNickName() + "\n";
     if (_clientslst.size() == 0)
@@ -34,6 +69,7 @@ void    Channel::addClient(int socket, Client *client)
     for(std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); it++)
         welcome2Channel += "    " + it->second->getNickName() + "\n";
     replyClient(welcome2Channel, socket);
+    printChannelUsers();
 }
 
 void Channel::newOperator(int socket, Client *client)

@@ -28,22 +28,30 @@
 #define ERROR_INVPASS(nickname) (nickname + " :Password incorrect\r\n")
 
 // INVITE ERRORS //
-#define ERR_NOTONCHANNEL(client_nickname, channelname) (client_nickname + " " + channelname + ":You're not on that channel" + "\r\n") //TRYING TO INVITE SOMEONE INTO A CHANNEL YOUR ARE NOT PART OF
+#define ERR_NOTONCHANNEL(client_nickname, channelname) (client_nickname + " " + channelname + " :You're not on that channel" + "\r\n") //TRYING TO INVITE SOMEONE INTO A CHANNEL YOUR ARE NOT PART OF
 #define ERR_NOSUCHCHANNEL(channelName) (":localhost 403 " + channelName + " :No such channel" + "\r\n") //NEEDS A # IN THE CHANNEL NAME !!
 #define ERR_USERONCHANNEL(client, nickname , channelname) (":localhost 403 " + client + " " + nickname + " " \
 + channelname + " :is already on channel" + "\r\t") //TRYING TO INVITE SOMEONE THAT IS ALREADY IN THE CHANNEL
 #define ERR_CHANOPRIVSNEEDED(client_nickname, channel_name) (client_nickname + " " + channel_name + " :You're not channel operator" + "\r\n") //OPERTORS CAN INVITE ONLY
 
 // JOIN ERRORS //
-//!\\ #define ERR_BADCHANNELKEY(client_nickanme, channel_name) (client_nickname + " " + channel_name + " :Cannot join channel (+k)" + "\r\n") //TRYING TO JOIN A CHANNEL WITH BAD KEY
-#define ERR_CHANNELISFULL(client_nickname, channel_name) (client_nickname + " " + channel_name + " :Cannot join channel (+l)" + "\r\n") //TRYING TO JOIN A CHANNEL THAT IS FULL
+#define ERR_INVITEONLYCHAN(nickname, channel_name) (":localhost 473 " + nickname + " " + channel_name + " :Cannot join channel (+i)" + "\r\n")
+#define ERR_BADCHANNELKEY(client_nickname, channel_name) (":localhost 475 " + client_nickname + " " + channel_name + " :Cannot join channel (+k)" + "\r\n") //TRYING TO JOIN A CHANNEL WITH BAD KEY
+#define ERR_CHANNELISFULL(client_nickname, channel_name) (":localhost 471 " + client_nickname + " " + channel_name + " :Cannot join channel (+l)" + "\r\n") //TRYING TO JOIN A CHANNEL THAT IS FULL
 #define NOT_EXISTING_CHANNEL(channelName) (":localhost 403 #" + channelName + " :No such channel\r\n") //TRYING TO JOIN A CHANNEL THAT DOESNT EXIST
-#define userID(nickname, username) (":" + nickname + "!" + username + "@localhost")
 #define NOTOPIC(nickname, channelName) (":localhost 331 " + nickname + " #" + channelName + " :No topic is set\r\n")
 #define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " " + topicName + "\r\n")
-#define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
+#define LISTUSERS(nickname, channelName, userslst) (":localhost 353 " + nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
 // OTHER
+
+#define PINGMACRO(sender_nick, dest_nick, token) (sender_nick + "!localhost PRIVMSG " + dest_nick + " : PING " + token + " \r\n")
+#define PONGMACRO(receiver_nick, sender_nick, token) (receiver_nick + "!localhost NOTICE " + sender_nick + " : PING " + token + "\r\n")
+
+#define KICKUSER(channel_name, nickname, reason) ("KICK #" + channel_name + " " + nickname + " :" + reason + "\r\n")
+#define KICK(userid, channel_name, kicked_nickname, reason) (userid + " KICK #" + channel_name + kicked_nickname + " :" + reason + "\r\n")
+
+#define userID(nickname, username) (":" + nickname + "!" + username + "@localhost")
 
 //FUNCTIONS
 size_t	replyClient(std::string Macros, int socket);
