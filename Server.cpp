@@ -48,16 +48,16 @@ void	Server::read_data_from_socket(int socket)
 		// }
 	}
 	//test ctrl+D
-	// std::string cmd1 = buffer;
-	// if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
-	// 	std::cout << "cmd1 = '" << cmd1 << "'" << std::endl;
+	std::string cmd1 = buffer;
+	if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
+		std::cout << "cmd1 = '" << cmd1 << "'" << std::endl;
 	//std::cout << GREEN << "HERE" << RESET << std::endl;
 	getClient(socket)->setTempBuffer(buffer, 0);
 	//std::cout << "buffer client = '" << getClient(socket)->getTempBuffer() << "'" << std::endl;
 	std::string cmd = getClient(socket)->getTempBuffer();
 	if (cmd[cmd.size() - 2] == '\r' && cmd[cmd.size() - 1] == '\n')
 	{
-		//std::cout << "cmd = '" << cmd << "'" << std::endl;
+		std::cout << "cmd = '" << cmd << "'" << std::endl;
 		parser(getClient(socket)->getTempBuffer(), socket);
 		getClient(socket)->setTempBuffer(NULL, 1);
 	}
@@ -198,9 +198,11 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	{
 		topicCmd(locate, socket);
 	}
-	// else if (locate.find("KICK") == 0)
-	// 	std::cout << "!!!KICK COMMAND!!!" << std::endl;
-	// 	std::cout << "???ERROR UNKNOW COMMAND???" << std::endl;
+	else if (locate.find("KICK") == 0)
+	{
+		std::cout << "!!!KICK COMMAND!!!" << std::endl;
+		kickCmd(locate, socket);
+	}
 }
 
 void	Server::parser(char *buffer, int socket)

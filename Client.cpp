@@ -47,7 +47,6 @@ bool	Client::do_we_set_or_not() const
 	return _dont_set_user;
 }
 
-
 void	Client::printChannels()
 {
 	std::vector<std::string>::iterator it = _channel.begin();
@@ -57,6 +56,17 @@ void	Client::printChannels()
 	{
 		std::cout << *it << std::endl;
 		++it;
+	}
+}
+
+void	Client::delChannel(std::string channelName)
+{
+	for (std::vector<std::string>::iterator it = _channel.begin(); it != _channel.end(); ++it)
+	{
+		if(*it == channelName)
+		{
+			it = _channel.erase(it);
+		}
 	}
 }
 

@@ -34,7 +34,6 @@ void	Server::userCmd(std::string str, int socket)
 		}
 		else
 		{
-		//	std::cout << "SETUP UsERNAME ET STATUS UPDATED" << std::endl;
 			return ;
 		}
 	}

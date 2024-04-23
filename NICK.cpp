@@ -24,8 +24,14 @@ bool	Server::checkNickName(std::string to_check, int socket)
 	return (true);
 }
 
+// void Server::changeUsers(std::string old, std::string cmd)
+// {
+	
+// }
+
 void	Server::nickCmd(std::string str, int socket)
 {
+
 	std::string cmd = str.substr(str.find(' ') + 1);	
 	if (cmd[0] == '\0')
 	{
@@ -77,6 +83,7 @@ void	Server::nickCmd(std::string str, int socket)
 				std::cout << "SENDING ICI : " << msg << std::endl;
 				replyClient(msg, socket);
 				it->second->setNickName(cmd);
+				//changeUsers(old, cmd);
 				return ;
 			}
 		}
@@ -90,7 +97,7 @@ void	Server::nickCmd(std::string str, int socket)
 			if (_clients[socket]->getConnectedStatus() == false)
 			{
 				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-				_clients[socket]->change_connected(); //true
+				_clients[socket]->change_connected();
 			}
 		}
 	}

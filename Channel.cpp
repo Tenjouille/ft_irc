@@ -48,6 +48,24 @@ void Channel::newOperator(int socket, Client *client)
 //     _clientslst.erase(socket);
 // }
 
+void    Channel::removeClientFromLst(std::string clientName)
+{
+        for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); ++it)
+        {
+            if (it->second->getNickName() == clientName)
+            {
+                _clientslst.erase(it->first);
+            }
+        }
+        for (std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it)
+        {
+            if (it->second->getNickName() == clientName)
+            {
+                _operators.erase(it->first);
+            }
+        }
+}
+
 void Channel::setName(std::string str)
 {
     _name = str;
