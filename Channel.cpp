@@ -26,6 +26,12 @@ std::string Channel::getKey() const
     return _key;
 }
 
+std::map<int, Client*>  Channel::getOperatorList() const
+{
+    return (_operators);
+}
+
+
 // void    Channel::kickClient(int socket, std::string name)
 // {
 //     if (_operators.find(socket) == _operators.end())
@@ -55,9 +61,9 @@ void    Channel::printChannelUsers()
     }
 }
 
-
 void    Channel::addClient(int socket, Client *client)
 {
+    
     std::cout << YELLOW << "ADDED : " << client->getNickName() << " and socket : " << socket << RESET << std::endl;
     std::string welcome2Channel = "Welcome in " + _name + " channel.\nSay hello to :\n";
     for(std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)

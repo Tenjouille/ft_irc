@@ -79,7 +79,7 @@ void Server::joinCmd(std::string locate, int socket)
                         return ;
                     }
                 }
-                if ((static_cast<size_t>(channel->getLimit())) < (channel->getClientlst().size() + 1))
+                if (channel->getLimit() != 0 && (static_cast<size_t>(channel->getLimit())) < (channel->getClientlst().size() + 1))
                 {
                     std::cout << (static_cast<size_t>(channel->getLimit())) << " and " << channel->getClientlst().size() + 1 << std::endl;
                     std::string err_msg = ERR_CHANNELISFULL(_clients[socket]->getNickName(), channelName);

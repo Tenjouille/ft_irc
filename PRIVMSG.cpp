@@ -86,7 +86,9 @@ int Server::getSocketFromUser(std::string to_find)
             ++it;
         }
         if (socket == -666)
+        {
             std::cout << RED << "ERROR SOCKET NOT FOUND" << RESET << std::endl;
+        }
     }
     else
     {

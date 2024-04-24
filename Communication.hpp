@@ -32,7 +32,7 @@
 #define ERR_NOSUCHCHANNEL(channelName) (":localhost 403 " + channelName + " :No such channel" + "\r\n") //NEEDS A # IN THE CHANNEL NAME !!
 #define ERR_USERONCHANNEL(client, nickname , channelname) (":localhost 403 " + client + " " + nickname + " " \
 + channelname + " :is already on channel" + "\r\t") //TRYING TO INVITE SOMEONE THAT IS ALREADY IN THE CHANNEL
-#define ERR_CHANOPRIVSNEEDED(client_nickname, channel_name) (client_nickname + " " + channel_name + " :You're not channel operator" + "\r\n") //OPERTORS CAN INVITE ONLY
+#define ERR_CHANOPRIVSNEEDED(client_nickname, channel_name) (client_nickname + " #" + channel_name + " :You're not channel operator" + "\r\n") //OPERTORS CAN INVITE ONLY
 
 // JOIN ERRORS //
 #define ERR_INVITEONLYCHAN(nickname, channel_name) (":localhost 473 " + nickname + " " + channel_name + " :Cannot join channel (+i)" + "\r\n")
@@ -43,6 +43,12 @@
 #define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " " + topicName + "\r\n")
 #define LISTUSERS(nickname, channelName, userslst) (":localhost 353 " + nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
+
+// MODE ERRORS //
+#define ERR_INVALIDMODEPARAM(client_nickname, mode_sign, mode_option , description) (":localhost 696 " + client_nickname + " " + \
+		mode_sign + mode_option + " :" + description + "\r\n")
+#define ERR_INVALIDKEY(client_nickname, channel_nickname) (":localhost 525 " + client_nickname + " " + channel_name + " :Key is not well-formed" + "\r\n")
+
 // OTHER
 
 #define PINGMACRO(sender_nick, dest_nick, token) (sender_nick + "!localhost PRIVMSG " + dest_nick + " : PING " + token + " \r\n")

@@ -63,8 +63,10 @@ bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::str
     return true;
 }
 
+
 void	Server::inviteCmd(std::string locate, int socket)
 {
+	std::cout << GREEN << "ICIIIIII : '" << locate << "'" << RESET << std::endl;
 	std::string invited_nickname;
 	std::string channel_name;
 	std::string nickname;
@@ -86,6 +88,16 @@ void	Server::inviteCmd(std::string locate, int socket)
 
 	/*PRINTING DES MACHINS POUR DEBUG*/
 	Client *sender = getClient(socket);
+	int socket_to_send_to = getSocketFromUser(invited_nickname);
+	
+	if (socket_to_send_to == -666)
+	{
+		std::cout << RED << "COULDNT FIND THE SOCKET WITH THE NICKNAME !" << RESET << std::endl;
+		std::string err_msg = ERR_NOSUCHNICK(_clients[socket]->getNickName(), invited_nickname);
+		std::cout << "SENDING : " << err_msg << std::endl;
+		return ;
+	}
+	
 	std::cout << "PRINTING CHANNELS" << std::endl;
 	sender->printChannels();
 	std::cout << "INVINTING FOR : " << channel_name << std::endl;
@@ -106,7 +118,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 		std::cout << YELLOW << "COMPARING : " << channel_name << " et " << tmp_name << RESET << std::endl;
 		if (channel_name == tmp_name)
 		{
-			std::cout << "CHANNEL EXISTS : " << tmp_name << std::endl;
+			std::cout << "CHANNEL EXISTS : " << it1->first << std::endl;
 			channel_exist = true;
 			channel_class = it1->second;
 			std::map<int, Client*> client_list = it1->second->getClientlst();
@@ -163,21 +175,19 @@ void	Server::inviteCmd(std::string locate, int socket)
 	std::cout << "\n\n";
 
 	// CHECK PERMISSION DE L'INVITEUR
-	// else if (sender_in_channel == true) //need to add the permission check
-	// {
-		// std::string error_msg = ERR_CHANOPRIVSNEEDED(nickname, channel_name);
-	// 	std::cout << YELLOW << "SENDER CANT INVITE" << RESET << std::endl;
-	// 	std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
-	// 	replyClient(error_msg, socket);
-	// 	return ;
-	// }
+	if (isClientOp(channel_class->getOperatorList(), socket) == false && channel_class->getInvitOnly() == true) //need to add the permission check
+	{
+		std::string error_msg = ERR_CHANOPRIVSNEEDED(nickname, it1->first);
+		std::cout << YELLOW << "SENDER CANT INVITE" << RESET << std::endl;
+		std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
+		replyClient(error_msg, socket);
+		return ;
+	}
 
 	//SENDING MESSAGE NO ERROR DETECTED
 	std::string username = sender->getUserName();
 	std::string userID = ":" + nickname + "!" + username + "@localhost";
 	std::string msg = RPL_INVITING(userID,  nickname, invited_nickname, channel_name);
-	int socket_to_send_to = getSocketFromUser(invited_nickname);
-	
 	Client *invited = getClient(socket_to_send_to);
 	channel_class->addClient(socket_to_send_to, invited);
 

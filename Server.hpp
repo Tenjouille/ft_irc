@@ -103,6 +103,8 @@ class Server
 		//check that the user is part of the channel before sending msg in channel
 		bool    isPartOfChannel(int socket, std::map<int, Client*> client_list);
 		bool    isInsideChannel(Channel *channel, int socket);
+		bool   isClientOp(std::map<int, Client*> op_list, int socket);
+
 
 };
 

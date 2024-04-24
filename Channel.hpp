@@ -40,6 +40,7 @@ class Channel
         int getLimit() const;
         bool getInvitOnly() const;
         std::string getKey() const;
+        std::map<int, Client*>  getOperatorList() const;
 
         void    printChannelUsers();
 };
