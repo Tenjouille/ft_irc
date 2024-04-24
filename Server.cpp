@@ -164,8 +164,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	else if (locate.find("USER") == 0)
         userCmd(locate, socket);
     else if (locate.find("MODE") == 0)
+	{
+		std::cout << WHITE << "passe dans la fonction mode" << std::endl;
 		modeCmd(locate, socket);
-	// 	std::cout << WHITE << "passe dans la fonction mode" << std::endl;
+	}
 	else if (locate.find("PASS") == 0)
 		passCmd(cmd, locate, socket);
 	else if (locate.find("JOIN") == 0)
@@ -204,6 +206,7 @@ void	Server::parser(char *buffer, int socket)
 {
 	if (!buffer)
 		return ;
+	std::cout << GREEN << buffer << std::endl;
 	std::string cmd = buffer;
 	int start = 0;
 	for (int i = 0; cmd[i]; i++)

@@ -43,6 +43,10 @@
 #define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " " + topicName + "\r\n")
 #define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
+
+// MODE ERRORS //
+#define ERR_UNKNOWNMODE()
+
 // OTHER
 
 //FUNCTIONS

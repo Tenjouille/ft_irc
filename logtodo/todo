@@ -14,3 +14,6 @@ changer pour avoir plusieurs clients
 
 
 si wrong password ca deco tout le monde
+
+Ne consomme pas d'argument : -i -t +i +t -l
+Consomme l'argument : -k -o +k +o +l

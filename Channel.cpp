@@ -4,6 +4,12 @@ Channel::Channel(std::string str)
 {
     setName(str);
     _topicStatus = 0;
+    _name = "";
+    _topic = "";
+    _key = "";
+    _limit = 0;
+    _inviteonly = 0;
+    _topicStatus = 0;
 }
 
 void    notOp()
@@ -56,6 +62,11 @@ void Channel::setName(std::string str)
 std::map<int, Client*> Channel::getClientlst()
 {
     return _clientslst;
+}
+
+std::map<int, Client*> Channel::getOperators()
+{
+    return (_operators);
 }
 
 void Channel::setTopic(std::string str)

@@ -57,8 +57,7 @@ void Server::createChannel(std::string name, int socket)
     channel->addClient(socket, getClient(socket));
     getClient(socket)->getChannel().push_back(name);
     replyClient(CREATECHANNEL(getClient(socket)->getName(), getClient(socket)->getUserName(), name), socket);
-    if (findChannel(name)->second->getTopicStatus() == 0)
-        replyClient(NOTOPIC(getClient(socket)->getNickName(), name), socket);
+    replyClient(NOTOPIC(getClient(socket)->getNickName(), name), socket);
     std::cout << "imprime ca :'" << getClient(socket)->getName() << "'" << std::endl;
     replyClient(LISTUSERS(getClient(socket)->getNickName(), name, getClient(socket)->getNickName()), socket);
     replyClient(NAMELIST(getClient(socket)->getNickName(), name), socket);

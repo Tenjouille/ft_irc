@@ -1,0 +1,387 @@
+<< CAP LS
+<< NICK tbourdea
+<< USER tbourdea tbourdea irc.dal.net :Tanguy BOURDEAU
+>> :bitcoin.uk.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :bitcoin.uk.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :bitcoin.uk.eu.dal.net 001 tbourdea :Welcome to the DALnet IRC Network tbourdea!~tbourdea@62.210.32.193
+<< MODE tbourdea +i
+>> :bitcoin.uk.eu.dal.net 002 tbourdea :Your host is bitcoin.uk.eu.dal.net, running version bahamut-2.2.2
+>> :bitcoin.uk.eu.dal.net 003 tbourdea :This server was created Sat 8 Oct 2022 at 14:41:03 BST
+>> :bitcoin.uk.eu.dal.net 004 tbourdea bitcoin.uk.eu.dal.net bahamut-2.2.2 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :bitcoin.uk.eu.dal.net 005 tbourdea NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :bitcoin.uk.eu.dal.net 005 tbourdea CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :bitcoin.uk.eu.dal.net 251 tbourdea :There are 68 users and 7444 invisible on 36 servers
+>> :bitcoin.uk.eu.dal.net 252 tbourdea 79 :IRC Operators online
+>> :bitcoin.uk.eu.dal.net 254 tbourdea 3683 :channels formed
+>> :bitcoin.uk.eu.dal.net 255 tbourdea :I have 310 clients and 1 servers
+>> :bitcoin.uk.eu.dal.net 265 tbourdea :Current local users: 310 Max: 4001
+>> :bitcoin.uk.eu.dal.net 266 tbourdea :Current global users: 7512 Max: 12809
+>> :bitcoin.uk.eu.dal.net NOTICE tbourdea :*** Notice -- motd was last changed at 9/11/2017 12:51
+>> :bitcoin.uk.eu.dal.net 375 tbourdea :- bitcoin.uk.eu.dal.net Message of the Day - 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-9/11/2017 12:51
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-                 [ bitcoin.uk.eu.dal.net    ]
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-                 [ Accessible via...        ]
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-                 [ ipv4: bitcoin.dal.net    ]
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- Thank you to Private Internet Access (https://www.privateinternetaccess.com) 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- for sponsoring this server.
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- by its acceptable use policy, available here: http://www.dal.net/aup
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- Server Policies:
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-    *   We reserve the right to deny access to this server without
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-        warning or explanation
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-    *   No malicious bots, including flood and nick/channel chasers
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-    *   No channel filler bots/clients/psybncs
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-          - A channel filler is a client, bnc, or bot which is
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-            connected just to fill a channel and make it look
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-            bigger
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-    *   Operator impersonation, spamming, or any other abuse will
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-        cause you to be banned from this server
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-    *   Abide by DALnet's AUP (www.dal.net/aup)
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :-    *   Please have fun and enjoy DALnet!
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- Server Administrator: tyler
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- Thank you to Private Internet Access (https://www.privateinternetaccess.com) for sponsori
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- ng this server.
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- For IRCop assistance, please /join #operhelp or message one of our
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- friendly server staff listed above.
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- For multilingual information:  <http://docs.dal.net/>
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- 
+>> :bitcoin.uk.eu.dal.net 372 tbourdea :- Thank you for using DALnet!  We hope you have a pleasant day.
+>> :bitcoin.uk.eu.dal.net 376 tbourdea :End of /MOTD command.
+>> :tbourdea MODE tbourdea :+iH
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tbourdea
+--> lag pong
+<< NICK tenj
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip NICK :tenj
+<< JOIN #cha
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+>> :bitcoin.uk.eu.dal.net 353 tenj = #cha :@tenj 
+>> :bitcoin.uk.eu.dal.net 366 tenj #cha :End of /NAMES list.
+<< MODE #cha
+>> :bitcoin.uk.eu.dal.net 324 tenj #cha + 
+--> chanquery mode
+<< WHO #cha
+>> :bitcoin.uk.eu.dal.net 329 tenj #cha 1713957681
+--> event 329
+>> :bitcoin.uk.eu.dal.net 352 tenj #cha ~tbourdea d3b3-5594-f2b4-bea-b5b.210.62.ip bitcoin.uk.eu.dal.net tenj H@ :0 Tanguy BOURDEAU
+--> silent event who
+>> :bitcoin.uk.eu.dal.net 315 tenj #cha :End of /WHO list.
+--> chanquery who end
+<< MODE #cha b
+>> :bitcoin.uk.eu.dal.net 368 tenj #cha :End of Channel Ban List
+--> chanquery ban end
+<< MODE #cha +l
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+<< MODE #cha +kl pass
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +k pass
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -k pass
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k pass
+<< MODE #cha +kl new merci
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +k new
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +l 0
+<< MODE #cha +l 0
+<< MODE #cha +l 0
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +l 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +l 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< MODE #cha +l 0
+<< MODE #cha +l 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< MODE #cha +l 1h
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< MODE #cha +l h
+<< MODE #cha -l
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -l 
+<< MODE #cha +l h
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip PART #cha
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -k+l 0
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k new
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip PART #cha
+<< MODE #cha +l 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< MODE #cha +l h
+<< MODE #cha +l h
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +l h
+<< MODE #cha -k+l 0
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k 0
+<< MODE #cha -k+l h
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k h
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -k+l h h
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k h
+<< MODE #cha -k+l 2
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k 2
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -kl
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -l 
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip PART #cha
+<< MODE #cha -k+l 2 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k+l 2 1
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -k+l 2 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k+l 2 1
+<< MODE #cha -i+l1 2
+>> :bitcoin.uk.eu.dal.net 472 tenj 1 :is unknown mode char to me
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -i+l 2
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip PART #cha
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -t+l1 2
+>> :bitcoin.uk.eu.dal.net 472 tenj 1 :is unknown mode char to me
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -t+l 2
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip PART #cha
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -l+k1 2
+>> :bitcoin.uk.eu.dal.net 472 tenj 1 :is unknown mode char to me
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -l+k 2
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +kl 2 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +kl 2 1
+<< MODE #cha +il1 2
+>> :bitcoin.uk.eu.dal.net 472 tenj 1 :is unknown mode char to me
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +il 2
+<< MODE #cha -i+l1 2
+>> :bitcoin.uk.eu.dal.net 472 tenj 1 :is unknown mode char to me
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -i+l 2
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -k+l 2 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k+l 2 1
+<< MODE #cha +tl1 2
+>> :bitcoin.uk.eu.dal.net 472 tenj 1 :is unknown mode char to me
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +tl 2
+<< MODE #cha +ol 2 1
+>> :bitcoin.uk.eu.dal.net 401 tenj 2 :No such nick/channel
+>> :bitcoin.uk.eu.dal.net 441 tenj 2 #cha :They aren't on that channel
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +ol 2 1
+>> :bitcoin.uk.eu.dal.net 401 tenj 2 :No such nick/channel
+>> :bitcoin.uk.eu.dal.net 441 tenj 2 #cha :They aren't on that channel
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< MODE #cha +ol 2 1
+>> :bitcoin.uk.eu.dal.net 401 tenj 2 :No such nick/channel
+>> :bitcoin.uk.eu.dal.net 441 tenj 2 #cha :They aren't on that channel
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +l 1
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +lk 2 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +lk 2 1
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -k 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k 1
+<< MODE #cha -k 1
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k 1
+<< MODE #cha -k
+<< MODE #cha -k
+<< MODE #cha -k
+<< MODE #cha +k
+<< MODE #cha +k
+<< MODE #cha +k
+<< MODE #cha +k
+<< MODE #cha +k
+<< MODE #cha +k
+<< MODE #cha +k
+<< MODE #cha +k
+>> :tbourdea!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip JOIN :#cha
+<< MODE #cha +k
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +k
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +o
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +o
+<< MODE #cha +k
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< MODE #cha +o
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha -o
+<< MODE #cha -o
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +i-o
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +i 
+<< MODE #cha +k-o new
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +k new
+<< MODE #cha +k-o new
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha +k new
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< MODE #cha +ol 2
+>> :bitcoin.uk.eu.dal.net 401 tenj 2 :No such nick/channel
+>> :bitcoin.uk.eu.dal.net 441 tenj 2 #cha :They aren't on that channel
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+<< MODE #cha +ol 2
+>> :bitcoin.uk.eu.dal.net 401 tenj 2 :No such nick/channel
+>> :bitcoin.uk.eu.dal.net 441 tenj 2 #cha :They aren't on that channel
+>> :bitcoin.uk.eu.dal.net 461 tenj MODE +l :Not enough parameters
+<< MODE #cha +o-k 2 new
+>> :bitcoin.uk.eu.dal.net 401 tenj 2 :No such nick/channel
+>> :bitcoin.uk.eu.dal.net 441 tenj 2 #cha :They aren't on that channel
+>> :tenj!~tbourdea@d3b3-5594-f2b4-bea-b5b.210.62.ip MODE #cha -k new
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :tenj
+--> lag pong
+<< QUIT :leaving
