@@ -96,8 +96,8 @@ class Server
 
 		void				inviteCmd(std::string locate, int socket);
 		bool				fillinBuffer(std::string locate, std::string& servername, std::string& invited, std::string& nickname, int socket);
-		void 				changeUsers(std::string old, std::string cmd);
 		void    			kickCmd(std::string locate, int socket);
+		int				is_in_channel(std::string str, std::string channel);
 
 		std::map<std::string, Channel*>::iterator findChannel(std::string channelName);
 		int     isUser(std::string str);

@@ -20,9 +20,8 @@
 #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use." + "\r\n")
 #define ERR_ERRONEUSNICKNAME(client_username, nick) (client_username + " " + nick + " :Erroneus nickname" + "\r\n") //THERE IS A FORDBIDEN CHAR IN THE NICKNAME
 #define TOPIC(nickname, channelName, topic) (":" + nickname + "!" + "uaupetit@localhost" + " TOPIC #" + channelName + " :" + topic + "\r\n") 
-
-#define KICKUSER(channel_name, nickname, reason) ("KICK #" + channel_name + " " + nickname + " :" + reason + "\r\n")
-#define KICK(userid, channel_name, kicked_nickname, reason) (userid + " KICK #" + channel_name + kicked_nickname + " :" + reason + "\r\n")
+#define KICKUSER(channel_name, nickname, reason) ("KICK " + channel_name + " " + nickname + " :" + reason + "\r\n")
+#define KICK(userid, channel_name, kicked_nickname, reason) (userid + " KICK #" + channel_name + " " + kicked_nickname + " :" + reason + "\r\n")
 // PRIVMSG ERRORS
 
 // PASS ERRORS //
@@ -38,6 +37,7 @@
 //#define ALREADYTOPIC(nickname, channelName, topicName) (nickname + " " + channelName + " " + topicName + "\r\n")
 
 // INVITE ERRORS //
+#define ERR_NOTINCHANNEL(client_nickname, user_nick, channelname) (client_nickname + " " + user_nick + " " + channelname + " :They aren't on that channel\r\n")
 #define ERR_NOTONCHANNEL(client_nickname, channelname) (client_nickname + " " + channelname + ":You're not on that channel" + "\r\n") //TRYING TO INVITE SOMEONE INTO A CHANNEL YOUR ARE NOT PART OF
 #define ERR_NOSUCHCHANNEL(channelName) (":localhost 403 " + channelName + " :No such channel" + "\r\n") //NEEDS A # IN THE CHANNEL NAME !!
 #define ERR_USERONCHANNEL(client, nickname , channelname) (":localhost 403 " + client + " " + nickname + " " \
@@ -53,6 +53,7 @@
 #define LISTUSERS(nickname, channelName, userslst) (":localhost 353 "+ nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
 // OTHER
+
 
 //FUNCTIONS
 size_t	replyClient(std::string Macros, int socket);

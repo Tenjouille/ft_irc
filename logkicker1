@@ -1,0 +1,26 @@
+<< CAP LS
+<< PASS mdp
+<< NICK uaupetit
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> :localhost 001 uaupetit :Welcome to the Internet Relay Network uaupetit!uaupetit
+<< MODE uaupetit +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #cha
+>> :localhost 403 #cha :No such channel
+>> Welcome in cha server.
+>> Say hello to :
+>> your fresh new server (me ^^)!
+>> And fear the powerfull judgment of :
+>>     uaupetit
+>> :!uaupetit@localhost JOIN cha
+>> :localhost 331 uaupetit #cha :No topic is set
+>> :localhost 353 uaupetit = #cha :@uaupetit
+>> :localhost 366 uaupetit cha :End of /NAMES list
+<< MODE #cha
+<< KICK #cha ulysse :
+<< PING localhost
+>> PONG localhost
+--> lag pong
