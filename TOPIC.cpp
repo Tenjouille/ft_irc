@@ -34,3 +34,20 @@ void Server::topicCmd(std::string locate, int socket)
     send_in_channel(channelName, _clients[socket]->getNickName(), topicName, socket, "topic");
     (void)socket;
 }
+
+bool    Server::isClientOp(std::map<int, Client*> op_list, int socket)
+{
+    std::map<int, Client *>::iterator it = op_list.begin();
+    std::map<int, Client *>::iterator ite = op_list.end();
+
+    while (it != ite)
+    {
+        if (_clients[socket]->getNickName() == it->second->getNickName())
+        {
+           // std::cout << "USER IS AN OPERATOR SO ALL GOOD" << std::endl;
+            return (true);
+        }
+        ++it;
+    }
+    return (false);
+}

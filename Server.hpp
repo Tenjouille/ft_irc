@@ -103,6 +103,9 @@ class Server
 		int     isUser(std::string str);
 		~Server();
 	// bool	isPing(std::string locate);
+		bool    isPartOfChannel(int socket, std::map<int, Client*> client_list);
+		bool    isInsideChannel(Channel *channel, int socket);
+		bool   isClientOp(std::map<int, Client*> op_list, int socket);
 };
 
 #endif

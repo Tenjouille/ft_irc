@@ -36,4 +36,6 @@ class Channel
         void    removeClientFromLst(std::string clientName);    
         std::map<int, Client*> getClientlst();
         std::string getName();
+        std::map<int, Client*>  getOperatorList() const;
+        bool getInvitOnly() const;
 };

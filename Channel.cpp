@@ -36,6 +36,11 @@ void    Channel::addClient(int socket, Client *client)
     replyClient(welcome2Channel, socket);
 }
 
+bool Channel::getInvitOnly() const
+{
+    return _inviteonly;
+}
+
 void Channel::newOperator(int socket, Client *client)
 {
     // std::string newSign = "@" + client->getNickName();
@@ -64,6 +69,11 @@ void    Channel::removeClientFromLst(std::string clientName)
                 _operators.erase(it->first);
             }
         }
+}
+
+std::map<int, Client*>  Channel::getOperatorList() const
+{
+    return (_operators);
 }
 
 void Channel::setName(std::string str)
