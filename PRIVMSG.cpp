@@ -19,6 +19,8 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
                         std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
                         replyClient(msg, it_clt->first);
                     }
+                    else
+                        return;
                 }
             }
             else if (macro == "topic")
