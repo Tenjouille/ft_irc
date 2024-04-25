@@ -16,7 +16,6 @@ bool	Server::checkNickName(std::string to_check, int socket)
 		tmp_name = it->second->getNickName();
 		if (to_check == tmp_name && socket != it->first)
 		{
-			std::cout << RED << "COMPARING : " << to_check << " ET " << tmp_name << RESET << std::endl;
 			return (false);
 		}
 		++it;
@@ -25,13 +24,22 @@ bool	Server::checkNickName(std::string to_check, int socket)
 	return (true);
 }
 
+// void Server::changeUsers(std::string old, std::string cmd)
+// {
+	
+// }
+
 void	Server::nickCmd(std::string str, int socket)
 {
-	std::string cmd = str.substr(str.find(' ') + 1);
-	
+
+	std::string cmd = str.substr(str.find(' ') + 1);	
+	if (cmd[0] == '\0')
+	{
+		replyClient(ERR_NONICKNAMEGIVE(getClient(socket)->getNickName()), socket);
+		return;
+	}
 	if (_clients[socket]->do_we_set_or_not() == true)
 	{
-		std::cout << "WE SKIPPED" << std::endl;
 		return ;
 	}
 	for (int i = 0; cmd[i]; i++)
@@ -52,13 +60,11 @@ void	Server::nickCmd(std::string str, int socket)
 	std::map<int, Client*>::iterator it = _clients.find(socket);
 	if (it != _clients.end())
 	{
-		//std::cout << YELLOW << "cmd = '" << it->second->getNickName() << "'" << std::endl; 
 		// Attention a si meme nickname ya PROBLEMES ou si user essaye de changer de nickname
 		std::string nickname = cmd;
 		std::cout << nickname << std::endl;
 		if (checkNickName(nickname, socket) == false)
 		{
-			std::cout << "On est PASSE LA" << std::endl;
 			replyClient(NICKNAMEINUSE_ERR(nickname), socket);
 			return ;
 		}
@@ -77,21 +83,21 @@ void	Server::nickCmd(std::string str, int socket)
 				std::cout << "SENDING ICI : " << msg << std::endl;
 				replyClient(msg, socket);
 				it->second->setNickName(cmd);
+				//changeUsers(old, cmd);
 				return ;
 			}
 		}
 		if (it->second->getStatus() >= 4)
 		{
-			std::cout << BLUE << "SETTING : " << cmd << RESET << std::endl;
 			it->second->setNickName(cmd);
 			std::cout << it->second->getNickName() << std::endl;
-			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
+			std::string server_name = "localhost";
 			std::string username = it->second->getUserName();
 			std::string nickname = it->second->getNickName();
 			if (_clients[socket]->getConnectedStatus() == false)
 			{
 				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-				_clients[socket]->change_connected(); //true
+				_clients[socket]->change_connected();
 			}
 		}
 	}

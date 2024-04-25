@@ -33,7 +33,7 @@ class Channel
         void setTopic(std::string str);
         int getTopicStatus();
         std::string getTopic();
-
+        void    removeClientFromLst(std::string clientName);    
         std::map<int, Client*> getClientlst();
         std::string getName();
 

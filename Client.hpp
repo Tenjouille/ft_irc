@@ -28,6 +28,7 @@ class Client
         int             _socket;
         int             _nickcount;
         int             _connection_status;
+        char            _tempBuffer[1024];
         //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
         bool            _dont_set_user;
@@ -46,6 +47,9 @@ class Client
         void            setUserName(std::string str);
         void            setSocket(int tmp);
         std::vector<std::string> getChannel();
+        char *          getTempBuffer();
+        void            setTempBuffer(char* str, int flag);
+        void	        delChannel(std::string channelName);
         // Client* cloneClient();
         ~Client();
 

@@ -21,7 +21,18 @@ bool	Client::getConnectedStatus() const
 	return (_is_connected);
 }
 
-/*//! TMP NOT SURE IF USEFULL !//*/
+char *	Client::getTempBuffer()
+{
+	return _tempBuffer;
+}
+
+void  Client::setTempBuffer(char* str, int flag)
+{
+	if (flag == 0)
+		strcat(_tempBuffer, str);
+	else if (flag == 1)
+		strcpy(_tempBuffer, "\0");
+}
 
 void	Client::dont_set_user(bool value)
 {
@@ -36,7 +47,6 @@ bool	Client::do_we_set_or_not() const
 	return _dont_set_user;
 }
 
-
 void	Client::printChannels()
 {
 	std::vector<std::string>::iterator it = _channel.begin();
@@ -46,6 +56,17 @@ void	Client::printChannels()
 	{
 		std::cout << *it << std::endl;
 		++it;
+	}
+}
+
+void	Client::delChannel(std::string channelName)
+{
+	for (std::vector<std::string>::iterator it = _channel.begin(); it != _channel.end(); ++it)
+	{
+		if(*it == channelName)
+		{
+			it = _channel.erase(it);
+		}
 	}
 }
 

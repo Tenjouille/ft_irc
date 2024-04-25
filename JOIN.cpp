@@ -35,7 +35,8 @@ void Server::joinCmd(std::string locate, int socket)
 {
         std::cout << RED << "locate = " << locate << std::endl;
         int flag = 0;
-        size_t start = locate.find("#");
+        size_t start = 0;
+        start = locate.find("#");
         std::string channelName = locate.substr(start + 1);
         std::cout << "LEN : " << channelName.length() << " For : '" << channelName << "'" << std::endl;
         
@@ -50,6 +51,14 @@ void Server::joinCmd(std::string locate, int socket)
         }
 
         std::cout << GREEN << "LEN : " << channelName.length() << " For : '" << channelName << "'" << RESET << std::endl;
+        bool em = channelName.empty();
+        std::cout << "start = " << start << "isempty = " << em << std::endl;
+        if (start == std::string::npos || channelName.empty())
+        {
+            replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "JOIN"), socket);
+            //std::cout << ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "JOIN") << std::endl;
+            return;
+        }
         for (std::map<std::string,
 		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
 	    {
@@ -90,7 +99,13 @@ void Server::joinCmd(std::string locate, int socket)
                 flag = 1;
                 channel->addClient(socket, getClient(socket));
                 if (findChannel(channelName)->second->getTopicStatus() == 1)
-                    replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, findChannel(channelName)->second->getTopic()), socket);
+                {
+                    std::cout << "ici topic = " << findChannel(channelName)->second->getTopic() << std::endl;
+                    std::string tn = findChannel(channelName)->second->getTopic();
+                    //replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, findChannel(channelName)->second->getTopic()), socket);
+                    std::cout << "tn = " << tn << std::endl;
+                    replyClient(ALREADYTOPIC(getClient(socket)->getNickName(), channelName, tn), socket);
+                }
                 else
                     replyClient(NOTOPIC(getClient(socket)->getNickName(), channelName), socket);
                 break; 
@@ -115,7 +130,15 @@ void Server::joinCmd(std::string locate, int socket)
         {
          std::cout << "DIRECTEMENT RENTRE LA DEDEANS << <<< " << std::endl;
             createChannel(channelName, socket);
-        }
+        //il faudra envoyer un reply avec la liste des clients du channel dans tout les cas
+        // std::string userlst;
+        //combien de channel max peut recevoir un client?
+        //set les key pour envoyer la bonne erreur si key incorrect V
+        //si client.limit V
+        //si le channel est sur invite uniquement V
+        //topic avec la valeur 333
+        //353
+    }
 }
 
 void Server::createChannel(std::string name, int socket)

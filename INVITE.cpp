@@ -2,30 +2,35 @@
 
 bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::string& invited, std::string& nickname, int socket)
 {
+	//INVITE ulysse #cha' ca ca marche
+	//INVITE #cha uaupetit_ ca ca marche pas il trouve pas uaupetit
+
 	Client *sender = getClient(socket);
-	
 	if (sender == NULL || !sender)
 	{
-		std::cout << "COULDNT GET CLIENT FROM SOCKET" << std::endl;
+		//std::cout << "COULDNT GET CLIENT FROM SOCKET" << std::endl;
 		return (false);
 	}
 
 	nickname = sender->getNickName();
 	if (nickname.empty())
 	{
-		std::cout << "NICKNAME IS EMPTY" << std::endl;
+		//std::cout << "NICKNAME IS EMPTY" << std::endl;
 		return (false);
 	}
 
-    // Clear the output strings
+    // Clear the outpu	// std::cout << "BUFFERS ARE FILLED" << std::endl;
+		// std::cout << "Channel name : '" << channel_name << "'" << "\n" \
+		// << "Invited nickname : '" << invited_nickname << "'" << "\n" \
+		// << "InvitEUR nickname : '" << nickname << "'" << std::endl; t strings
     channelname.clear();
     invited.clear();
-
+	size_t channel_end;
     // Find the position of '#' and the next space
     size_t channel_start = locate.find("#");
     if (channel_start != std::string::npos)
     {
-        size_t channel_end = locate.find(" ", channel_start);
+        channel_end = locate.find(" ", channel_start);
         if (channel_end != std::string::npos)
         {
             // Extract the channel name substring
@@ -37,21 +42,29 @@ bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::str
             channelname = locate.substr(channel_start);
         }
     }
-
-	// Find the position of the first space
-	size_t space_pos = locate.find(" ");
-	if (space_pos != std::string::npos)
+	channel_end = locate.find(" ", channel_start);
+//	std::cout << "locate de channel end = " << static_cast<int>(locate[channel_end]) << std::endl;
+	if (static_cast<int>(locate[channel_end]) == 0)
 	{
-    	// Extract the substring from the first space to the end of the string
-    	invited = locate.substr(space_pos + 1);
+		size_t space_pos = locate.find(" ");
+		if (space_pos != std::string::npos)
+		{
+		//	std::cout << YELLOW << "ici" << std::endl;
+			invited = locate.substr(space_pos + 1);
 
-    	// Find the end of the invited nickname
-    	size_t end_pos = invited.find(" ");
-    	if (end_pos != std::string::npos)
-    	{
-    	    // Extract the invited nickname substring
-    	    invited = invited.substr(0, end_pos);
-    	}
+			size_t end_pos = invited.find(" ");
+			if (end_pos != std::string::npos)
+			{
+			//	std::cout << YELLOW << "la" << std::endl;
+				invited = invited.substr(0, end_pos);
+			}
+		}
+	}
+	else if (static_cast<int>(locate[channel_end]) == 32)
+	{
+		size_t start = channel_end + 1;
+		size_t end = locate.find("\r");
+		invited = locate.substr(start, end);
 	}
 	if (channelname.empty())
 		return (false);
@@ -59,14 +72,13 @@ bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::str
 		return (false);
 	if (nickname.empty())
 		return (false);
-
     return true;
 }
 
 
 void	Server::inviteCmd(std::string locate, int socket)
 {
-	std::cout << GREEN << "ICIIIIII : '" << locate << "'" << RESET << std::endl;
+	//std::cout << GREEN << "ICIIIIII : '" << locate << "'" << RESET << std::endl;
 	std::string invited_nickname;
 	std::string channel_name;
 	std::string nickname;
@@ -74,14 +86,14 @@ void	Server::inviteCmd(std::string locate, int socket)
 
 	if (fillinBuffer(locate, channel_name, invited_nickname, nickname, socket) == true)
 	{
-		std::cout << "BUFFERS ARE FILLED" << std::endl;
-		std::cout << "Channel name : '" << channel_name << "'" << "\n" \
-		<< "Invited nickname : '" << invited_nickname << "'" << "\n" \
-		<< "InvitEUR nickname : '" << nickname << "'" << std::endl; 
+		// std::cout << "BUFFERS ARE FILLED" << std::endl;
+		// std::cout << "Channel name : '" << channel_name << "'" << "\n" \
+		// << "Invited nickname : '" << invited_nickname << "'" << "\n" \
+		// << "InvitEUR nickname : '" << nickname << "'" << std::endl; 
 	}
 	else
 	{
-		std::cout << RED << "FAILED TO FILL IN BUFFERS" << RESET << std::endl;
+	//	std::cout << RED << "FAILED TO FILL IN BUFFERS" << RESET << std::endl;
 		//IDK WHAT TO DO BUT NEED TO DO MORE THAN THAT IM GUESSING?
 		return ;
 	}
@@ -100,8 +112,8 @@ void	Server::inviteCmd(std::string locate, int socket)
 	
 	std::cout << "PRINTING CHANNELS" << std::endl;
 	sender->printChannels();
-	std::cout << "INVINTING FOR : " << channel_name << std::endl;
-	std::cout << "NBB CCHANNELS : " << _nb_channels << std::endl;
+	// std::cout << "INVINTING FOR : " << channel_name << std::endl;
+	// std::cout << "NBB CCHANNELS : " << _nb_channels << std::endl;
 	std::cout << "\n\n";
 
 	//CHECK THAT THE CHANNEL EXISTS
@@ -114,8 +126,8 @@ void	Server::inviteCmd(std::string locate, int socket)
 	while (it1 != ite1)
 	{
 		std::string tmp_name = "#" + it1->first;
-		std::cout << "Chann : " << tmp_name << std::endl;
-		std::cout << YELLOW << "COMPARING : " << channel_name << " et " << tmp_name << RESET << std::endl;
+		//std::cout << "Chann : " << tmp_name << std::endl;
+		//std::cout << YELLOW << "COMPARING : " << channel_name << " et " << tmp_name << RESET << std::endl;
 		if (channel_name == tmp_name)
 		{
 			std::cout << "CHANNEL EXISTS : " << it1->first << std::endl;
@@ -147,8 +159,8 @@ void	Server::inviteCmd(std::string locate, int socket)
 	if (channel_exist == false)
 	{
 		std::string doesnt_exist = ERR_NOSUCHCHANNEL(channel_name);
-		std::cout << YELLOW << "CHANNEL DOESNT EXIST" << RESET << std::endl;
-		std::cout << RED << "SENDING ERROR : " << doesnt_exist << RESET << std::endl;
+	//	std::cout << YELLOW << "CHANNEL DOESNT EXIST" << RESET << std::endl;
+	//	std::cout << RED << "SENDING ERROR : " << doesnt_exist << RESET << std::endl;
 		replyClient(doesnt_exist, socket);
 		return ;
 	}
@@ -158,8 +170,8 @@ void	Server::inviteCmd(std::string locate, int socket)
 	{
 		//! NEED TO DETERMINE WHAT CLIENt IS FOR NOW USERNAME??? !//
 		std::string already_on = ERR_USERONCHANNEL(tmp_username_invited, nickname, channel_name);
-		std::cout << YELLOW << "ALREADY ON" << RESET << std::endl;
-		std::cout << RED << "SENDING ERROR : " << already_on << RESET << std::endl;
+	//	std::cout << YELLOW << "ALREADY ON" << RESET << std::endl;
+	//	std::cout << RED << "SENDING ERROR : " << already_on << RESET << std::endl;
 		replyClient(already_on, socket);
 		return ;
 	}
@@ -167,8 +179,8 @@ void	Server::inviteCmd(std::string locate, int socket)
 	if (sender_in_channel == false)
 	{
 		std::string error_msg = ERR_NOTONCHANNEL(nickname, channel_name);
-		std::cout << YELLOW << "SENDER IS NOT IN CHANNEL" << RESET << std::endl;
-		std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
+		//std::cout << YELLOW << "SENDER IS NOT IN CHANNEL" << RESET << std::endl;
+		//std::cout << RED << "MSG D'ERREUR : " << error_msg << RESET << std::endl;
 		replyClient(error_msg, socket);
 		return ;
 	}

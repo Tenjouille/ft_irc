@@ -37,6 +37,7 @@ class Server
 		int						_socket;
 		struct sockaddr_in		_serverAddress;
 		int					 	_clientSocket;
+		std::string				_serverName;
 		//liste de clients existant
 		std::map<int, Client*>	_clients;
 		std::string				_password;
@@ -95,9 +96,11 @@ class Server
 
 		void				inviteCmd(std::string locate, int socket);
 		bool				fillinBuffer(std::string locate, std::string& servername, std::string& invited, std::string& nickname, int socket);
-
+		void    			kickCmd(std::string locate, int socket);
+		int				is_in_channel(std::string str, std::string channel);
 
 		std::map<std::string, Channel*>::iterator findChannel(std::string channelName);
+		int     isUser(std::string str);
 		~Server();
 
 		//check that the user is part of the channel before sending msg in channel

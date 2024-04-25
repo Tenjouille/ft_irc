@@ -16,19 +16,9 @@ int Channel::getLimit() const
     return (_limit);
 }
 
-bool Channel::getInvitOnly() const
-{
-    return _inviteonly;
-}
-
 std::string Channel::getKey() const
 {
     return _key;
-}
-
-std::map<int, Client*>  Channel::getOperatorList() const
-{
-    return (_operators);
 }
 
 
@@ -78,6 +68,11 @@ void    Channel::addClient(int socket, Client *client)
     printChannelUsers();
 }
 
+bool Channel::getInvitOnly() const
+{
+    return _inviteonly;
+}
+
 void Channel::newOperator(int socket, Client *client)
 {
     // std::string newSign = "@" + client->getNickName();
@@ -89,6 +84,29 @@ void Channel::newOperator(int socket, Client *client)
 // {
 //     _clientslst.erase(socket);
 // }
+
+void    Channel::removeClientFromLst(std::string clientName)
+{
+        for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); ++it)
+        {
+            if (it->second->getNickName() == clientName)
+            {
+                _clientslst.erase(it->first);
+            }
+        }
+        for (std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it)
+        {
+            if (it->second->getNickName() == clientName)
+            {
+                _operators.erase(it->first);
+            }
+        }
+}
+
+std::map<int, Client*>  Channel::getOperatorList() const
+{
+    return (_operators);
+}
 
 void Channel::setName(std::string str)
 {

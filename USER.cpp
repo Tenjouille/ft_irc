@@ -4,6 +4,11 @@ void	Server::userCmd(std::string str, int socket)
 {
 	std::string cmd = str.substr(str.find(' ') + 1);
 	cmd = cmd.substr(0, cmd.find(' '));
+	if (getClient(socket)->getStatus() == 4)
+	{
+		replyClient(ALREADYREGISTERED(getClient(socket)->getNickName()), socket);
+		return;
+	}
 	for (int i = 0; cmd[i]; i++)
 		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
 			return;
@@ -29,7 +34,6 @@ void	Server::userCmd(std::string str, int socket)
 		}
 		else
 		{
-		//	std::cout << "SETUP UsERNAME ET STATUS UPDATED" << std::endl;
 			return ;
 		}
 	}

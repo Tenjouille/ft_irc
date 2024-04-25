@@ -97,12 +97,23 @@ int Server::getSocketFromUser(std::string to_find)
     return (socket);
 }
 
+int     Server::isUser(std::string str)
+{
+    	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+        {
+            if (it->second->getNickName() == str)
+            {
+                return 0;
+            }
+        }
+        return 1;
+}
+
 void Server::msgCmd(std::string locate, int socket)
 {
 	int is_channel = 0;
     std::string user;
     std::string msg;
-
 	size_t start = locate.find("PRIVMSG ");
 	if (start != std::string::npos)
 	{
@@ -144,7 +155,6 @@ void Server::msgCmd(std::string locate, int socket)
 			}
 		}
 	}
-
     std::string s_user = _clients[socket]->getUserName();
     std::string s_nick = _clients[socket]->getNickName();
 	if (is_channel == 0)
