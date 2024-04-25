@@ -92,7 +92,11 @@ void	Channel::execMode(std::string options, std::vector<std::string>& args)
 void	Channel::infoChannel()
 {
 	std::cout << MAGENTA << "ABOUT " << getName() << ":" << std::endl;
-	std::cout << "Topic : [" << _topic << "]" << std::endl;
+	std::cout << "Topic : [" << _topic << "]";
+	if (_topicStatus)
+		std::cout << " on" << std::endl;
+	else
+		std::cout << " off" << std::endl;
 	std::cout << "Key : [" << _key << "]" << std::endl;
 	std::cout << "Limit : [" << _limit << "]" << std::endl;
 	std::cout << "Inviteonly : [" << _inviteonly << "]" << std::endl;
@@ -139,8 +143,9 @@ void	Server::modeCmd(std::string locate, int socket)
 			std::cout << WHITE << "Valeur de i = " << i << " Valeur  de count = " << optionNb(options) << std::endl; 
 			std::vector<std::string>	args = initArgs(cmd, optionNb(options), i);
 
+			std::cout << YELLOW << "Executed options :";
 			it->second->execMode(options, args);
-			std::cout << YELLOW << "HEEEEEEERE" << std::endl;
+			std::cout << RESET << std::endl;
 			it->second->infoChannel();
 			return ;
 		}
