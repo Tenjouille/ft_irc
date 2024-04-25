@@ -108,7 +108,8 @@ class Server
 		bool    isInsideChannel(Channel *channel, int socket);
 		bool   isClientOp(std::map<int, Client*> op_list, int socket);
 
-
+		std::map<std::string, Channel*> getChannelListe() const;
+		Channel *getChannelFromName(std::string name);
 };
 
 #endif

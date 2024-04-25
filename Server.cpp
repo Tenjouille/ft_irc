@@ -21,6 +21,31 @@ Server::Server(char **av)
 		std::cout << "invalid port format" << std::endl;
 }
 
+Channel* Server::getChannelFromName(std::string name)
+{
+	std::map<std::string, Channel*>::iterator it = _channelLst.begin();
+	std::map<std::string, Channel*>::iterator ite = _channelLst.end();
+
+	while (it != ite)
+	{
+		std::string tmp_channel_name = it->first;
+		std::cout << "COMPARING : '" << tmp_channel_name << "' and : '" << name << "'" << std::endl;
+		if (tmp_channel_name == name)
+		{
+			std::cout << "CHANNEL FOUND !" << std::endl;
+			return (it->second);
+		}
+		++it;
+	}
+	return (NULL);
+}
+
+std::map<std::string, Channel*> Server::getChannelListe() const
+{
+	return _channelLst;
+}
+
+
 int	Server::getSocket() const
 {
 	return _socket;

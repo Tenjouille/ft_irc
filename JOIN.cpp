@@ -166,7 +166,10 @@ std::map<std::string, Channel*>::iterator Server::findChannel(std::string channe
     for(std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
     {
         if (it->second->getName() == channelName)
+        {
+            std::cout << YELLOW << "CHANNEL FOUND" << RESET << std::endl;
             return it;
+        }
     }
     return _channelLst.end();
 }

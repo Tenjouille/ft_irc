@@ -75,7 +75,6 @@ bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::str
     return true;
 }
 
-
 void	Server::inviteCmd(std::string locate, int socket)
 {
 	//std::cout << GREEN << "ICIIIIII : '" << locate << "'" << RESET << std::endl;
