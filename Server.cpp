@@ -28,7 +28,7 @@ int	Server::getSocket() const
 
 void	Server::read_data_from_socket(int socket)
 {
-	std::cout << "read data" << std::endl;
+//	std::cout << "read data" << std::endl;
 	char buffer[1024];
 	// char msg_to_send[1024];
 	int bytes_read;
@@ -167,7 +167,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	// options.append(defineOptions(locate));
 	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
-	std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
+	//std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 		nickCmd (locate, socket);
 	else if (locate.find("CAP LS") == 0)

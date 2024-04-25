@@ -1,0 +1,44 @@
+<< CAP LS
+<< PASS mdp
+<< NICK uaupetit
+<< USER uaupetit uaupetit localhost :Ulysse AUPETIT
+>> CAP_ACK LS
+>> :localhost 433 * uaupetit :Nickname is already in use.
+<< NICK uaupetit_
+>> :localhost 001 uaupetit_ :Welcome to the Internet Relay Network uaupetit_!uaupetit
+<< MODE uaupetit_ +i
+<< WHOIS uaupetit
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #cha
+>> Welcome in cha server.
+>> Say hello to :
+>>     uaupetit
+>> And fear the powerfull judgment of :
+>>     uaupetit
+>> :localhost 331 uaupetit_ #cha :No topic is set
+>> :localhost 353 uaupetit_ = #cha :@uaupetit uaupetit_ 
+>> :localhost 366 uaupetit_ cha :End of /NAMES list
+<< MODE #cha
+>> :uaupetit!uaupetit@localhost KICK #cha  uaupetit_ :
+<< PING localhost
+>> PONG localhost
+--> FAILED whois
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED mode channel: chanquery abort
+<< MODE #cha
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED mode channel: chanquery abort
+<< WHO #cha
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong

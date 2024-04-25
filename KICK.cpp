@@ -16,10 +16,10 @@ void Server::kickCmd(std::string locate, int socket)
         end = locate.find_first_of(" ", start);
         if (end != std::string::npos)
         {
-            channelName = locate.substr(start + 1, end - start);
+            channelName = locate.substr(start + 1, end - start - 1);
         }
     }
-    std::string userName = locate.substr(d_end, (d_end - d_start));
+   // std::string userName = locate.substr(d_end, (d_end - d_start));
     std::string userName2 = locate.substr(d_end, (d_start - d_end) + 1);
     //std::cout << "1 = '" << userName << "' 2 = '" << userName2 << "'" << std::endl;
     size_t c_start = locate.find(":");
@@ -32,16 +32,16 @@ void Server::kickCmd(std::string locate, int socket)
     {
         findChannel(channelName)->second->removeClientFromLst(channelName);
     }
-    if(channelName.empty() || userName2.empty())
-    {
-        replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "KICK"), socket);
-        return;
-    }
-    if (findChannel(channelName) == _channelLst.end())
-    {
-        replyClient(ERR_NOSUCHCHANNEL(channelName), socket);
-        return;
-    }
+    // if(channelName.empty() || userName2.empty())
+    // {
+    //     replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "KICK"), socket);
+    //     return;
+    // }
+    // if (findChannel(channelName) == _channelLst.end())
+    // {
+    //     replyClient(ERR_NOSUCHCHANNEL(channelName), socket);
+    //     return;
+    // }
     if (is_in_channel(userName2, channelName) == 1)
     {
         replyClient(ERR_NOTINCHANNEL(getClient(socket)->getNickName(), userName2, channelName), socket);
@@ -50,8 +50,10 @@ void Server::kickCmd(std::string locate, int socket)
     {
         replyClient(ERR_NOTONCHANNEL(getClient(socket)->getNickName(), channelName), socket);
     }
+    std::cout << RED << "le client :" << YELLOW << getClient(socket)->getNickName() << RED << "veut kick le user : " << YELLOW << userName2 << RED << "du channel : '" << YELLOW << channelName << "'" << std::endl;
 //    std::cout << RED << "user: " << userName << " socket = "<< getSocketFromUser(userName2) << std::endl;
     replyClient(KICK(userID(getClient(socket)->getNickName(), getClient(socket)->getUserName()), channelName, userName2, comment), getSocketFromUser(userName2));
+    replyClient(KICK(userID(getClient(socket)->getNickName(), getClient(socket)->getUserName()), channelName, userName2, comment), socket);
     //(void)socket;
 }
 
