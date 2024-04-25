@@ -16,43 +16,78 @@ void Server::kickCmd(std::string locate, int socket)
         end = locate.find_first_of(" ", start);
         if (end != std::string::npos)
         {
-            channelName = locate.substr(start + 1, end - start);
+            channelName = locate.substr(start + 1, end - start - 1);
         }
     }
-    std::string userName = locate.substr(d_end, (d_end - d_start));
     std::string userName2 = locate.substr(d_end, (d_start - d_end) + 1);
-    //std::cout << "1 = '" << userName << "' 2 = '" << userName2 << "'" << std::endl;
     size_t c_start = locate.find(":");
     std::string comment;
     if (c_start != std::string::npos)
     {
         comment = locate.substr(c_start + 1);
     }
-    if (findChannel(channelName) != _channelLst.end())
-    {
-        findChannel(channelName)->second->removeClientFromLst(channelName);
-    }
+
+    std::cout << "CHANNEL NAME : '" << channelName << "'" << std::endl;
+
+    // NEED MORE PARAMS IN COMMAND
     if(channelName.empty() || userName2.empty())
     {
         replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "KICK"), socket);
         return;
     }
+
+    // CHANNEL NOT FOUND
     if (findChannel(channelName) == _channelLst.end())
     {
         replyClient(ERR_NOSUCHCHANNEL(channelName), socket);
         return;
     }
+
+    // KICKED CLIENT IS NOT IN CHANNEL
     if (is_in_channel(userName2, channelName) == 1)
     {
         replyClient(ERR_NOTINCHANNEL(getClient(socket)->getNickName(), userName2, channelName), socket);
+        return;
     }
+    // KICKEUR CLIENT IS NOT IN CHANNEL
     if (is_in_channel(getClient(socket)->getNickName(), channelName) == 1)
     {
         replyClient(ERR_NOTONCHANNEL(getClient(socket)->getNickName(), channelName), socket);
+        return;
     }
-//    std::cout << RED << "user: " << userName << " socket = "<< getSocketFromUser(userName2) << std::endl;
-    replyClient(KICK(userID(getClient(socket)->getNickName(), getClient(socket)->getUserName()), channelName, userName2, comment), getSocketFromUser(userName2));
-    //(void)socket;
+    
+    // GET THE CHANNEL CLASS TO CHECK IF THE KICKEUR IS OP
+    Channel *channel = getChannelFromName(channelName);
+    if (channel == NULL)
+    {
+        std::cout << YELLOW << "COULDNT FIND THE CHANNEL NAME" << RESET << std::endl;
+        std::string err_msg = ERR_NOSUCHCHANNEL(channelName);
+        std::cout << "SENDING : " << err_msg << std::endl;
+        replyClient(err_msg, socket);
+        return ;
+    }
+    else if (isClientOp(channel->getOperatorList(), socket) == false)
+    {
+        std::cout << "USER : " << _clients[socket]->getNickName() << " is not an OPERATOR !!" << std::endl;
+        std::string err_msg = ERR_CHANOPRIVSNEEDED(_clients[socket]->getNickName(), channelName);
+        std::cout << "SENDING : " << err_msg << std::endl;
+        replyClient(err_msg, socket);
+        return ;
+    }
+    std::cout << "USER SHOULD GET KICKED" << std::endl;
+    if (comment.empty())
+        comment = "BE GONE FOOL";
+    std::string msg = KICK(userID(getClient(socket)->getNickName(), getClient(socket)->getUserName()), channelName, userName2, comment);
+    std::cout << "Sending : " << msg << std::endl;
+
+    replyClient(msg, getSocketFromUser(userName2));
+    replyClient(msg, socket);
+    findChannel(channelName)->second->removeClientFromLst(userName2);
+
+
+    std::string kicked_msg = "You were kicked by " + getClient(socket)->getNickName() + "! You need to behave.\nReason : " + comment + "\r\n";
+    std::cout << "kicked_msg : '" << kicked_msg << "'" << std::endl; 
+    replyClient(kicked_msg, getSocketFromUser(userName2));
 }
 
 /*int Server::is_in_channel(std::string str, std::string channel)

@@ -89,8 +89,10 @@ void    Channel::removeClientFromLst(std::string clientName)
 {
         for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); ++it)
         {
+            std::cout << "Comparing : '" << clientName << "'" << " and : '" << it->second->getNickName() << "'" << std::endl;
             if (it->second->getNickName() == clientName)
             {
+                std::cout << BLUE << "CLIENT DEL FROM LIST" << RESET << std::endl;
                 _clientslst.erase(it->first);
             }
         }
