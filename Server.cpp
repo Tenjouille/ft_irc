@@ -210,7 +210,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 
 void	Server::parser(char *buffer, int socket)
 {
-	std::cout << MAGENTA << "dans parser buffer = '" << buffer << "'" << std::endl;
 	if (!buffer)
 		return ;
 	std::string cmd = buffer;

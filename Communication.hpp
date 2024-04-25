@@ -54,7 +54,6 @@
 #define NAMELIST(user, channel) (":localhost 366 " + user + " " + channel + " :End of /NAMES list\r\n")
 // OTHER
 
-
 //FUNCTIONS
 size_t	replyClient(std::string Macros, int socket);
 
