@@ -2,6 +2,11 @@
 
 Channel::Channel(std::string str)
 {
+    _name = "";
+    _topic = "";
+    _key = "";
+    _limit = 0;
+    _inviteonly = 0;
     setName(str);
     _topicStatus = 0;
 }
@@ -87,22 +92,25 @@ void Channel::newOperator(int socket, Client *client)
 
 void    Channel::removeClientFromLst(std::string clientName)
 {
-        for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); ++it)
+    std::cout << RED << _clientslst.size() << std::endl;
+    for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
+    {
+        std::cout << "Comparing : '" << clientName << "'" << " and : '" << it->second->getNickName() << "'" << std::endl;
+        if (it->second->getNickName() == clientName)
         {
-            std::cout << "Comparing : '" << clientName << "'" << " and : '" << it->second->getNickName() << "'" << std::endl;
-            if (it->second->getNickName() == clientName)
-            {
-                std::cout << BLUE << "CLIENT DEL FROM LIST" << RESET << std::endl;
-                _clientslst.erase(it->first);
-            }
+            std::cout << BLUE << "CLIENT DEL FROM LIST" << RESET << std::endl;
+            _clientslst.erase(it->first);
+            break ;
         }
-        for (std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it)
+    }
+    for (std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); it++)
+    {
+        if (it->second->getNickName() == clientName)
         {
-            if (it->second->getNickName() == clientName)
-            {
-                _operators.erase(it->first);
-            }
+            _operators.erase(it->first);
+            break ;
         }
+    }
 }
 
 std::map<int, Client*>  Channel::getOperatorList() const

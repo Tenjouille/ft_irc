@@ -78,14 +78,15 @@ void	Server::read_data_from_socket(int socket)
 	if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
 		std::cout << "cmd1 = '" << cmd1 << "'" << std::endl;
 	//std::cout << GREEN << "HERE" << RESET << std::endl;
-	getClient(socket)->setTempBuffer(buffer, 0);
+	getClient(socket)->setTempBuffer(static_cast<char*>(buffer), 0);
 	//std::cout << "buffer client = '" << getClient(socket)->getTempBuffer() << "'" << std::endl;
 	std::string cmd = getClient(socket)->getTempBuffer();
 	if (cmd[cmd.size() - 2] == '\r' && cmd[cmd.size() - 1] == '\n')
 	{
 		//std::cout << "cmd = '" << cmd << "'" << std::endl;
 		parser(getClient(socket)->getTempBuffer(), socket);
-		getClient(socket)->setTempBuffer(NULL, 1);
+		if (getClient(socket))
+			getClient(socket)->setTempBuffer("", 1);
 	}
 	// for (int i = 0; i  1024)
 	buffer[0] = '\0';
@@ -232,11 +233,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 }
 
-void	Server::parser(char *buffer, int socket)
+void	Server::parser(std::string cmd, int socket)
 {
-	if (!buffer)
+	if (cmd.empty())
 		return ;
-	std::string cmd = buffer;
 	int start = 0;
 	for (int i = 0; cmd[i]; i++)
 	{
@@ -247,17 +247,6 @@ void	Server::parser(char *buffer, int socket)
 			start = i + 1;
 		}
 	}
-}
-
-void	Server::delClient(int socket)
-{
-	std::map<int,Client*>::iterator it = _clients.find(socket);
-	if (it == _clients.end())
-	{
-		return;
-	}
-	else
-		_clients.erase(it);
 }
 
 void	Server::closeSockets()

@@ -21,17 +21,17 @@ bool	Client::getConnectedStatus() const
 	return (_is_connected);
 }
 
-char *	Client::getTempBuffer()
+std::string	Client::getTempBuffer()
 {
 	return _tempBuffer;
 }
 
-void  Client::setTempBuffer(char* str, int flag)
+void  Client::setTempBuffer(std::string str, int flag)
 {
 	if (flag == 0)
-		strcat(_tempBuffer, str);
+	_tempBuffer += str;
 	else if (flag == 1)
-		strcpy(_tempBuffer, "\0");
+		_tempBuffer = "";
 }
 
 void	Client::dont_set_user(bool value)

@@ -73,7 +73,7 @@ class Server
 		void				read_data_from_socket(int socket);
 		void				accept_new_connection();
 		//////////////PARSING///////////////
-		void				parser(char *buffer, int socket);
+		void				parser(std::string buffer, int socket);
 		void				defineCmd(std::string cmd, int start, int it, int socket);
 		std::string			defineArgs(std::string cmd);
 		std::string			defineOptions(std::string cmd);
