@@ -30,18 +30,19 @@ void Server::kickCmd(std::string locate, int socket)
     }
     if (findChannel(channelName) != _channelLst.end())
     {
-        findChannel(channelName)->second->removeClientFromLst(channelName);
+        //findChannel(channelName)->second->removeClientFromLst(channelName);
+        findChannel(channelName)->second->removeClientFromLst(userName2);
     }
-    // if(channelName.empty() || userName2.empty())
-    // {
-    //     replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "KICK"), socket);
-    //     return;
-    // }
-    // if (findChannel(channelName) == _channelLst.end())
-    // {
-    //     replyClient(ERR_NOSUCHCHANNEL(channelName), socket);
-    //     return;
-    // }
+    if(channelName.empty() || userName2.empty())
+    {
+        replyClient(ERR_NEEDMOREPARAMS(getClient(socket)->getNickName(), "KICK"), socket);
+        return;
+    }
+    if (findChannel(channelName) == _channelLst.end())
+    {
+        replyClient(ERR_NOSUCHCHANNEL(channelName), socket);
+        return;
+    }
     if (is_in_channel(userName2, channelName) == 1)
     {
         replyClient(ERR_NOTINCHANNEL(getClient(socket)->getNickName(), userName2, channelName), socket);
