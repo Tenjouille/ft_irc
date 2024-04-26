@@ -59,17 +59,21 @@ void    Channel::printChannelUsers()
 void    Channel::addClient(int socket, Client *client)
 {
     
-    std::cout << YELLOW << "ADDED : " << client->getNickName() << " and socket : " << socket << RESET << std::endl;
-    std::string welcome2Channel = "Welcome in " + _name + " channel.\nSay hello to :\n";
-    for(std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
-        welcome2Channel += "    " + it->second->getNickName() + "\n";
-    if (_clientslst.size() == 0)
-        welcome2Channel += "your fresh new server (me ^^)!\n";
+    // std::string welcome2Channel = "\x1b[1m\x1b[32mWelcome in the #" + _name + " channel.\x1b[0m\nSay hello to :\n";
+    // std::cout << YELLOW << "ADDED : " << client->getNickName() << " and socket : " << socket << RESET << std::endl;
+    // for(std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
+    //     welcome2Channel += "    " + it->second->getNickName() + "\n";
+    // if (_clientslst.size() == 0)
+    //     welcome2Channel += "your fresh new server (me ^^)!\n";
+    // welcome2Channel += "And fear the powerfull judgment of :\n\x1b[31m\x1b[1m";
+    // for(std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); it++)
+    //     welcome2Channel += "    " + it->second->getNickName() + "\n\x1b[0m";
+    // // replyClient(welcome2Channel, socket);
+    // std::cout << "SENDING : " << SENDINCHANNEL(client->getNickName(), client->getNickName(), welcome2Channel,_name) << std::endl;
+    
     _clientslst.insert(std::make_pair(socket, client));
-    welcome2Channel += "And fear the powerfull judgment of :\n";
-    for(std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); it++)
-        welcome2Channel += "    " + it->second->getNickName() + "\n";
-    replyClient(welcome2Channel, socket);
+    
+    // replyClient(SENDINCHANNEL(client->getNickName(), client->getNickName(), welcome2Channel,_name), client->getSocket());
     printChannelUsers();
 }
 

@@ -98,6 +98,7 @@ void Server::joinCmd(std::string locate, int socket)
                 }
                 flag = 1;
                 channel->addClient(socket, getClient(socket));
+                // WelcomeMsg(channelName, getClient(socket), socket);
                 if (findChannel(channelName)->second->getTopicStatus() == 1)
                 {
                     std::cout << "ici topic = " << findChannel(channelName)->second->getTopic() << std::endl;
@@ -124,11 +125,14 @@ void Server::joinCmd(std::string locate, int socket)
                 }
                 replyClient(LISTUSERS(getClient(socket)->getNickName(), channelName, userlst), socket);
                 replyClient(NAMELIST(getClient(socket)->getNickName(), channelName), socket);
+               
+                // SEND WELCOME MESSAGE
+                WelcomeMsg(channelName, getClient(socket), socket);
             }
         }
         else if (flag == 0)
         {
-         std::cout << "DIRECTEMENT RENTRE LA DEDEANS << <<< " << std::endl;
+            std::cout << "DIRECTEMENT RENTRE LA DEDEANS << <<< " << std::endl;
             createChannel(channelName, socket);
         //il faudra envoyer un reply avec la liste des clients du channel dans tout les cas
         // std::string userlst;

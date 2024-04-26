@@ -24,7 +24,8 @@ void Server::kickCmd(std::string locate, int socket)
     std::string comment;
     if (c_start != std::string::npos)
     {
-        comment = locate.substr(c_start + 1);
+        comment = "\x1b[31m\x1b[1m" + locate.substr(c_start + 1) + "\x1b[0m";
+        std::cout << BLUE << "COMMENT FILLED WITH : '" << comment << "' ->" << comment.length() << RESET << std::endl;
     }
 
     std::cout << "CHANNEL NAME : '" << channelName << "'" << std::endl;
@@ -75,8 +76,14 @@ void Server::kickCmd(std::string locate, int socket)
         return ;
     }
     std::cout << "USER SHOULD GET KICKED" << std::endl;
-    if (comment.empty())
-        comment = "BE GONE FOOL";
+    //13 because of colors
+    if (comment.length() == 13)
+    {
+        comment.clear();
+        std::cout << "NEED TO FILL THE COMMENT TO KIK" << std::endl;
+        std::string color = "\x1b[1m\x1b[31m";
+        comment = color + "BE GONE FOOL\x1b[0m";
+    }
     std::string msg = KICK(userID(getClient(socket)->getNickName(), getClient(socket)->getUserName()), channelName, userName2, comment);
     std::cout << "Sending : " << msg << std::endl;
 
@@ -85,7 +92,7 @@ void Server::kickCmd(std::string locate, int socket)
     findChannel(channelName)->second->removeClientFromLst(userName2);
 
 
-    std::string kicked_msg = "You were kicked by " + getClient(socket)->getNickName() + "! You need to behave.\nReason : " + comment + "\r\n";
+    std::string kicked_msg = "You were kicked by " + getClient(socket)->getNickName() + "! You need to \x1b[4m\x1b[1mbehave\x1b[0m.\nReason : \"" + comment + "\"\r\n";
     std::cout << "kicked_msg : '" << kicked_msg << "'" << std::endl; 
     replyClient(kicked_msg, getSocketFromUser(userName2));
 }

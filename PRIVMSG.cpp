@@ -44,12 +44,24 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
                 {
                     if (it_clt->first != socket)
                     {
-                        std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
-                        replyClient(msg, it_clt->first);
+                        if (isClientOp(channel->getOperatorList(), socket) == true)
+                        {
+                            std::cout << BLUE << "OP IS SENDING A MESSAGE ????" << RESET << std::endl;
+                            std::string red_nickname = "\x1b[31m" + s_nick + "\x1b[0m";
+                            std::string msg = SENDINCHANNEL(s_nick, red_nickname, msg_to_send, user);
+                            replyClient(msg, it_clt->first);
+                            return ;
+                        }
+                        else
+                        {
+                            std::cout << "ON EsT PASSE LA ????????????????" << std::endl;
+                            std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
+                            replyClient(msg, it_clt->first);
+                        }
                     }
-                    else
-                        return;
                 }
+                    // else
+                    //     return;
             }
             else if (macro == "topic")
             {

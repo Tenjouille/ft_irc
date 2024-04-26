@@ -11,6 +11,11 @@
 #define CYAN	"\x1b[36m"
 #define WHITE   "\x1b[37m"
 
+#define CLIGNO "\x1b[5m"
+#define ITALIQUE "\x1b[3m"
+#define BOLD "\x1b[1m"
+#define UNDERLINE "\x1b[4m"
+
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <iostream>
@@ -110,6 +115,8 @@ class Server
 
 		std::map<std::string, Channel*> getChannelListe() const;
 		Channel *getChannelFromName(std::string name);
+		void	WelcomeMsg(std::string channel_name, Client *clicli, int socket);
+
 };
 
 #endif

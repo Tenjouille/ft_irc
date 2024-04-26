@@ -249,6 +249,48 @@ void	Server::parser(std::string cmd, int socket)
 	}
 }
 
+void	Server::WelcomeMsg(std::string channel_name, Client *client, int socket)
+{
+	// (void) socket;
+	Channel	*channel;
+	for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+    {
+        std::string tmp_name = it->first;
+        channel = it->second;
+        if (tmp_name == channel_name)
+		{
+            std::map<int, Client*> client_list = channel->getClientlst();
+			for (std::map<int, Client*>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
+            {
+            	if (it_clt->first != socket)
+                {
+		 			std::string nickname = client->getNickName();
+					// std::string msg_to_send = "\x1b[1m\x1b[32mWelcome in the #" + channel_name + " channel.\x1b[0m";
+					std::string msg_to_send = "\x1b[1m\x1b[32mSay Hello to our new member : " + nickname + " !\x1b[0m";
+					std::string channel_msg = "\x1b[3m\x1b[36m#" + channel_name;
+					std::string msg = SENDINCHANNEL(channel_msg, nickname, msg_to_send, channel_name);
+            		replyClient(msg, it_clt->first);
+                }
+				else
+				{
+		 			std::string nickname = client->getNickName();
+					// std::string msg_to_send = "\x1b[1m\x1b[32mWelcome in the #" + channel_name + " channel.\x1b[0m";
+					std::string welcome = "\x1b[1m\x1b[32mBienvenu dans le #" + channel_name + " channel !\x1b[0m";
+					std::string cowboy = "\x1b[1m\x1b[5m\x1b[34mFait pas le cowboy et tout ira bien\x1b[0m\n";
+					std::string channel_msg = "\x1b[3m\x1b[36m#" + channel_name;
+					std::string msg = SENDINCHANNEL(channel_msg, nickname, welcome, channel_name);
+            		replyClient(msg, socket);
+					msg.clear();
+					msg = SENDINCHANNEL(channel_msg, nickname, cowboy, channel_name);
+            		replyClient(msg, socket);
+				}
+            }
+			
+		}
+	
+	}
+}
+
 void	Server::closeSockets()
 {
 	for(std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
