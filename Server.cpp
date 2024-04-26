@@ -5,6 +5,7 @@ Server::Server(char **av)
 	size_t i;
 	_status = 0;
 	_nb_channels = 0;
+	_nb_clients = 0;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -123,6 +124,16 @@ fd_set& Server::getallSockets()
 fd_set& Server::getreadFds()
 {
 	return _readFds;
+}
+
+int	Server::getChannelNumber() const
+{
+	return _nb_channels;
+}
+
+int	Server::getClientNumber() const
+{
+	return _nb_clients;
 }
 
 int Server::getfdMax()

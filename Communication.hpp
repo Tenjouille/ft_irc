@@ -66,6 +66,8 @@
 
 #define userID(nickname, username) (":" + nickname + "!" + username + "@localhost")
 
+#define infos(nb_client, nb_channel) ("There is " + nb_client + " clients and " + nb_channel + " launched" + "\n")
+
 //FUNCTIONS
 size_t	replyClient(std::string Macros, int socket);
 

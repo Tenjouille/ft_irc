@@ -3,7 +3,7 @@
 
 #define RESET   "\x1b[0m"
 #define BLACK   "\x1b[30m"
-#define RED	 "\x1b[31m"
+#define RED	 	"\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
 #define BLUE	"\x1b[34m"
@@ -52,7 +52,8 @@ class Server
 		int						_fdMax;
 		//liste de channels existant
 		std::map<std::string, Channel*> _channelLst;
-		int								_nb_channels;
+		int						_nb_channels;
+		int						_nb_clients;
 
 	public:
 		Server(char **arguments);
@@ -116,7 +117,13 @@ class Server
 		std::map<std::string, Channel*> getChannelListe() const;
 		Channel *getChannelFromName(std::string name);
 		void	WelcomeMsg(std::string channel_name, Client *clicli, int socket);
+		int		getChannelNumber() const;
+		int		getClientNumber() const;
+		void	startingMsg(int socket);
 
 };
+
+std::string intToString(int value);
+
 
 #endif

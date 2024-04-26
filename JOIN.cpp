@@ -134,6 +134,7 @@ void Server::joinCmd(std::string locate, int socket)
         {
             std::cout << "DIRECTEMENT RENTRE LA DEDEANS << <<< " << std::endl;
             createChannel(channelName, socket);
+            _nb_channels++;
         //il faudra envoyer un reply avec la liste des clients du channel dans tout les cas
         // std::string userlst;
         //combien de channel max peut recevoir un client?

@@ -30,6 +30,8 @@ void	Server::userCmd(std::string str, int socket)
 			{
 				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
 				_clients[socket]->change_connected(); //true
+				_nb_clients++;
+				startingMsg(socket);
 			}
 		}
 		else
