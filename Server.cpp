@@ -61,7 +61,6 @@ void	Server::read_data_from_socket(int socket)
 	//int status;
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
-	//std::cout << RED << "'" << buffer << "'" << std::endl;
 	if (buffer[0] == '\0')
 		return ;
 	for (int j = 0; j <= _fdMax; j++)
@@ -169,8 +168,6 @@ void	Server::loop()
 		{
 			if (FD_ISSET(i, &_readFds) != 1)
 				continue ;
-			// if (FD_ISSET(i, &_readFds) == -1)
-			// 	return;
 			if (i == _socket)
 				accept_new_connection();
 			else
@@ -182,8 +179,7 @@ void	Server::loop()
 
 void	Server::accept_new_connection()
 {
-		std::cout << "accept" << std::endl;
-
+	std::cout << "accept" << std::endl;
 	int client_fd;
 
 	client_fd = accept(_socket, NULL, NULL);
@@ -287,7 +283,7 @@ void	Server::WelcomeMsg(std::string channel_name, Client *client, int socket)
 		 			std::string nickname = client->getNickName();
 					// std::string msg_to_send = "\x1b[1m\x1b[32mWelcome in the #" + channel_name + " channel.\x1b[0m";
 					std::string welcome = "\x1b[1m\x1b[32mBienvenu dans le #" + channel_name + " channel !\x1b[0m";
-					std::string cowboy = "\x1b[1m\x1b[5m\x1b[34mFait pas le cowboy et tout ira bien\x1b[0m\n";
+					std::string cowboy = "\x1b[1m\x1b[31mRègle\x1b[0m :\x1b[31m\x1b[5m\x1b[1m Fait pas le cowboy et tout ira bien\x1b[0m\n";
 					std::string channel_msg = "\x1b[3m\x1b[36m#" + channel_name;
 					std::string msg = SENDINCHANNEL(channel_msg, nickname, welcome, channel_name);
             		replyClient(msg, socket);
