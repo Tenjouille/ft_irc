@@ -2,84 +2,141 @@
 
 Client::Client()
 {
-    std::cout << "New client" << std::endl;
-    _nickcount = 0;
-
+	_nickcount = 0;
+	_connection_status = 0;
+	_dont_set_user = false;
+	_is_connected = false;
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
+{}
+
+void	Client::change_connected()
 {
-    std::cout << "New client" << std::endl;
+	_is_connected = true;
 }
+
+bool	Client::getConnectedStatus() const
+{
+	return (_is_connected);
+}
+
+std::string	Client::getTempBuffer()
+{
+	return _tempBuffer;
+}
+
+void  Client::setTempBuffer(std::string str, int flag)
+{
+	if (flag == 0)
+	_tempBuffer += str;
+	else if (flag == 1)
+		_tempBuffer = "";
+}
+
+void	Client::dont_set_user(bool value)
+{
+	if (value == true)
+		_dont_set_user = true;
+	else
+		_dont_set_user = false;
+}
+
+bool	Client::do_we_set_or_not() const
+{
+	return _dont_set_user;
+}
+
+void	Client::printChannels()
+{
+	std::vector<std::string>::iterator it = _channel.begin();
+	std::vector<std::string>::iterator itend = _channel.end();
+	
+	while (it != itend)
+	{
+		std::cout << *it << std::endl;
+		++it;
+	}
+}
+
+void	Client::delChannel(std::string channelName)
+{
+	for (std::vector<std::string>::iterator it = _channel.begin(); it != _channel.end(); ++it)
+	{
+		if(*it == channelName)
+		{
+			it = _channel.erase(it);
+		}
+	}
+}
+
+/* ==== GETTERS ====*/
+
 std::string Client::getNickName() const
 {
-    return _nickname;
+	return _nickname;
+}
+
+void    Client::updateStatus()
+{
+    _connection_status++;
+	std::cout << "STATUS UPDATED TO : " << _connection_status << std::endl;
 }
 
 std::string Client::getUserName() const
 {
-    return _username;
+	return _username;
 }
 
 std::string Client::getName() const
 {
-    return _name;
+	return _name;
 }
 
-struct sockaddr Client::getClientAddr() const
+std::vector<std::string> Client::getChannel()
 {
-    return (_clientAddr);
+	return _channel;
 }
-// void Client::setNickName() const
-void Client::setSocket(int tmp)
+
+struct sockaddr	Client::getClientAddr() const
 {
-    _socket = tmp;
+	return (_clientAddr);
 }
 
 int Client::getSocket() const
 {
-    return _socket;
+	return _socket;
 }
 
-// void Client::nickCmd(std::string str)
-// {
-//     if (str.length() > 9)
-//         printf("trop de char pour nick");
-//     for (int i = 0; str[i]; i++)
-//     {
-//         if(!((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9')))
-//         {
-//             printf("nickname wrong input");
-//         }
-//     }
-//     _nickname = str;
-// }
+int     Client::getStatus()
+{
+    return _connection_status;
+}
 
-// void Client::userCmd(std::string str)
-// {
-//  //   Parameters: <username> <hostname> <servername> :<realname>
-// //idk
-// }
+/* ==== SETTERS ==== */
 
-// void Client::joinCmd(std::string str)
-// {
+void    Client::addChannel(std::string channelname_to_add)
+{
+	_channel.push_back(channelname_to_add);
+	std::cout << "ADDED " << channelname_to_add << " into client's vector" << std::endl;
+}
 
-// }
+void Client::setSocket(int tmp)
+{
+	_socket = tmp;
+}
 
 void Client::setNickName(std::string str)
 {
-    _nickname = str;
+	_nickname = str;
 }
 
-// void Client::setUserName() const
-// {
+void Client::setUserName(std::string str)
+{
+    _username = str;
+}
 
-// }
-
-// void Client::setName() const
-// {
-
-// }
+/* ==== DESTRUCTEUR ==== */
 
 Client::~Client()
 {}

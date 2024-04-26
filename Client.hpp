@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <iostream>
@@ -11,6 +13,10 @@
 #include <string.h>
 #include <fcntl.h>
 #include <vector>
+#include "Communication.hpp"
+#include "Channel.hpp"
+
+class Channel;
 
 class Client
 {
@@ -22,7 +28,12 @@ class Client
         std::string     _password;
         int             _socket;
         int             _nickcount;
-
+        int             _connection_status;
+        std::string     _tempBuffer;
+        //listes de channels dans lequel est le client
+        std::vector<std::string> _channel;
+        bool            _dont_set_user;
+        bool            _is_connected;
     public:
         Client();
         Client(std::string password);
@@ -33,13 +44,29 @@ class Client
         struct sockaddr getClientAddr() const;
         int             getSocket() const;
         void            setNickName(std::string str);
-        // void            setUserName();
-        // void            setName();
+        void            updateStatus();
+        int             getStatus();
+        void            setUserName(std::string str);
         void            setSocket(int tmp);
-        // void            nickCmd(std::string str);
-        // void            userCmd(std::string str);
-        // void            joinCmd(std::string str);
+        std::vector<std::string> getChannel();
+        std::string     getTempBuffer();
+        void            setTempBuffer(std::string str, int flag);
+        void	        delChannel(std::string channelName);
+        // Client* cloneClient();
         ~Client();
 
         std::string getPassword() const;
+        //to know if we set the user or not depending on value
+        void    dont_set_user(bool value);
+        bool    do_we_set_or_not() const;
+
+        void    addChannel(std::string to_add);
+        void	printChannels();
+
+        //to change connected status
+        void	change_connected();
+        bool	getConnectedStatus() const;
+
 };
+
+#endif

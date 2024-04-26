@@ -30,32 +30,26 @@ bool    is_valid_password(std::string password)
 
 int main(int ac, char **av)
 {
-    if (ac == 3)
-    {
-        try
-        {
-            std::string tmp_pass = av[2];
-            if (is_valid_password(tmp_pass) == false)
-            {
-                std::cout << "Invalid Password" << std::endl;
-                return (0);
-            }
-            std::cout << "Valide Password" << std::endl;
-
-            Server server(av);
-            socklen_t client_addr_len = sizeof(struct sockaddr);
-            struct sockaddr client_addr;
-            int tmp = accept(server.getSocket(), (struct sockaddr *)&client_addr, &client_addr_len);
-            std::cout << "C'est bon !" << std::endl;
-            server.setClientSocket(tmp);
-            server.loop();
-
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-    }
-    else
-        std::cout << "Error : Bad Usage\nTry : ./ft_irc <port> <password>" << std::endl;
+	if (ac == 3)
+	{
+		Server server(av);
+		try
+		{
+			int status;
+		   // struct timeval timer;
+			status = listen(server.getSocket(), 10);
+			FD_ZERO(&server.getallSockets());
+			FD_ZERO(&server.getreadFds());
+			FD_SET(server.getSocket(), &server.getallSockets());
+			server.setfdMax(server.getSocket());
+			server.loop();
+		}
+		catch(const std::exception& e)
+		{
+			server.closeSockets();
+			std::cerr << e.what() << '\n';
+		}
+	}
+	else
+		std::cout << "Bad arguments number" << std::endl;
 }

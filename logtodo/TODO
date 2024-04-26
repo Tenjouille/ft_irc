@@ -1,0 +1,6 @@
+-KICK cmd
+-Si je renomme un user avec nick je dois changer le nick dans tout les conteneurs
+-buffer dans chaque clients si pas de /r/n
+-cleaner un peu les fonctions (ex si iterateurs partout, faire une fonction utilisable par les autres fonction)
+-verifier si tout ce qu'on a deja fonctionne ?
+-modifier fonctions en prenant en compte le mode
