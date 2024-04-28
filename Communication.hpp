@@ -11,7 +11,7 @@
 #define CAP_LS() ("CAP_ACK LS\r\n")
 #define CREATECHANNEL(nickname, username, name) (":" + nickname+ "!" + username + "@localhost JOIN " + name + "\r\n") //CREATE CHANNEL
 #define SENDINCHANNEL(sender, receiver, msg, channelname) (":" + sender + "!" + "uaupetit" + "@localhost PRIVMSG #" + channelname + " :" + msg + "\r\n") //PRIVMSG FOR CHANNEL
-#define PRIVMSG(nickname, envoyeur, msg) (":" + nickname + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n") //PRIVMSG CMD
+#define PRIVMSG(nickname, envoyeur, msg) (":" + std::string(nickname) + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n") //PRIVMSG CMD
 #define DEFAULTPONG(servername) ("PONG " + servername + "\r\n") //PONG CMD
 #define RPL_INVITING(userID, client_nickname, invited_nickname, channel_name) (userID + " INVITE " + invited_nickname + " :" + channel_name + "\r\n") //INVITE CMD
 //!#define NICK(userID, nickname) (userID + " NICK :" + nickname + "\r\n")
@@ -67,6 +67,35 @@
 #define userID(nickname, username) (":" + nickname + "!" + username + "@localhost")
 
 #define infos(nb_client, nb_channel) ("There is " + nb_client + " clients and " + nb_channel + " launched" + "\n")
+
+// BOT
+#define _bot_name "Botimus_Maximus"
+
+//NICK
+//JOIN
+//PRIVMSG
+//QUIT
+#define HELP_BOX() (\
+"       Voici quelques commandes utiles :        \n" \
+"┌──────────────────────────────────────────────┐\n" \
+"│   \x1b[33mNICK\x1b[0m <new_nickname> : permet de changer de │\n" \
+"│ changer de blaze si tu veux en avoir un      │\n" \
+"│ aussi cool que Botimus_Maximus.              │\n" \
+"└──────────────────────────────────────────────┘\n" \
+"┌──────────────────────────────────────────────┐\n" \
+"│   \x1b[34mJOIN\x1b[0m <#channel_name> : permet de joindre   │\n" \
+"│ un channel et parler avec des petits geeks.  │\n" \
+"└──────────────────────────────────────────────┘\n" \
+"┌──────────────────────────────────────────────┐\n" \
+"│   \x1b[35mPRIVMSG\x1b[0m <receiver_name> <msg> : envoi un   │\n" \
+"│ message privé a ton amoureux.                │\n" \
+"└──────────────────────────────────────────────┘\n" \
+"┌──────────────────────────────────────────────┐\n" \
+"│   \x1b[31mQUIT\x1b[0m : te rends raciste, leak tes données  │\n" \
+"│ bancaire, me fait pleurer et quitte le       │\n" \
+"│ serveur.                                     │\n" \
+"└──────────────────────────────────────────────┘\r\n")
+
 
 //FUNCTIONS
 size_t	replyClient(std::string Macros, int socket);

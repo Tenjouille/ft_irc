@@ -157,13 +157,14 @@ void	Server::setClientSocket(int tmp)
 void	Server::loop()
 {
 	struct timeval timer;
-	int status;
+	// int status; commented because error set but not used
 	while (true)
 	{
 		_readFds = _allSockets;
 		timer.tv_sec = 2;
 		timer.tv_usec = 0;
-		status = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
+		// status = select(_fdMax + 1, &_readFds, NULL, NULL, &timer); SAME HERE
+		select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
 		for (int i = 0; i <= _fdMax; i++)
 		{
 			if (FD_ISSET(i, &_readFds) != 1)
@@ -200,7 +201,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	// options.append(defineOptions(locate));
 	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
-	//std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
+	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (locate.find("NICK") == 0)
 		nickCmd (locate, socket);
 	else if (locate.find("CAP LS") == 0)

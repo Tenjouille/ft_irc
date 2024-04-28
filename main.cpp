@@ -2,14 +2,15 @@
 
 int main(int ac, char **av)
 {
+	int status;
 	if (ac == 3)
 	{
 		Server server(av);
 		try
 		{
-			int status;
 		   // struct timeval timer;
 			status = listen(server.getSocket(), 10);
+			(void) status;
 			FD_ZERO(&server.getallSockets());
 			FD_ZERO(&server.getreadFds());
 			FD_SET(server.getSocket(), &server.getallSockets());

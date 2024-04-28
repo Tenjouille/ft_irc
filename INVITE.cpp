@@ -20,8 +20,8 @@ bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::str
 	}
 
     // Clear the outpu	// std::cout << "BUFFERS ARE FILLED" << std::endl;
-		// std::cout << "Channel name : '" << channel_name << "'" << "\n" \
-		// << "Invited nickname : '" << invited_nickname << "'" << "\n" \
+		// std::cout << "Channel name : '" << channel_name << "'" << "\n"
+		// << "Invited nickname : '" << invited_nickname << "'" << "\n"
 		// << "InvitEUR nickname : '" << nickname << "'" << std::endl; t strings
     channelname.clear();
     invited.clear();
@@ -86,8 +86,8 @@ void	Server::inviteCmd(std::string locate, int socket)
 	if (fillinBuffer(locate, channel_name, invited_nickname, nickname, socket) == true)
 	{
 		// std::cout << "BUFFERS ARE FILLED" << std::endl;
-		// std::cout << "Channel name : '" << channel_name << "'" << "\n" \
-		// << "Invited nickname : '" << invited_nickname << "'" << "\n" \
+		// std::cout << "Channel name : '" << channel_name << "'" << "\n"
+		// << "Invited nickname : '" << invited_nickname << "'" << "\n"
 		// << "InvitEUR nickname : '" << nickname << "'" << std::endl; 
 	}
 	else

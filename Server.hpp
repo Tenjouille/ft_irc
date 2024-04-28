@@ -32,7 +32,10 @@
 #include "Client.hpp"
 #include "Communication.hpp"
 #include "Channel.hpp"
-//mode = conteneur set
+#include <ctime>
+#include <fstream>
+
+
 class Client;
 class Channel;
 
@@ -120,6 +123,10 @@ class Server
 		int		getChannelNumber() const;
 		int		getClientNumber() const;
 		void	startingMsg(int socket);
+
+
+		void    parsingBot(std::string msg, std::string user, int socket);
+		void	bot_sendHelp(int socket, std::string user);
 
 };
 
