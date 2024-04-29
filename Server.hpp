@@ -33,6 +33,7 @@
 #include "Communication.hpp"
 #include "Channel.hpp"
 #include <ctime>
+#include <csignal>
 #include <fstream>
 
 
@@ -57,7 +58,7 @@ class Server
 		std::map<std::string, Channel*> _channelLst;
 		int						_nb_channels;
 		int						_nb_clients;
-
+		bool					_quit;
 	public:
 		Server(char **arguments);
 		void				closeSockets();
@@ -130,6 +131,7 @@ class Server
 
 };
 
+void handleSignal(int signal_recu);
 std::string intToString(int value);
 
 

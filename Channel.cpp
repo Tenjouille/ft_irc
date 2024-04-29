@@ -11,6 +11,11 @@ Channel::Channel(std::string str)
     _topicStatus = 0;
 }
 
+Channel::~Channel()
+{
+
+}
+
 void    notOp()
 {
     std::cout << "Message d'erreur si client n'est pas operateur" << std::endl;

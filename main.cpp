@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+
 int main(int ac, char **av)
 {
 	int status;
@@ -15,7 +16,9 @@ int main(int ac, char **av)
 			FD_ZERO(&server.getreadFds());
 			FD_SET(server.getSocket(), &server.getallSockets());
 			server.setfdMax(server.getSocket());
+			// signal(SIGINT, handleSignal);
 			server.loop();
+			// signal(SIGINT, handleSignal);
 		}
 		catch(const std::exception& e)
 		{

@@ -19,6 +19,7 @@ class Channel
         std::map<int, Client*>  _operators;
     public:
         Channel(std::string str);
+        ~Channel();
         void    infoChannel();
         void    setName(std::string str);
         void    addClient(int socket, Client *client);

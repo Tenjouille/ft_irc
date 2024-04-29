@@ -6,6 +6,7 @@ Server::Server(char **av)
 	_status = 0;
 	_nb_channels = 0;
 	_nb_clients = 0;
+	_quit = false;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -61,22 +62,33 @@ void	Server::read_data_from_socket(int socket)
 	//int status;
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
-	if (buffer[0] == '\0')
-		return ;
-	for (int j = 0; j <= _fdMax; j++)
+	if (bytes_read == 0)
+    {
+        std::cout << "closing socket" << std::endl;
+        quitCmd(socket);
+        close(socket);
+        return ; 
+    }
+    if (buffer[0] == '\0')
 	{
-		// if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
-		// {
-		// 	//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
-		// 	// status = send(j, msg_to_send, strlen(msg_to_send), 0);
-		// 	// if (status == -1)
-		// 	// 	quitCmd(j);
-		// }
+		return ;
 	}
+	// for (int j = 0; j <= _fdMax; j++)
+	// {
+	// 	// if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
+	// 	// {
+	// 	// 	//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
+	// 	// 	// status = send(j, msg_to_send, strlen(msg_to_send), 0);
+	// 	// 	// if (status == -1)
+	// 	// 	// 	quitCmd(j);
+	// 	// }
+	// }
 	//test ctrl+D
 	std::string cmd1 = buffer;
 	if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
+	{
 		std::cout << "cmd1 = '" << cmd1 << "'" << std::endl;
+	}
 	//std::cout << GREEN << "HERE" << RESET << std::endl;
 	getClient(socket)->setTempBuffer(static_cast<char*>(buffer), 0);
 	//std::cout << "buffer client = '" << getClient(socket)->getTempBuffer() << "'" << std::endl;
@@ -154,17 +166,62 @@ void	Server::setClientSocket(int tmp)
 
 /* //? ==== MAIN FUNCTIONS ==== ?// */
 
+
+// void handleSignal(int signal_recu)
+// {
+// 	if (signal_recu == SIGINT)
+// 	{
+// 		std::cout << "Closing SERVEUR" << std::endl;
+// 		std::cout << "Closing SERVEUR" << std::endl;
+// 		std::cout << "Closing SERVEUR" << std::endl;
+// 		std::cout << RESET << RED << "Closing SERVEUR" << RESET << std::endl;
+// 		//need to free stuff
+// 		return ;
+// 	}
+// 	return ;
+// }
+
+volatile sig_atomic_t interrupted = false;
+
+void handleSignal(int signal_recu)
+{
+	if (signal_recu == SIGINT)
+	{
+		std::cout << "Closing SERVEUR" << std::endl;
+		std::cout << "Closing SERVEUR" << std::endl;
+		std::cout << "Closing SERVEUR" << std::endl;
+		std::cout << RESET << RED << "Closing SERVEUR" << RESET << std::endl;
+		interrupted = true;
+		return ;
+	}
+	return ;
+}
+
+
 void	Server::loop()
 {
 	struct timeval timer;
 	// int status; commented because error set but not used
-	while (true)
+	signal(SIGINT, handleSignal);
+	while (!interrupted)
 	{
 		_readFds = _allSockets;
 		timer.tv_sec = 2;
 		timer.tv_usec = 0;
-		// status = select(_fdMax + 1, &_readFds, NULL, NULL, &timer); SAME HERE
-		select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
+		int result;
+		result = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
+		// signal(SIGINT, handleSignal);
+		if (result == -1)
+		{
+			std::cout << "ERROR WITH SELECT" << std::endl;
+			break ;
+		}
+		if (interupted == true)
+		{
+			std::cout << "NEED TO EXIT PROPERLY" << std::endl;
+			//need to free stuff;
+			return ;
+		}
 		for (int i = 0; i <= _fdMax; i++)
 		{
 			if (FD_ISSET(i, &_readFds) != 1)
@@ -176,7 +233,6 @@ void	Server::loop()
 		}
 	}
 }
-
 
 void	Server::accept_new_connection()
 {
@@ -307,5 +363,24 @@ void	Server::closeSockets()
 
 Server::~Server()
 {
+	// quitCmd(_socket);
+	std::map<int, Client*>::iterator it = _clients.begin();
+	std::map<int, Client*>::iterator ite = _clients.end();
+	std::map<std::string, Channel*>::iterator it_chan = _channelLst.begin();
+	std::map<std::string, Channel*>::iterator it_end = _channelLst.end();
+	int socket_to_del;
+
+	while (it != ite)
+	{
+		socket_to_del = it->first;
+		quitCmd(socket_to_del);
+		++it;
+	}
+	while (it_chan != it_end)
+	{
+		delete it_chan->second;
+		++it_chan;
+	}
+	FD_CLR(_socket, &_allSockets);
 	close(_socket);
 }
