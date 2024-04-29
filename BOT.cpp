@@ -42,23 +42,23 @@ void	Server::startingMsg(int socket)
 	std::string infos2 = "\x1b[36mUsers actifs :\x1b[0m\n" + users_list + "\x1b[36mChannels actifs :\x1b[0m\n" + channels_list + "\n";
 	std::cout << infos2 << std::endl;
 	replyClient(infos2, socket);
-
-
-	//BOT PART
-	std::string check_mails = "\x1b[1m\x1b[32m📨 Tu as des messages non lu. (CTRL-N pour aller les voir !) 📨\x1b[0m\r\n";
+    std::string check_mails = "\x1b[1m\x1b[32mEnvoi \"/NOTICE BOT START\" pour commencer la conversation avec notre \x1b[36mBOT\x1b[0m !\r\n";
 	replyClient(check_mails, socket);
+}
+
+void    Server::botStart(int socket)
+{
+	//BOT PART
 
 	std::string bjr = "Bonjour " + _clients[socket]->getNickName() + " ça baigne ? Je m'appelle \x1b[3m\x1b[36mBotimus_Maximus\x1b[0m\r\n";
 	std::string help = "Tu peux m'envoyer \"HELP_ME\" si tu es perdu sur ce \x1b[3m\x1b[36mmagnifique\x1b[0m serveur ou \"COMMANDS\" si tu veux savoir ce dont je suis capable...\r\n";
 	
-	std::string blagues = "Tu peux aussi m'envoyer \"BLAGUES\" si tu veux te taper une grosse barre.";
 
-	std::string bot_name = "Botimus_Maximus";
-	std::cout << "Sending : " << PRIVMSG(bot_name, _clients[socket]->getNickName(), bjr) << std::endl;
-	replyClient(PRIVMSG(bot_name, _clients[socket]->getNickName(), bjr), socket);
+	std::cout << "Sending : " << PRIVMSG(_bot_name, _clients[socket]->getNickName(), bjr) << std::endl;
+	replyClient(PRIVMSG(_bot_name, _clients[socket]->getNickName(), bjr), socket);
 
-	std::cout << "Sending : " << PRIVMSG(bot_name, _clients[socket]->getNickName(), help) << std::endl;
-	replyClient(PRIVMSG(bot_name, _clients[socket]->getNickName(), help), socket);
+	std::cout << "Sending : " << PRIVMSG(_bot_name, _clients[socket]->getNickName(), help) << std::endl;
+	replyClient(PRIVMSG(_bot_name, _clients[socket]->getNickName(), help), socket);
 }
 
 

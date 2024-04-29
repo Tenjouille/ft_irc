@@ -1,17 +1,32 @@
 #include "Channel.hpp"
 
-std::string		initOptions(std::string cmd)
+int    isOneOf(char c, std::string chars)
 {
-	std::string	ret = "";
+    for(int i = 0; chars[i]; i++)
+        if (c == chars[i])
+            return (1);
+    return (0);
+}
 
-	if (cmd == "")
-		return (NULL);
-	for (size_t i = 0; cmd[i] && cmd[i] != '\r'; i++)
-		if (cmd[i] == '+' || cmd[i] == '-')
-			while(cmd[i] && cmd[i] != '\r' && cmd[i] != ' ')
-				ret += cmd[i++];
-	std::cout << YELLOW << "options: [" << ret << "]" << std::endl;
-	return (ret);
+std::string	initOptions(std::string cmd)
+{
+    std::string    ret = "";
+    size_t        i = 0;
+
+    if (cmd == "")
+        return (NULL);
+    while (cmd[i] && cmd[i] != '+' && cmd[i] != '-')
+        i++;
+    if (cmd[i] != '+' && cmd[i] != '-')
+        return (""); // 501 ERR_UMODEUNKNOWNFLAG
+    while (cmd[i] && cmd[i] != '\r' && cmd[i] != ' ')
+    {
+        if (!isOneOf(cmd[i], "+-itkol"))
+            return (""); // 501 ERR_UMODEUNKNOWNFLAG
+        ret += cmd[i++];
+    }
+    std::cout << YELLOW << "options: [" << ret << "]" << std::endl;
+    return (ret);
 }
 
 std::vector<std::string>	initArgs(std::string cmd)
@@ -50,7 +65,7 @@ void	Channel::defineMode(char sign, char option, std::vector<std::string>& args)
 	if (option == 'i')
 		return (changeInvit(sign));
 	if (option == 't')
-		return (changeTopic(sign, args));
+		return (changeTopic(sign));
 	if (option == 'k')
 		return (changeKey(sign, args));
 	if (option == 'o')

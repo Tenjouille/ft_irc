@@ -26,7 +26,7 @@ class Channel
         void    changeOperator(char sign, std::vector<std::string>& args);
         void    newOperator(int socket, Client *client);
         void    changeInvit(char sign);
-        void    changeTopic(char sign, std::vector<std::string>& args);
+        void    changeTopic(char sign);
         void    changeKey(char sign, std::vector<std::string>& args);
         void    changeLimit(char sign, std::vector<std::string>& args);
         void	execMode(std::string options, std::vector<std::string>& args);

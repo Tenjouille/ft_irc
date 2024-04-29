@@ -80,6 +80,8 @@ void Server::joinCmd(std::string locate, int socket)
                     std::cout << "THERE IS A KEY" << std::endl;
                     std::string mdp = channel->getKey();
                     std::cout << "mdp enregistre : " << mdp << " ET : " << key << std::endl;
+                    
+                    //TODO : check que le mec est pas dans le channel si c'est le cas il a ete invite
                     if (mdp != key)
                     {
                         std::string err_msg = ERR_BADCHANNELKEY(_clients[socket]->getNickName(), channelName);

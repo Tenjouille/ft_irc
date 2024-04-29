@@ -128,6 +128,7 @@ class Server
 
 		void    parsingBot(std::string msg, std::string user, int socket);
 		void	bot_sendHelp(int socket, std::string user);
+		void    botStart(int socket);
 
 
 		bool 	userCheckArgs(std::string str);

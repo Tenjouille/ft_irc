@@ -31,6 +31,7 @@ class Client
         std::string     _tempBuffer;
         //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
+        std::vector<std::string> _invitation;
         bool            _dont_set_user;
         bool            _is_connected;
     public:

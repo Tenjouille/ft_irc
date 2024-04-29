@@ -87,7 +87,7 @@ int Server::getSocketFromUser(std::string to_find)
         }
         if (socket == -666)
         {
-            if (to_find == "Botimus_Maximus")
+            if (to_find == "Botimus_Maximus" || to_find == "BOT")
             {
                 socket = -777;
                 std::cout << YELLOW << "TALKING TO THE BOT" << RESET << std::endl;
@@ -191,8 +191,10 @@ void Server::msgCmd(std::string locate, int socket)
         //TALKING TO THE BOT
         if (socket_to_send_to == -777)
         {
-            //parsing bot
-            parsingBot(msg, user, socket);
+            if (user == "BOT")
+                botStart(socket);
+            else
+                parsingBot(msg, user, socket);
             return ;
         }
         

@@ -241,6 +241,13 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	//	std::cout << "!!!KICK COMMAND!!!" << std::endl;
 		kickCmd(locate, socket);
 	}
+	else if (locate.find("NOTICE") == 0)
+	{
+		std::cout << "ICI" << std::endl;
+		if (locate.find("BOT") != std::string::npos && locate.find("START") != std::string::npos)
+			botStart(socket);
+        return;
+	}
 }
 
 void	Server::parser(std::string cmd, int socket)
