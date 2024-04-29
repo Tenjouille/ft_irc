@@ -8,13 +8,10 @@ bool 	Server::userCheckArgs(std::string str)
 	while (str[i] != '\r' && i < len)
 	{
 		if (str[i] == ' ')
-		{
-			std::cout << "Found space at : " << i << " '" << &str[i] << "'" << std::endl;
 			found++;
-		}
 		i++;
 	}
-	if (found == 2)
+	if (found > 2)
 		return (true);
 	return (false);
 }

@@ -41,69 +41,8 @@ std::string intToString(int value)
     return result;
 }
 
-void	Server::startingMsg(int socket)
-{
-	std::string total = "\n\x1b[34m╔═════════════════════════════╗\n\x1b[34m║\x1b[0m\x1b[36m  Bienvenue sur UTV Network\x1b[0m  \x1b[34m║\n\x1b[34m╚═════════════════════════════╝\x1b[0m\n        \x1b[1m\x1b[4mCreated by\x1b[0m :\n{ \x1b[1m\x1b[35mUaupetit\x1b[0m | \x1b[1m\x1b[31mTbourdea\x1b[0m | \x1b[1m\x1b[33mVgoret\x1b[0m }\n\n"; 
-	std::cout << total << std::endl;
-
-	// SEND WELCOME
-	replyClient(total, socket);
-	
-	// SEND INFOS
-	std::string infos = "\x1b[1mIl y a actuellement\x1b[33m " + intToString(getClientNumber()) + "\x1b[0m\x1b[1m utilisateurs connectés et \x1b[33m" + intToString(getChannelNumber()) + "\x1b[0m\x1b[1m channels de lancés !\x1b[0m\n";
-	replyClient(infos, socket);
-
-	// GET THE CLIENTS LIST
-	std::map<int, Client *>::iterator it = _clients.begin();
-	std::map<int, Client *>::iterator ite = _clients.end();
-	std::string users_list;
-	while (it != ite)
-	{
-		if (_clients[socket]->getNickName() == it->second->getNickName())
-			users_list += "- " + it->second->getNickName() + " (\x1b[32mYOU\x1b[0m)\n";
-		else
-			users_list += "- " + it->second->getNickName() + "\n";
-		++it;
-	}
-
-	// GET THE CHANNELS LIST
-	std::map<std::string, Channel *>::iterator it2 = _channelLst.begin();
-	std::map<std::string, Channel *>::iterator ite2 = _channelLst.end();
-	std::string channels_list;
-	int i = 0;
-	while (it2 != ite2)
-	{
-		channels_list += "- #" + it2->second->getName() + "\n";
-		i++;
-		++it2;
-	}
-	if (i == 0)
-		channels_list = "[ NONE 😭 ]";
-	std::string infos2 = "\x1b[36mUsers actifs :\x1b[0m\n" + users_list + "\x1b[36mChannels actifs :\x1b[0m\n" + channels_list + "\n";
-	std::cout << infos2 << std::endl;
-	replyClient(infos2, socket);
-
-
-	//BOT PART
-	std::string check_mails = "\x1b[1m\x1b[32m📨 Tu as des messages non lu. (CTRL-N pour aller les voir !) 📨\x1b[0m\r\n";
-	replyClient(check_mails, socket);
-
-	std::string bjr = "Bonjour " + _clients[socket]->getNickName() + " ça baigne ? Je m'appelle \x1b[3m\x1b[36mBotimus_Maximus\x1b[0m\r\n";
-	std::string help = "Tu peux m'envoyer \"HELP_ME\" si tu es perdu sur ce \x1b[3m\x1b[36mmagnifique\x1b[0m serveur ou \"COMMANDS\" si tu veux savoir ce dont je suis capable...\r\n";
-	
-	std::string blagues = "Tu peux aussi m'envoyer \"BLAGUES\" si tu veux te taper une grosse barre.";
-
-	std::string bot_name = "Botimus_Maximus";
-	std::cout << "Sending : " << PRIVMSG(bot_name, _clients[socket]->getNickName(), bjr) << std::endl;
-	replyClient(PRIVMSG(bot_name, _clients[socket]->getNickName(), bjr), socket);
-
-	std::cout << "Sending : " << PRIVMSG(bot_name, _clients[socket]->getNickName(), help) << std::endl;
-	replyClient(PRIVMSG(bot_name, _clients[socket]->getNickName(), help), socket);
-}
-
 void	Server::nickCmd(std::string str, int socket)
 {
-
 	std::string cmd = str.substr(str.find(' ') + 1);	
 	if (cmd[0] == '\0')
 	{
@@ -132,7 +71,6 @@ void	Server::nickCmd(std::string str, int socket)
 	std::map<int, Client*>::iterator it = _clients.find(socket);
 	if (it != _clients.end())
 	{
-		// Attention a si meme nickname ya PROBLEMES ou si user essaye de changer de nickname
 		std::string nickname = cmd;
 		std::cout << nickname << std::endl;
 		if (checkNickName(nickname, socket) == false)
@@ -155,7 +93,6 @@ void	Server::nickCmd(std::string str, int socket)
 				std::cout << "SENDING ICI : " << msg << std::endl;
 				replyClient(msg, socket);
 				it->second->setNickName(cmd);
-				//changeUsers(old, cmd);
 				return ;
 			}
 		}

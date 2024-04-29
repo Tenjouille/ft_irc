@@ -19,6 +19,8 @@ NC :
 /MODE +t SEGFAULT
 
 
+/disconnect avec irssi creer des leaks
+
 NEED CLEANING :
 {
 - Mettre le bot dans son fichier a part + cleaner ses replies
