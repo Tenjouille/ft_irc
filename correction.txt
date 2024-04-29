@@ -1,0 +1,20 @@
+NC :
+- Connextion pas complete puis reco = leaks valgrind (tmpbuffer) -> invalid free
+- USER check le nombre de params ? (2 mini)
+- NICK sans arg pour afficher le nick change le nickname en " NICK"
+- PRIVMSG dans channel sans : -> parser ?
+
+"
+/MODE +i
+2== Conditional jump or move depends on uninitialised value(s)
+==369712==    at 0x4285F6: initOptions(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (MODE.cpp:9)
+==369712==    by 0x4297EB: Server::modeCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int) (MODE.cpp:103)
+==369712==    by 0x407DD0: Server::defineCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int) (Server.cpp:214)
+==369712==    by 0x40770F: Server::parser(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int) (Server.cpp:255)
+==369712==    by 0x40739C: Server::read_data_from_socket(int) (Server.cpp:98)
+==369712==    by 0x403F0D: Server::loop() (main.cpp:45)
+==369712==    by 0x404225: main (main.cpp:64)
+"
+
+/MODE +t SEGFAULT
+

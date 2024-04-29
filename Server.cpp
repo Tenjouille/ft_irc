@@ -6,7 +6,6 @@ Server::Server(char **av)
 	_status = 0;
 	_nb_channels = 0;
 	_nb_clients = 0;
-	_quit = false;
 	for(i = 0; isdigit(av[1][i]) != 0; i++)
 		continue ;
 	_password = av[2];
@@ -181,59 +180,6 @@ void	Server::setClientSocket(int tmp)
 // 	return ;
 // }
 
-volatile sig_atomic_t interrupted = false;
-
-void handleSignal(int signal_recu)
-{
-	if (signal_recu == SIGINT)
-	{
-		std::cout << "Closing SERVEUR" << std::endl;
-		std::cout << "Closing SERVEUR" << std::endl;
-		std::cout << "Closing SERVEUR" << std::endl;
-		std::cout << RESET << RED << "Closing SERVEUR" << RESET << std::endl;
-		interrupted = true;
-		return ;
-	}
-	return ;
-}
-
-
-void	Server::loop()
-{
-	struct timeval timer;
-	// int status; commented because error set but not used
-	signal(SIGINT, handleSignal);
-	while (!interrupted)
-	{
-		_readFds = _allSockets;
-		timer.tv_sec = 2;
-		timer.tv_usec = 0;
-		int result;
-		result = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
-		// signal(SIGINT, handleSignal);
-		if (result == -1)
-		{
-			std::cout << "ERROR WITH SELECT" << std::endl;
-			break ;
-		}
-		if (interupted == true)
-		{
-			std::cout << "NEED TO EXIT PROPERLY" << std::endl;
-			//need to free stuff;
-			return ;
-		}
-		for (int i = 0; i <= _fdMax; i++)
-		{
-			if (FD_ISSET(i, &_readFds) != 1)
-				continue ;
-			if (i == _socket)
-				accept_new_connection();
-			else
-				read_data_from_socket(i);
-		}
-	}
-}
-
 void	Server::accept_new_connection()
 {
 	std::cout << "accept" << std::endl;
@@ -363,11 +309,11 @@ void	Server::closeSockets()
 
 Server::~Server()
 {
-	// quitCmd(_socket);
+	std::cout << "On detruit le serveur" << std::endl;
+	
+	// DELETE DES CLIENTS
 	std::map<int, Client*>::iterator it = _clients.begin();
 	std::map<int, Client*>::iterator ite = _clients.end();
-	std::map<std::string, Channel*>::iterator it_chan = _channelLst.begin();
-	std::map<std::string, Channel*>::iterator it_end = _channelLst.end();
 	int socket_to_del;
 
 	while (it != ite)
@@ -376,8 +322,13 @@ Server::~Server()
 		quitCmd(socket_to_del);
 		++it;
 	}
+
+	// DELETE DES CHANNAUX
+	std::map<std::string, Channel*>::iterator it_chan = _channelLst.begin();
+	std::map<std::string, Channel*>::iterator it_end = _channelLst.end();
 	while (it_chan != it_end)
 	{
+		std::cout << "ON delete le channel" << std::endl;
 		delete it_chan->second;
 		++it_chan;
 	}

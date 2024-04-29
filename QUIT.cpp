@@ -20,14 +20,13 @@ void    Server::delClient(int socket)
     else
     {
         delete _clients[socket];
-        _clients.erase(socket);
     }
 }
 
 void	Server::quitCmd(int socket)
 {
 	FD_CLR(socket, &_allSockets);
-	_clients.erase(socket);
+    std::cout << "On detruit le client" << std::endl;
 	delClient(socket);
 	_fdMax--;
 }

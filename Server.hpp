@@ -58,7 +58,7 @@ class Server
 		std::map<std::string, Channel*> _channelLst;
 		int						_nb_channels;
 		int						_nb_clients;
-		bool					_quit;
+
 	public:
 		Server(char **arguments);
 		void				closeSockets();
