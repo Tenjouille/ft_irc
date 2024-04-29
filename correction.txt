@@ -1,6 +1,6 @@
 NC :
 - Connextion pas complete puis reco = leaks valgrind (tmpbuffer) -> invalid free
-- USER check le nombre de params ? (2 mini)
+- USER check le nombre de params ? (2 mini)  GOOD
 - NICK sans arg pour afficher le nick change le nickname en " NICK"
 - PRIVMSG dans channel sans : -> parser ?
 
@@ -18,3 +18,18 @@ NC :
 
 /MODE +t SEGFAULT
 
+
+NEED CLEANING :
+{
+- Mettre le bot dans son fichier a part + cleaner ses replies
+- SUR SEND IN CHANNEL NIVEAU DES COULEURS POUR L'OP
+- Les fichiers .hpp -> orga les fonctions par "type" + ajouter des comms
+- Check que les fonctions sont bien reparties genre fonction pour nick dans nick.cpp etc etc
+- Enlever les std::cout mais peut etre laisser les importants ?
+- Ajouter des commentaires essentiaux genre 1 ligne max pour les trucs importants/details pour meilleure
+comprehension du code
+}
+
+TRUCS QUE J'AI FIX :
+- Le parsing de PRIVMSG : marche plus sans ':' et petit fix d'affichage si on essaye de mettre des espaces apres le nom du channel genre PRIVMSG #cha       : coucou --> affiche : PRIVMSG #cha : coucou
+- USER marche plus sans minimum 2 espaces (donc 2 arguments)

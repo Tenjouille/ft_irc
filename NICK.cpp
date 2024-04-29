@@ -1,10 +1,5 @@
 #include "Server.hpp"
 
-/*
-TODOO:
-ENVOYER ALREADY IN USE WHEN /connect localhost xxxx mdp "already use"
-*/
-
 bool	Server::checkNickName(std::string to_check, int socket)
 {
 	std::string tmp_name;
@@ -50,16 +45,15 @@ void	Server::startingMsg(int socket)
 {
 	std::string total = "\n\x1b[34m╔═════════════════════════════╗\n\x1b[34m║\x1b[0m\x1b[36m  Bienvenue sur UTV Network\x1b[0m  \x1b[34m║\n\x1b[34m╚═════════════════════════════╝\x1b[0m\n        \x1b[1m\x1b[4mCreated by\x1b[0m :\n{ \x1b[1m\x1b[35mUaupetit\x1b[0m | \x1b[1m\x1b[31mTbourdea\x1b[0m | \x1b[1m\x1b[33mVgoret\x1b[0m }\n\n"; 
 	std::cout << total << std::endl;
-	// std::string separ1 = "\n╔═════════════════════════════╗\n";
-	// std::string msg =      "░  Bienvenue sur UTV Network  ░";
-	// std::string separ2 =   "╚═════════════════════════════╝\n"
-	
+
 	// SEND WELCOME
 	replyClient(total, socket);
 	
+	// SEND INFOS
 	std::string infos = "\x1b[1mIl y a actuellement\x1b[33m " + intToString(getClientNumber()) + "\x1b[0m\x1b[1m utilisateurs connectés et \x1b[33m" + intToString(getChannelNumber()) + "\x1b[0m\x1b[1m channels de lancés !\x1b[0m\n";
 	replyClient(infos, socket);
 
+	// GET THE CLIENTS LIST
 	std::map<int, Client *>::iterator it = _clients.begin();
 	std::map<int, Client *>::iterator ite = _clients.end();
 	std::string users_list;
@@ -71,7 +65,8 @@ void	Server::startingMsg(int socket)
 			users_list += "- " + it->second->getNickName() + "\n";
 		++it;
 	}
-	std::cout << "ICI : '" << users_list << "'" << std::endl; 
+
+	// GET THE CHANNELS LIST
 	std::map<std::string, Channel *>::iterator it2 = _channelLst.begin();
 	std::map<std::string, Channel *>::iterator ite2 = _channelLst.end();
 	std::string channels_list;
@@ -90,8 +85,6 @@ void	Server::startingMsg(int socket)
 
 
 	//BOT PART
-	//AU BOUT DE 3 PAS DROLE IL BOUDE
-
 	std::string check_mails = "\x1b[1m\x1b[32m📨 Tu as des messages non lu. (CTRL-N pour aller les voir !) 📨\x1b[0m\r\n";
 	replyClient(check_mails, socket);
 
@@ -106,7 +99,6 @@ void	Server::startingMsg(int socket)
 
 	std::cout << "Sending : " << PRIVMSG(bot_name, _clients[socket]->getNickName(), help) << std::endl;
 	replyClient(PRIVMSG(bot_name, _clients[socket]->getNickName(), help), socket);
-
 }
 
 void	Server::nickCmd(std::string str, int socket)

@@ -129,10 +129,13 @@ class Server
 		void    parsingBot(std::string msg, std::string user, int socket);
 		void	bot_sendHelp(int socket, std::string user);
 
+
+		bool 	userCheckArgs(std::string str);
+		bool 	msgCheckArgs(std::string locate);
+
 };
 
 void handleSignal(int signal_recu);
 std::string intToString(int value);
-
 
 #endif

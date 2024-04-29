@@ -44,24 +44,10 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
                 {
                     if (it_clt->first != socket)
                     {
-                        if (isClientOp(channel->getOperatorList(), socket) == true)
-                        {
-                            std::cout << BLUE << "OP IS SENDING A MESSAGE ????" << RESET << std::endl;
-                            std::string red_nickname = "\x1b[31m" + s_nick + "\x1b[0m";
-                            std::string msg = SENDINCHANNEL(s_nick, red_nickname, msg_to_send, user);
-                            replyClient(msg, it_clt->first);
-                            return ;
-                        }
-                        else
-                        {
-                            std::cout << "ON EsT PASSE LA ????????????????" << std::endl;
-                            std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
-                            replyClient(msg, it_clt->first);
-                        }
+                        std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
+                        replyClient(msg, it_clt->first);
                     }
                 }
-                    // else
-                    //     return;
             }
             else if (macro == "topic")
             {
@@ -273,8 +259,24 @@ void    Server::bot_sendHelp(int socket, std::string user)
     return ;
 }
 
+bool Server::msgCheckArgs(std::string locate)
+{
+    size_t found;
+    found = locate.find(":", 0);
+    std::cout << "found at : " << found << std::endl;
+    if (found == std::string::npos)
+        return (false);
+    return (true);
+}
+
 void Server::msgCmd(std::string locate, int socket)
 {
+    std::cout << "LOCATE : " << locate << std::endl;
+    if (msgCheckArgs(locate) == false)
+    {
+        replyClient(ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PRIVMSG"), socket);
+        return ;
+    }
 	int is_channel = 0;
     std::string user;
     std::string msg;
@@ -285,10 +287,14 @@ void Server::msgCmd(std::string locate, int socket)
 		size_t end = locate.find(' ', start);
 		if (end != std::string::npos)
         {
+            size_t test = locate.find(':', start);
             user = '\0';
             msg = '\0';
             user = locate.substr(start, end - start); //destinataire
-            msg = locate.substr(end + 2); // +2 pour ignorer ": "
+            if (locate[test] == ':')
+                msg = locate.substr(test + 1); // +2 pour ignorer ": "
+            else
+                msg = locate.substr(test);
             if (user[0] == '#')
  			{
  				user = user.substr(1);

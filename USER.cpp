@@ -1,7 +1,32 @@
 #include "Server.hpp"
 
+bool 	Server::userCheckArgs(std::string str)
+{
+	size_t i = 0;
+	int	found = 0;
+	size_t len = str.length();
+	while (str[i] != '\r' && i < len)
+	{
+		if (str[i] == ' ')
+		{
+			std::cout << "Found space at : " << i << " '" << &str[i] << "'" << std::endl;
+			found++;
+		}
+		i++;
+	}
+	if (found == 2)
+		return (true);
+	return (false);
+}
+
 void	Server::userCmd(std::string str, int socket)
 {
+	if (userCheckArgs(str) == false)
+	{
+		replyClient(ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "USER"), socket);
+		return;
+	}
+	std::cout << YELLOW << "STR : " << str << RESET << std::endl;
 	std::string cmd = str.substr(str.find(' ') + 1);
 	cmd = cmd.substr(0, cmd.find(' '));
 	if (getClient(socket)->getStatus() == 4)
