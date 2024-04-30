@@ -24,7 +24,7 @@ std::string Server::getUsernameFormNick(std::string to_parse)
 	else
 	{
 		std::cout << "COULDNT FIND IN THE BUFFER" << std::endl;
-		return ("<default_nickname>");
+		return ("Error");
 	}
 }
 
@@ -42,7 +42,7 @@ void	Server::passCmd(std::string str, std::string cmd, int socket)
 	i++;
 	if (cmd == "PASS" || cmd == "PASS ")
 	{
-		std::string dn = "<default_nickname>";
+		std::string dn = "Error";
 		replyClient(ERR_NEEDMOREPARAMS(dn, "PASS"), socket);
 		return;
 	}

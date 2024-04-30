@@ -1,5 +1,7 @@
 #include "Server.hpp"
 
+bool	quitting = false;
+
 Server::Server(char **av)
 {
 	size_t i;
@@ -96,10 +98,9 @@ void	Server::read_data_from_socket(int socket)
 	{
 		//std::cout << "cmd = '" << cmd << "'" << std::endl;
 		parser(getClient(socket)->getTempBuffer(), socket);
-		if (getClient(socket))
+		if (getClient(socket) && quitting == false)
 			getClient(socket)->setTempBuffer("", 1);
 	}
-	// for (int i = 0; i  1024)
 	buffer[0] = '\0';
 }
 
@@ -159,6 +160,7 @@ void	Server::setfdMax(int socket)
 void	Server::setClientSocket(int tmp)
 {
 	Client* client = new Client();
+	_nb_clients++;
 	client->setSocket(tmp);
 	_clients.insert(std::make_pair(tmp, client));
 }
@@ -220,7 +222,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
+	{
 		quitCmd(socket);
+		quitting = true;
+	}
 	else if (locate.find("PING") == 0)
 		pingCmd(locate, socket);
 	else if (locate.find("PRIVMSG") == 0)
@@ -325,6 +330,7 @@ Server::~Server()
 
 	while (it != ite)
 	{
+		// check que le client existe / a pas deja ete free
 		socket_to_del = it->first;
 		quitCmd(socket_to_del);
 		++it;

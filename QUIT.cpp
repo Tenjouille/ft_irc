@@ -19,7 +19,15 @@ void    Server::delClient(int socket)
         return;
     else
     {
-        delete _clients[socket];
+        // _clients.erase(socket);
+        if (_nb_clients > 0)
+        {
+            _clients[socket]->setNickName("");
+            _clients[socket]->setTempBuffer("", 1);
+            // _clients[socket]->getTempBuffer().erase();
+            delete _clients[socket];
+            _nb_clients--;
+        }
     }
 }
 

@@ -40,7 +40,7 @@ void	Server::userCmd(std::string str, int socket)
 		_clients[socket]->updateStatus();
 		if (_clients[socket]->getStatus() == 4)
 		{
-			std::string server_name = "localhost"; // TODO : setup un getter pour le nom de server
+			std::string server_name = "localhost";
 			std::string username = _clients[socket]->getUserName();
 			std::string nickname = _clients[socket]->getNickName();
 			if (checkNickName(nickname, socket) == false)
@@ -52,7 +52,6 @@ void	Server::userCmd(std::string str, int socket)
 			{
 				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
 				_clients[socket]->change_connected(); //true
-				_nb_clients++;
 				startingMsg(socket);
 			}
 		}

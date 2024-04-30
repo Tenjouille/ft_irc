@@ -64,7 +64,6 @@ class Client
         //to change connected status
         void	change_connected();
         bool	getConnectedStatus() const;
-
 };
 
 #endif

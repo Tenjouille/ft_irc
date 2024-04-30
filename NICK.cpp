@@ -59,7 +59,7 @@ void	Server::nickCmd(std::string str, int socket)
 		{
 			std::string username;
 			if (_clients[socket]->getUserName().empty())
-				username = "<default_username>";
+				username = "Error";
 			else
 				username = _clients[socket]->getUserName();
 			std::string msg = ERR_ERRONEUSNICKNAME(username, cmd);
@@ -106,7 +106,6 @@ void	Server::nickCmd(std::string str, int socket)
 			if (_clients[socket]->getConnectedStatus() == false)
 			{
 				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-				_nb_clients++;
 				_clients[socket]->change_connected();
 				startingMsg(socket);
 			}

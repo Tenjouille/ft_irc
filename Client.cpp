@@ -29,7 +29,7 @@ std::string	Client::getTempBuffer()
 void  Client::setTempBuffer(std::string str, int flag)
 {
 	if (flag == 0)
-	_tempBuffer += str;
+		_tempBuffer += str;
 	else if (flag == 1)
 		_tempBuffer = "";
 }
