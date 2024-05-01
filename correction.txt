@@ -30,6 +30,8 @@ MDP check lien entre invite et /mode +k pour voir qui est prioritaire
 
 /disconnect avec irssi creer des leaks
 
+Ctrl-c vite quand tu lances sur un port qui vient d'etre utilisé = leak
+
 NEED CLEANING :
 {
 - Mettre le bot dans son fichier a part + cleaner ses replies

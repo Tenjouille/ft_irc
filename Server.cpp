@@ -66,8 +66,8 @@ void	Server::read_data_from_socket(int socket)
 	if (bytes_read == 0)
     {
         std::cout << "closing socket" << std::endl;
+		close(socket);
         quitCmd(socket);
-        close(socket);
         return ; 
     }
     if (buffer[0] == '\0')
@@ -223,7 +223,8 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("QUIT") == 0)
 	{
-		quitCmd(socket);
+		_clients[socket]->setTempBuffer("", 1);
+		_clients[socket]->setNickName("\0");
 		quitting = true;
 	}
 	else if (locate.find("PING") == 0)
@@ -321,30 +322,26 @@ void	Server::closeSockets()
 
 Server::~Server()
 {
-	std::cout << "On detruit le serveur" << std::endl;
-	
-	// DELETE DES CLIENTS
-	std::map<int, Client*>::iterator it = _clients.begin();
-	std::map<int, Client*>::iterator ite = _clients.end();
-	int socket_to_del;
+    std::cout << "Destroying the server" << std::endl;
 
-	while (it != ite)
-	{
-		// check que le client existe / a pas deja ete free
-		socket_to_del = it->first;
-		quitCmd(socket_to_del);
-		++it;
-	}
+    // Delete clients
+    std::map<int, Client*>::iterator client_it;
+    for (client_it = _clients.begin(); client_it != _clients.end(); ++client_it)
+    {
+        delete client_it->second; // Delete the Client object
+    }
+    _clients.clear(); // Clear the map
 
-	// DELETE DES CHANNAUX
-	std::map<std::string, Channel*>::iterator it_chan = _channelLst.begin();
-	std::map<std::string, Channel*>::iterator it_end = _channelLst.end();
-	while (it_chan != it_end)
-	{
-		std::cout << "ON delete le channel" << std::endl;
-		delete it_chan->second;
-		++it_chan;
-	}
-	FD_CLR(_socket, &_allSockets);
-	close(_socket);
+    // Delete channels
+    std::map<std::string, Channel*>::iterator channel_it;
+    for (channel_it = _channelLst.begin(); channel_it != _channelLst.end(); ++channel_it)
+    {
+        std::cout << "Deleting channel" << std::endl;
+        delete channel_it->second; // Delete the Channel object
+    }
+    _channelLst.clear(); // Clear the map
+
+    FD_CLR(_socket, &_allSockets);
+    close(_socket);
 }
+

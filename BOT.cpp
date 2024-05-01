@@ -19,11 +19,17 @@ void	Server::startingMsg(int socket)
 	std::string users_list;
 	while (it != ite)
 	{
-		if (_clients[socket]->getNickName() == it->second->getNickName())
-			users_list += "- " + it->second->getNickName() + " (\x1b[32mYOU\x1b[0m)\n";
-		else
-			users_list += "- " + it->second->getNickName() + "\n";
-		++it;
+        std::cout << CYAN << socket << " and " << it->second->getSocket() << RESET << std::endl;
+        if (_clients[socket]->getNickName() == it->second->getNickName() && socket == it->second->getSocket())
+        {
+        	users_list += "- " + it->second->getNickName() + " (\x1b[32mYOU\x1b[0m)\n";
+        }
+        else
+        {
+            if (_clients[socket]->getConnectedStatus() == true)
+        	    users_list += "- " + it->second->getNickName() + "\n";
+        }
+        ++it;
 	}
 
 	// GET THE CHANNELS LIST

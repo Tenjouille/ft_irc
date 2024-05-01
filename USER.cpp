@@ -11,7 +11,7 @@ bool 	Server::userCheckArgs(std::string str)
 			found++;
 		i++;
 	}
-	if (found > 2)
+	if (found != 2)
 		return (true);
 	return (false);
 }
