@@ -1,5 +1,5 @@
 #include "Server.hpp"
-
+/*
 bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::string& invited, std::string& nickname, int socket)
 {
 	//INVITE ulysse #cha' ca ca marche
@@ -62,6 +62,94 @@ bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::str
 	}
 	else if (static_cast<int>(locate[channel_end]) == 32)
 	{
+		size_t start = channel_end + 1;
+		size_t end = locate.find("\r");
+		invited = locate.substr(start, end);
+	}
+	if (channelname.empty())
+		return (false);
+	if (invited.empty())
+		return (false);
+	if (nickname.empty())
+		return (false);
+    return true;
+}*/
+
+bool	Server::fillinBuffer(std::string locate, std::string& channelname, std::string& invited, std::string& nickname, int socket)
+{
+	std::cout << "lololocate = " << locate << std::endl;
+	int config = 0;
+	//INVITE ulysse #cha' ca ca marche
+	//INVITE #cha uaupetit_ ca ca marche pas il trouve pas uaupetit
+
+	Client *sender = getClient(socket);
+	if (sender == NULL || !sender)
+	{
+		//std::cout << "COULDNT GET CLIENT FROM SOCKET" << std::endl;
+		return (false);
+	}
+	//nickname.clear();
+	nickname = sender->getNickName();
+	if (nickname.empty())
+	{
+		//std::cout << "NICKNAME IS EMPTY" << std::endl;
+		return (false);
+	}
+
+    // Clear the outpu	// std::cout << "BUFFERS ARE FILLED" << std::endl;
+		// std::cout << "Channel name : '" << channel_name << "'" << "\n"
+		// << "Invited nickname : '" << invited_nickname << "'" << "\n"
+		// << "InvitEUR nickname : '" << nickname << "'" << std::endl; t strings
+    channelname.clear();
+    invited.clear();
+	size_t channel_end;
+    // Find the position of '#' and the next space
+    size_t channel_start = locate.find("#");
+	//channel_end = locate.find(" ", channel_start);
+    if (channel_start != std::string::npos)
+    {
+       	channel_end = locate.find(" ", channel_start);
+        if (channel_end != std::string::npos)
+        {
+			std::cout << "ici" << std::endl;
+            // Extract the channel name substring
+            //channelname = locate.substr(channel_start, channel_end - channel_start - 1);
+			channelname = locate.substr(channel_start, channel_end - channel_start);
+		}
+        else
+        {
+			std::cout << "la" << std::endl;
+            // If no space is found after '#', consider the rest of the string as the channel name
+            channelname = locate.substr(channel_start);
+			config = 1;
+		}
+    }
+	std::cout << "DANS FILIN = '" << channelname << "'" << std::endl;
+	std::cout << RED "CONFIG = " << config << RESET << std::endl;
+	std::cout << "avant" << std::endl;
+	channel_end = locate.find(" ", channel_start);
+//	std::cout << "locate de channel end = " << static_cast<int>(locate[channel_end]) << std::endl;
+	//if (static_cast<int>(locate[channel_end]) == 0)
+	if (static_cast<int>(channel_end) == -1)
+	{
+		std::cout << "case 1" << std::endl;
+		size_t space_pos = locate.find(" ");
+		if (space_pos != std::string::npos)
+		{
+			std::cout << YELLOW << "ici" << std::endl;
+			invited = locate.substr(space_pos + 1);
+
+			size_t end_pos = invited.find(" ");
+			if (end_pos != std::string::npos)
+			{
+			//	std::cout << YELLOW << "la" << std::endl;
+				invited = invited.substr(0, end_pos);
+			}
+		}
+	}
+	else if (static_cast<int>(locate[channel_end]) == 32)
+	{
+		std::cout << "case 2" << std::endl;
 		size_t start = channel_end + 1;
 		size_t end = locate.find("\r");
 		invited = locate.substr(start, end);

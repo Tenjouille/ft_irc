@@ -44,7 +44,10 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
                 {
                     if (it_clt->first != socket)
                     {
-                        std::string msg = SENDINCHANNEL(s_nick, it_clt->second->getNickName(), msg_to_send, user);
+                        // std::string msg = SENDINCHANNEL(s_nick, clients[socket]->getUsername(), msg_to_send, user);
+                        std::string username = _clients[socket]->getUserName();
+                        //USER == CHANNELNAME
+                        std::string msg = SENDINCHANNEL(s_nick, username, msg_to_send, user);
                         replyClient(msg, it_clt->first);
                     }
                 }

@@ -6,17 +6,16 @@
 
 bool    Server::isClientOp(std::map<int, Client*> op_list, int socket)
 {
-    std::map<int, Client *>::iterator it = op_list.begin();
-    std::map<int, Client *>::iterator ite = op_list.end();
+    // std::map<int, Client *>::iterator ite = op_list.end();
 
-    while (it != ite)
+    for (std::map<int, Client *>::iterator it = op_list.begin(); it != op_list.end(); ++it)
     {
         if (_clients[socket]->getNickName() == it->second->getNickName())
         {
             std::cout << "USER IS AN OPERATOR SO ALL GOOD" << std::endl;
             return (true);
         }
-        ++it;
+        // ++it;
     }
     return (false);
 }
@@ -44,7 +43,7 @@ void Server::topicCmd(std::string locate, int socket)
     {
         if (it->first == channelName)
         {
-            if (isClientOp(it->second->getOperatorList(), socket) == false)
+            if (it->second->getTopicStatus() == 1 && isClientOp(it->second->getOperatorList(), socket) == false)
             {
                 std::cout << YELLOW << "CLIENT IS NOT AN OPERATOR !" << RESET << std::endl;
                 // std::string tmp = "#" + channelName; //NEED TO ADD THE #

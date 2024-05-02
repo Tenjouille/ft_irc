@@ -60,68 +60,73 @@ std::vector<std::string>	initArgs(std::string cmd)
 	return (ret);
 }
 
-void	Channel::defineMode(char sign, char option, std::vector<std::string>& args)
+void    Channel::defineMode(char sign, char option, std::vector<std::string>& args, int socket)
 {
-	if (option == 'i')
-		return (changeInvit(sign));
-	if (option == 't')
-		return (changeTopic(sign));
-	if (option == 'k')
-		return (changeKey(sign, args));
-	if (option == 'o')
-		return (changeOperator(sign, args));
-	if (option == 'l')
-		return (changeLimit(sign, args));
-	else
-		//Error : OPTION NON MANDATORY OU INEXISTANTE !!!
-		return ;		
+    std::cout << "sign = " << sign << " option = " << option << std::endl;
+    if (option == 'i')
+        return (changeInvit(sign));
+    if (option == 't')
+        return (changeTopic(sign));
+    if (option == 'k')
+        return (changeKey(sign, args, socket));
+    if (option == 'o')
+        return (changeOperator(sign, args, socket));
+    if (option == 'l')
+        return (changeLimit(sign, args, socket));
+    else
+        //Error : OPTION NON MANDATORY OU INEXISTANTE !!!
+        return ;        
 }
 
-void	Channel::execMode(std::string options, std::vector<std::string>& args)
+void    Channel::execMode(std::string options, std::vector<std::string>& args, int socket)
 {
-	char sign = options[0];
+    if (options.empty())
+        return ;
 
-	for(size_t i = 0; options[i]; i++)
-	{
-		if (options[i] == '+' || options[i] == '-')
-			sign = options[i];
-		else
-			defineMode(sign, options[i], args);
-	}
+    char sign = options[0];
+
+    for(size_t i = 0; options[i]; i++)
+    {
+        if (options[i] == '+' || options[i] == '-')
+            sign = options[i];
+        else
+            defineMode(sign, options[i], args, socket);
+    }
 }
 
-void	Channel::infoChannel()
+void    Channel::infoChannel()
 {
-	std::cout << MAGENTA << "ABOUT " << getName() << ":" << std::endl;
-	std::cout << "Topic : [" << _topic << "]" << std::endl;
-	std::cout << "Key : [" << _key << "]" << std::endl;
-	std::cout << "Limit : [" << _limit << "]" << std::endl;
-	std::cout << "Inviteonly : [" << _inviteonly << "]" << std::endl;
-	std::cout << "Clients :" << std::endl;
-	for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
-		std::cout << "[" << it->second->getNickName() << "]" << std::endl;
-	std::cout << "Operators :" << std::endl;
-	for (std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); it++)
-		std::cout << "[" << it->second->getNickName() << "]" << std::endl;
+    std::cout << MAGENTA << "ABOUT " << getName() << ":" << std::endl;
+    std::cout << "Topic : [" << _topic << "]" << std::endl;
+    std::cout << "Key : [" << _key << "]" << std::endl;
+    std::cout << "Limit : [" << _limit << "]" << std::endl;
+    std::cout << "Inviteonly : [" << _inviteonly << "]" << std::endl;
+    std::cout << "Clients :" << std::endl;
+    for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
+        std::cout << "[" << it->second->getNickName() << "]" << std::endl;
+    std::cout << "Operators :" << std::endl;
+    for (std::map<int, Client*>::iterator it = _operators.begin(); it != _operators.end(); it++)
+        std::cout << "[" << it->second->getNickName() << "]" << std::endl;
 }
 
-void	Server::modeCmd(std::string locate, int socket)
+void    Server::modeCmd(std::string locate, int socket)
 {
-	std::cout << CYAN << locate << std::endl;
-	std::string cmd = locate.substr(locate.find(' ') + 1);
-	(void) socket;
-	for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); it++)
-	{
-		if (cmd.find(it->first) == 1 && cmd[0] == '#')
-		{
-			// AJOUTER UNE CONDITION DE VERIFICATION SI SOCKET EST OPERATOR ICI
-			std::string					options = initOptions(cmd.substr(cmd.find(' ') + 1));
-			std::vector<std::string>	args = initArgs(cmd.substr(cmd.find(' ') + 1));
+    std::cout << CYAN << locate << std::endl;
+    std::string cmd = locate.substr(locate.find(' ') + 1);
+    (void) socket;
+    for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); it++)
+    {
+        if (cmd.find(it->first) == 1 && cmd[0] == '#')
+        {
+            // AJOUTER UNE CONDITION DE VERIFICATION SI SOCKET EST OPERATOR ICI
+            std::string                    options = initOptions(cmd.substr(cmd.find(' ') + 1));
+            std::vector<std::string>    args = initArgs(cmd.substr(cmd.find(' ') + 1));
 
-			it->second->execMode(options, args);
-			it->second->infoChannel();
-			return ;
-		}
-	}
-	//Error : NOM DU CHANNEL ERRONE !!!
+            it->second->execMode(options, args, socket);
+        	it->second->infoChannel();
+            return ;
+        }
+    }
+    //Error : NOM DU CHANNEL ERRONE !!!
 }
+

@@ -23,14 +23,17 @@ class Channel
         void    infoChannel();
         void    setName(std::string str);
         void    addClient(int socket, Client *client);
-        void    changeOperator(char sign, std::vector<std::string>& args);
+        void    changeOperator(char sign, std::vector<std::string>& args, int socket);
+
         void    newOperator(int socket, Client *client);
         void    changeInvit(char sign);
         void    changeTopic(char sign);
-        void    changeKey(char sign, std::vector<std::string>& args);
-        void    changeLimit(char sign, std::vector<std::string>& args);
-        void	execMode(std::string options, std::vector<std::string>& args);
-        void    defineMode(char sign, char option, std::vector<std::string>& args);
+        void    changeKey(char sign, std::vector<std::string>& args, int socket);
+        void    changeLimit(char sign, std::vector<std::string>& args, int socket);
+
+       	void    defineMode(char sign, char option, std::vector<std::string>& args, int socket);
+		void    execMode(std::string options, std::vector<std::string>& args, int socket);
+
         void setTopic(std::string str);
         int getTopicStatus();
         std::string getTopic();

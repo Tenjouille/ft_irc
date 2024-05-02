@@ -10,7 +10,7 @@
 	" :Welcome to the Internet Relay Network " + username + "!" + nickname + "\r\n")
 #define CAP_LS() ("CAP_ACK LS\r\n")
 #define CREATECHANNEL(nickname, username, name) (":" + nickname+ "!" + username + "@localhost JOIN " + name + "\r\n") //CREATE CHANNEL
-#define SENDINCHANNEL(sender, receiver, msg, channelname) (":" + sender + "!" + "uaupetit" + "@localhost PRIVMSG #" + channelname + " :" + msg + "\r\n") //PRIVMSG FOR CHANNEL
+#define SENDINCHANNEL(sender, username, msg, channelname) (":" + sender + "!" + username + "@localhost PRIVMSG #" + channelname + " :" + msg + "\r\n") //PRIVMSG FOR CHANNEL
 #define PRIVMSG(nickname, envoyeur, msg) (":" + std::string(nickname) + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n") //PRIVMSG CMD
 #define DEFAULTPONG(servername) ("PONG " + servername + "\r\n") //PONG CMD
 #define RPL_INVITING(userID, client_nickname, invited_nickname, channel_name) (userID + " INVITE " + invited_nickname + " :" + channel_name + "\r\n") //INVITE CMD

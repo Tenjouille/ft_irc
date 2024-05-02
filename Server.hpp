@@ -133,7 +133,7 @@ class Server
 
 		bool 	userCheckArgs(std::string str);
 		bool 	msgCheckArgs(std::string locate);
-
+	
 };
 
 void handleSignal(int signal_recu);

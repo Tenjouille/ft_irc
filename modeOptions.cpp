@@ -1,28 +1,36 @@
 #include "Channel.hpp"
 
-void    Channel::changeOperator(char sign, std::vector<std::string>& args)
+void    Channel::changeOperator(char sign, std::vector<std::string>& args, int socket)
 {
-    int                                 socket = -1;
+    int                                    targSocket = -1;
+    bool                                opeStatus = false;
     std::map<int, Client*>::iterator    it = _clientslst.begin();
-
+    (void) socket;
     if (!args.size())
         return ; // 461 ERR_NEEDMOREPARAMS
     for (;it != _clientslst.end(); it++)
+    {
         if (it->second->getNickName() == args[0])
-            socket = it->first;
-    if (it == _clientslst.end())
-	{
-		// std::string error = ERR_NOSUCHNICK(nickname_op, arg[0]);
-		// std::string e_441 = ERR_USERONCHANNEL(nickname op, arg[0] , _name);
-	    return ; // 401 ERR_NOSUCHNICK && 441 ERR_USERNOTINCHANNEL
-	}
-	for (std::map<int, Client*>::iterator it = _operators.begin();it != _operators.end(); it++)
+        {
+            targSocket = it->first;
+            break;
+        }
+    }
+    // std::cout << YELLOW << "changg OPERATORS for " << it->second->getNickName() << std::endl;
+    if (targSocket == -1)
+    {
+        // std::string error = ERR_NOSUCHNICK(nickname_op, arg[0]);
+        // std::string e_441 = ERR_USERONCHANNEL(nickname op, arg[0] , _name);
+        return ; // 401 ERR_NOSUCHNICK && 441 ERR_USERNOTINCHANNEL
+    }
+    for (std::map<int, Client*>::iterator it = _operators.begin();it != _operators.end(); it++)
             if (it->second->getNickName() == args[0])
-                socket = -2;
-    if (sign == '+' && socket != -2)
-        newOperator(socket, it->second);
-    else if (sign == '-' && socket == -2)
-        _operators.erase(socket);
+                opeStatus = true;
+    std::cout << YELLOW << "opeStatus = " << opeStatus << std::endl;
+    if (sign == '+' && opeStatus == false)
+        newOperator(targSocket, it->second);
+    else if (sign == '-' && opeStatus == true)
+        _operators.erase(targSocket);
     args.erase(args.begin());
 }
 
@@ -43,8 +51,26 @@ void    Channel::changeTopic(char sign)
         _topicStatus = 0;
 }
 
-void    Channel::changeKey(char sign, std::vector<std::string>& args)
+
+void    Channel::changeLimit(char sign, std::vector<std::string>& args, int socket)
 {
+    (void) socket;
+    if (sign == '+')
+    {
+        if (args.size() == 0)
+            return ; // 461 ERR_NEEDMOREPARAMS
+        if (atoi(args[0].c_str()) < 1 || strtod(args[0].c_str(), NULL) > 2147483647)
+            return ; // (NO ERROR MSG FOUND)
+        _limit = atoi(args[0].c_str());
+        args.erase(args.begin());
+    }
+    else
+        _limit = 0;
+}
+
+void    Channel::changeKey(char sign, std::vector<std::string>& args, int socket)
+{
+    (void) socket;
     if (sign == '+')
     {
         if (!args.size())
@@ -58,19 +84,4 @@ void    Channel::changeKey(char sign, std::vector<std::string>& args)
         if (args.size())
             args.erase(args.begin());
     }
-}
-
-void    Channel::changeLimit(char sign, std::vector<std::string>& args)
-{
-    if (sign == '+')
-    {
-        if (args.size() == 0)
-            return ; // 461 ERR_NEEDMOREPARAMS
-        if (atoi(args[0].c_str()) < 1 || strtod(args[0].c_str(), NULL) > 2147483647)
-            return ; // (NO ERROR MSG FOUND)
-        _limit = atoi(args[0].c_str());
-        args.erase(args.begin());
-    }
-    else
-        _limit = 0;
 }
