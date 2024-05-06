@@ -8,6 +8,7 @@ Client::Client()
 	_is_connected = false;
 	_sent = false;
 	_skip = false;
+	_userflag = false;
 }
 
 void	Client::setSent(bool to_set)
@@ -168,9 +169,20 @@ void	Client::setConnectedStatus(bool to_set)
 	std::cout << "CONNECTION STATUS SET TO " << to_set << std::endl;
 }
 
+void	Client::setUserFlag(bool to_set)
+{
+	_userflag = to_set;
+}
+
+bool	Client::getUserFlag() const
+{
+	return (_userflag);
+}
+
 void	Client::ClearNick()
 {
 	_nickname.clear();
+	_nickname.erase();
 }
 
 /* ==== DESTRUCTEUR ==== */

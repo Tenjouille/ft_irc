@@ -36,6 +36,7 @@ class Client
         bool            _is_connected;
         bool            _sent;
         bool            _skip;
+        bool            _userflag;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -69,6 +70,10 @@ class Client
         bool    getSent() const;
         void	setSkip(bool to_set);
         bool    getSkip() const;
+
+        void	setUserFlag(bool to_set);
+        bool    getUserFlag() const;
+
 
         //to change connected status
         void	change_connected();

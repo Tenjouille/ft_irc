@@ -26,7 +26,7 @@ void	Server::startingMsg(int socket)
         }
         else
         {
-            if (_clients[socket]->getConnectedStatus() == true && _clients[it->second->getSocket()]->getNickName() != "\0")
+            if (it->second->getConnectedStatus() == true)
             {
         	    users_list += "- " + it->second->getNickName() + "\n";
             }

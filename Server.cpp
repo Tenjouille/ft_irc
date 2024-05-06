@@ -228,7 +228,8 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
-			// _clients[socket]->setNickName("\0");
+			_clients[socket]->setNickName("\0");
+			_clients[socket]->ClearNick();
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);

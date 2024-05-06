@@ -40,10 +40,16 @@ void	Server::userCmd(std::string str, int socket)
 		_clients[socket]->setUserName(cmd);
 		if (_clients[socket]->getStatus() == 3 || _clients[socket]->getStatus() == 2)
 		{
-			if (_clients[socket]->getStatus() == 3)
+			if (_clients[socket]->getStatus() == 3 && _clients[socket]->getUserFlag() == false)
+			{
+				_clients[socket]->setUserFlag(true);
 				_clients[socket]->updateStatus(4);
-			else
+			}
+			else if (_clients[socket]->getStatus() == 2 && _clients[socket]->getUserFlag() == false)
+			{
+				_clients[socket]->setUserFlag(true);
 				_clients[socket]->updateStatus(3);
+			}
 		}
 		if (_clients[socket]->getStatus() == 4)
 		{
