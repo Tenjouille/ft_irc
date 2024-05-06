@@ -29,10 +29,14 @@ void	Server::loop()
 		int result;
 		result = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
 		// signal(SIGINT, handleSignal);
-		if (result == -1 || interrupted == true)
+		if (result == -1)
+		{
+			std::cout << "SOCKET GO CLOSED" << std::endl;
+		}
+		if (interrupted == true)
 		{
 			std::cout << "INTERUP : " << interrupted << std::endl;
-			std::cout << "ERROR WITH SELECT" << std::endl;	
+			std::cout << "ERROR WITH SELECT" << std::endl;
 			return ;
 		}
 		for (int i = 0; i <= _fdMax; i++)

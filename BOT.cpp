@@ -8,9 +8,9 @@ void	Server::startingMsg(int socket)
 
 	// SEND WELCOME
 	replyClient(total, socket);
+	std::string infos = "\x1b[1mIl y a actuellement\x1b[33m " + intToString(getClientNumber()) + "\x1b[0m\x1b[1m utilisateurs connectés et \x1b[33m" + intToString(getChannelNumber()) + "\x1b[0m\x1b[1m channels de lancés !\x1b[0m\n";
 	
 	// SEND INFOS
-	std::string infos = "\x1b[1mIl y a actuellement\x1b[33m " + intToString(getClientNumber()) + "\x1b[0m\x1b[1m utilisateurs connectés et \x1b[33m" + intToString(getChannelNumber()) + "\x1b[0m\x1b[1m channels de lancés !\x1b[0m\n";
 	replyClient(infos, socket);
 
 	// GET THE CLIENTS LIST
@@ -26,8 +26,10 @@ void	Server::startingMsg(int socket)
         }
         else
         {
-            if (_clients[socket]->getConnectedStatus() == true)
+            if (_clients[socket]->getConnectedStatus() == true && _clients[it->second->getSocket()]->getNickName() != "\0")
+            {
         	    users_list += "- " + it->second->getNickName() + "\n";
+            }
         }
         ++it;
 	}
@@ -50,6 +52,7 @@ void	Server::startingMsg(int socket)
 	replyClient(infos2, socket);
     std::string check_mails = "\x1b[1m\x1b[32mEnvoi \"/NOTICE BOT START\" pour commencer la conversation avec notre \x1b[36mBOT\x1b[0m !\r\n";
 	replyClient(check_mails, socket);
+    _clients[socket]->setSent(true);
 }
 
 void    Server::botStart(int socket)

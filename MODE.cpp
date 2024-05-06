@@ -123,7 +123,7 @@ void    Server::modeCmd(std::string locate, int socket)
             std::vector<std::string>    args = initArgs(cmd.substr(cmd.find(' ') + 1));
 
             it->second->execMode(options, args, socket);
-        	it->second->infoChannel();
+        	// it->second->infoChannel();
             return ;
         }
     }

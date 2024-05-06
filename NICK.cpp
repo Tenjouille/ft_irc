@@ -75,6 +75,8 @@ void	Server::nickCmd(std::string str, int socket)
 		std::cout << nickname << std::endl;
 		if (checkNickName(nickname, socket) == false)
 		{
+			_clients[socket]->setSkip(true);
+			std::cout << "LA :" << _clients[socket]->getSkip() << std::endl;
 			replyClient(NICKNAMEINUSE_ERR(nickname), socket);
 			return ;
 		}
@@ -83,7 +85,14 @@ void	Server::nickCmd(std::string str, int socket)
 			if (_clients[socket]->getConnectedStatus() == false)
 			{
 				it->second->setNickName(cmd);
-				it->second->updateStatus();
+				if (_clients[socket]->getStatus() == 2 || _clients[socket]->getStatus() == 3)
+				{
+					if (_clients[socket]->getStatus() == 3)
+						it->second->updateStatus(4);
+					else
+						it->second->updateStatus(3);
+					std::cout << "PASSE ICI" << std::endl;
+				}
 			}
 			else
 			{

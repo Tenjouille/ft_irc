@@ -92,7 +92,7 @@ class Server
 		void				userCmd(std::string str, int socket);
 		void				modeCmd(std::string locate, int socket);
 		void				nickCmd(std::string str, int socket);
-		void				passCmd(std::string to_parse, std::string cmd, int socket);
+		bool				passCmd(std::string to_parse, std::string cmd, int socket);
 		void				joinCmd(std::string locate, int socket);
 		void				quitCmd(int socket);
 		void				pingCmd(std::string cmd, int socket);
@@ -133,7 +133,9 @@ class Server
 
 		bool 	userCheckArgs(std::string str);
 		bool 	msgCheckArgs(std::string locate);
+		void    delFromChannels(int socket);
 	
+
 };
 
 void handleSignal(int signal_recu);

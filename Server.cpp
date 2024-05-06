@@ -63,10 +63,11 @@ void	Server::read_data_from_socket(int socket)
 	//int status;
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
-	if (bytes_read == 0)
+	if (bytes_read == 0 || quitting == true)
     {
         std::cout << "closing socket" << std::endl;
-		close(socket);
+		if (socket != 0)
+			close(socket);
         quitCmd(socket);
         return ; 
     }
@@ -160,35 +161,21 @@ void	Server::setfdMax(int socket)
 void	Server::setClientSocket(int tmp)
 {
 	Client* client = new Client();
-	_nb_clients++;
 	client->setSocket(tmp);
 	_clients.insert(std::make_pair(tmp, client));
 }
 
 /* //? ==== MAIN FUNCTIONS ==== ?// */
 
-
-// void handleSignal(int signal_recu)
-// {
-// 	if (signal_recu == SIGINT)
-// 	{
-// 		std::cout << "Closing SERVEUR" << std::endl;
-// 		std::cout << "Closing SERVEUR" << std::endl;
-// 		std::cout << "Closing SERVEUR" << std::endl;
-// 		std::cout << RESET << RED << "Closing SERVEUR" << RESET << std::endl;
-// 		//need to free stuff
-// 		return ;
-// 	}
-// 	return ;
-// }
-
 void	Server::accept_new_connection()
 {
+	quitting = false;
 	std::cout << "accept" << std::endl;
 	int client_fd;
 
 	client_fd = accept(_socket, NULL, NULL);
 	setClientSocket(client_fd);
+	_nb_clients++;
 	FD_SET(client_fd, &_allSockets);
 	if (client_fd > _fdMax)
 		_fdMax = client_fd;
@@ -206,25 +193,83 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	// args.append(defineArgs(locate, cmd.size()));
 	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
 	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
+	if (_clients[socket]->getConnectedStatus() == false && str.find("PASS") == std::string::npos)
+	{
+		if (_clients[socket]->getSkip() == true)
+		{
+			getClient(socket)->updateStatus(0);
+			std::cout << "CONNECTION FAILED TRY FULL PROCESS AGAIN ICIIII" << std::endl;
+			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
+			size_t test = replyClient(msg, socket);
+			std::cout << "TEST : " << test << std::endl;
+			_clients[socket]->setTempBuffer("", 1);
+			// _clients[socket]->ClearNick();
+			// _clients[socket]->setNickName("\0");
+			// _clients[socket]->setNickName("!!!###");
+			if (_nb_clients > 0)
+				_nb_clients--;
+			_clients[socket]->setConnectedStatus(false);
+			quitting = true;
+			std::cout << "LAODLAOLOAD" << std::endl;
+			return;
+		}
+		// std::cout << "ALL GOOD??? 2222" << std::endl;
+	}
 	if (locate.find("NICK") == 0)
 		nickCmd (locate, socket);
-	else if (locate.find("CAP LS") == 0)
+	else if (locate.find("CAP LS") == 0 && _clients[socket]->getConnectedStatus() == false)
 		caplsCmd(locate, socket);
 	else if (locate.find("USER") == 0)
+	{
         userCmd(locate, socket);
-    else if (locate.find("MODE") == 0)
+		if (_clients[socket]->getStatus() == 1)
+		{
+			getClient(socket)->updateStatus(0);
+			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
+			replyClient(msg, socket);
+			_clients[socket]->setTempBuffer("", 1);
+			// _clients[socket]->setNickName("\0");
+			if (_nb_clients > 0)
+				_nb_clients--;
+			_clients[socket]->setConnectedStatus(false);
+			quitting = true;
+			std::cout << "Jsuis chaud" << std::endl;
+			return ;
+		}
+	}
+	else if (locate.find("MODE") == 0)
 		modeCmd(locate, socket);
 	else if (locate.find("PASS") == 0)
-		passCmd(cmd, locate, socket);
+	{
+		if (passCmd(cmd, locate, socket) == false)
+		{
+			getClient(socket)->updateStatus(0);
+			std::cout << "CONNECTION FAILED TRY FULL PROCESS AGAIN" << std::endl;
+			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
+			replyClient(msg, socket);
+			_clients[socket]->setTempBuffer("", 1);
+			// _clients[socket]->ClearNick();
+			// _clients[socket]->setNickName("\0");
+			// _clients[socket]->setNickName("!!!###");
+			if (_nb_clients > 0)
+				_nb_clients--;
+			_clients[socket]->setConnectedStatus(false);
+			quitting = true;
+			std::cout << "LAODLAOLOAD 2222" << std::endl;
+			// delClient(socket);
+			// close(socket);
+			return ;
+		}
+		std::cout << "ALL GOOD???" << std::endl;
+	}
 	else if (locate.find("JOIN") == 0)
 	{
-//		std::cout << WHITE << "passe dans la fonction join avec string '" << locate << "'" << std::endl;
 		joinCmd(locate, socket);
 	}
 	else if (locate.find("QUIT") == 0)
 	{
 		_clients[socket]->setTempBuffer("", 1);
-		_clients[socket]->setNickName("\0");
+		// _clients[socket]->setNickName("\0");
 		quitting = true;
 	}
 	else if (locate.find("PING") == 0)
@@ -252,8 +297,8 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		std::cout << "ICI" << std::endl;
 		if (locate.find("BOT") != std::string::npos && locate.find("START") != std::string::npos)
 			botStart(socket);
-        return;
 	}
+	_clients[socket]->setTempBuffer("", 1);
 }
 
 void	Server::parser(std::string cmd, int socket)
@@ -328,6 +373,8 @@ Server::~Server()
     std::map<int, Client*>::iterator client_it;
     for (client_it = _clients.begin(); client_it != _clients.end(); ++client_it)
     {
+		if (_socket != 0)
+			close(client_it->first);
         delete client_it->second; // Delete the Client object
     }
     _clients.clear(); // Clear the map
@@ -342,6 +389,7 @@ Server::~Server()
     _channelLst.clear(); // Clear the map
 
     FD_CLR(_socket, &_allSockets);
-    close(_socket);
+    if (_socket != 0)
+		close(_socket);
 }
 

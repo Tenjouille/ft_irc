@@ -34,6 +34,8 @@ class Client
         std::vector<std::string> _invitation;
         bool            _dont_set_user;
         bool            _is_connected;
+        bool            _sent;
+        bool            _skip;
     public:
         Client();
         Client(struct sockaddr client_addr);
@@ -43,7 +45,7 @@ class Client
         struct sockaddr getClientAddr() const;
         int             getSocket() const;
         void            setNickName(std::string str);
-        void            updateStatus();
+        void            updateStatus(int to_set);
         int             getStatus();
         void            setUserName(std::string str);
         void            setSocket(int tmp);
@@ -60,6 +62,13 @@ class Client
 
         void    addChannel(std::string to_add);
         void	printChannels();
+
+        void	ClearNick();
+        void	setConnectedStatus(bool to_set);
+        void	setSent(bool to_set);
+        bool    getSent() const;
+        void	setSkip(bool to_set);
+        bool    getSkip() const;
 
         //to change connected status
         void	change_connected();

@@ -170,21 +170,21 @@ void Server::msgCmd(std::string locate, int socket)
 	{
         std::cerr << "Erreur: Chaîne ne contient pas 'PRIVMSG '" << std::endl;
     }
-	for (std::map<std::string,
-			Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
-	{
-		std::string channel_name = it->first;
-		Channel *channel = it->second;
-		if (channel_name == user)
-		{
-			std::map<int, Client *> client_list = channel->getClientlst();
-			for (std::map<int,
-					Client *>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
-			{
-				std::cout << YELLOW << "client dans channel = " << it_clt->second->getNickName() << RESET << std::endl;
-			}
-		}
-	}
+	// for (std::map<std::string,
+	// 		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
+	// {
+	// 	std::string channel_name = it->first;
+	// 	Channel *channel = it->second;
+	// 	if (channel_name == user)
+	// 	{
+	// 		std::map<int, Client *> client_list = channel->getClientlst();
+	// 		for (std::map<int,
+	// 				Client *>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
+	// 		{
+	// 			std::cout << YELLOW << "client dans channel = " << it_clt->second->getNickName() << RESET << std::endl;
+	// 		}
+	// 	}
+	// }
     std::string s_user = _clients[socket]->getUserName();
     std::string s_nick = _clients[socket]->getNickName();
 	if (is_channel == 0)
@@ -217,7 +217,8 @@ void Server::msgCmd(std::string locate, int socket)
 		std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
 
 		std::cout << socket_to_send_to << " et " << socket << std::endl;
-		replyClient(msg_to_send, socket_to_send_to);
+		if (replyClient(msg_to_send, socket_to_send_to) == static_cast<size_t>(-1))
+            quitCmd(socket);
 		(void) socket;
 	}
 	else

@@ -28,14 +28,14 @@ std::string Server::getUsernameFormNick(std::string to_parse)
 	}
 }
 
-void	Server::passCmd(std::string str, std::string cmd, int socket)
+bool Server::passCmd(std::string str, std::string cmd, int socket)
 {
 	std::string server_pass = getServerPassword();
 	int i = 0;
 	if (getClient(socket)->getStatus() == 4)
 	{
 		replyClient(ALREADYREGISTERED(getClient(socket)->getNickName()), socket);
-		return;
+		return false;
 	}
 	while (cmd[i] != '\0' && cmd[i] != ' ')
 		i++;
@@ -44,7 +44,7 @@ void	Server::passCmd(std::string str, std::string cmd, int socket)
 	{
 		std::string dn = "Error";
 		replyClient(ERR_NEEDMOREPARAMS(dn, "PASS"), socket);
-		return;
+		return false;
 	}
 	int start = i;
 	std::string from_client = &cmd[start];
@@ -52,9 +52,13 @@ void	Server::passCmd(std::string str, std::string cmd, int socket)
 	{
 		std::string username = getUsernameFormNick(str);
 		_clients[socket]->dont_set_user(true);
+		_clients[socket]->setSkip(true);
 		replyClient(ERROR_INVPASS(username), socket);
-		return ;
+		return false;
 	}
 	_clients[socket]->dont_set_user(false);
-	getClient(socket)->updateStatus();
+	if (_clients[socket]->getStatus() == 1)
+		getClient(socket)->updateStatus(2);
+	std::cout << "WE GOT UNTIL HERE?" << std::endl;
+	return (true);
 }

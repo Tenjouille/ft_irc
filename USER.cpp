@@ -26,18 +26,25 @@ void	Server::userCmd(std::string str, int socket)
 	std::cout << YELLOW << "STR : " << str << RESET << std::endl;
 	std::string cmd = str.substr(str.find(' ') + 1);
 	cmd = cmd.substr(0, cmd.find(' '));
-	if (getClient(socket)->getStatus() == 4)
-	{
-		replyClient(ALREADYREGISTERED(getClient(socket)->getNickName()), socket);
-		return;
-	}
+	// if (getClient(socket)->getStatus() == 4 && _clients[socket]->getSent() == true)
+	// {
+	// 	std::cout << "LUI???" << std::endl;
+	// 	replyClient(ALREADYREGISTERED(getClient(socket)->getNickName()), socket);
+	// 	return;
+	// }
 	for (int i = 0; cmd[i]; i++)
 		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
 			return;
 	if (_clients[socket])
 	{
 		_clients[socket]->setUserName(cmd);
-		_clients[socket]->updateStatus();
+		if (_clients[socket]->getStatus() == 3 || _clients[socket]->getStatus() == 2)
+		{
+			if (_clients[socket]->getStatus() == 3)
+				_clients[socket]->updateStatus(4);
+			else
+				_clients[socket]->updateStatus(3);
+		}
 		if (_clients[socket]->getStatus() == 4)
 		{
 			std::string server_name = "localhost";

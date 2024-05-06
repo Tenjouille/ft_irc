@@ -6,6 +6,31 @@ Client::Client()
 	_connection_status = 0;
 	_dont_set_user = false;
 	_is_connected = false;
+	_sent = false;
+	_skip = false;
+}
+
+void	Client::setSent(bool to_set)
+{
+	_sent = to_set;
+}
+
+bool	Client::getSent() const
+{
+	return (_sent);
+}
+
+void	Client::setSkip(bool to_set)
+{
+	if (to_set == true)
+		_skip = true;
+	else
+		_skip = false;
+}
+
+bool	Client::getSkip() const
+{
+	return (_sent);
 }
 
 Client::Client(struct sockaddr client_addr) : _clientAddr(client_addr)
@@ -77,9 +102,10 @@ std::string Client::getNickName() const
 	return _nickname;
 }
 
-void    Client::updateStatus()
+void    Client::updateStatus(int to_set)
 {
-    _connection_status++;
+    // _connection_status++;
+	_connection_status = to_set;
 	std::cout << "STATUS UPDATED TO : " << _connection_status << std::endl;
 }
 
@@ -134,6 +160,17 @@ void Client::setNickName(std::string str)
 void Client::setUserName(std::string str)
 {
     _username = str;
+}
+
+void	Client::setConnectedStatus(bool to_set)
+{
+	_connection_status = to_set;
+	std::cout << "CONNECTION STATUS SET TO " << to_set << std::endl;
+}
+
+void	Client::ClearNick()
+{
+	_nickname.clear();
 }
 
 /* ==== DESTRUCTEUR ==== */
