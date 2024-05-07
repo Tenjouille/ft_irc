@@ -18,10 +18,12 @@ Server::Server(char **av)
 		_serverAddress.sin_family = AF_INET;
 		_serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
 		_serverAddress.sin_port = htons(port);
-		bind(_socket, (struct sockaddr*)&_serverAddress, sizeof(_serverAddress));
+		if (bind(_socket, (struct sockaddr*)&_serverAddress, sizeof(_serverAddress)) == -1)
+		{
+			std::cout << "failed to bind" << std::endl;
+			return;
+		}
 	}
-	else
-		std::cout << "invalid port format" << std::endl;
 }
 
 Channel* Server::getChannelFromName(std::string name)
@@ -32,10 +34,8 @@ Channel* Server::getChannelFromName(std::string name)
 	while (it != ite)
 	{
 		std::string tmp_channel_name = it->first;
-		std::cout << "COMPARING : '" << tmp_channel_name << "' and : '" << name << "'" << std::endl;
 		if (tmp_channel_name == name)
 		{
-			std::cout << "CHANNEL FOUND !" << std::endl;
 			return (it->second);
 		}
 		++it;
@@ -56,16 +56,12 @@ int	Server::getSocket() const
 
 void	Server::read_data_from_socket(int socket)
 {
-//	std::cout << "read data" << std::endl;
 	char buffer[1024];
-	// char msg_to_send[1024];
 	int bytes_read;
-	//int status;
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
 	if (bytes_read == 0 || quitting == true)
     {
-        std::cout << "closing socket" << std::endl;
 		if (socket != 0)
 			close(socket);
         quitCmd(socket);
@@ -75,29 +71,15 @@ void	Server::read_data_from_socket(int socket)
 	{
 		return ;
 	}
-	// for (int j = 0; j <= _fdMax; j++)
-	// {
-	// 	// if (FD_ISSET(j, &_allSockets) && j != _socket && j != socket)
-	// 	// {
-	// 	// 	//send(getClientSocket(socket), to_send.c_str(), to_send.length(), 0);
-	// 	// 	// status = send(j, msg_to_send, strlen(msg_to_send), 0);
-	// 	// 	// if (status == -1)
-	// 	// 	// 	quitCmd(j);
-	// 	// }
-	// }
-	//test ctrl+D
 	std::string cmd1 = buffer;
 	if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
 	{
-		std::cout << "cmd1 = '" << cmd1 << "'" << std::endl;
+
 	}
-	//std::cout << GREEN << "HERE" << RESET << std::endl;
 	getClient(socket)->setTempBuffer(static_cast<char*>(buffer), 0);
-	//std::cout << "buffer client = '" << getClient(socket)->getTempBuffer() << "'" << std::endl;
 	std::string cmd = getClient(socket)->getTempBuffer();
 	if (cmd[cmd.size() - 2] == '\r' && cmd[cmd.size() - 1] == '\n')
 	{
-		//std::cout << "cmd = '" << cmd << "'" << std::endl;
 		parser(getClient(socket)->getTempBuffer(), socket);
 		if (getClient(socket) && quitting == false)
 			getClient(socket)->setTempBuffer("", 1);
@@ -165,12 +147,9 @@ void	Server::setClientSocket(int tmp)
 	_clients.insert(std::make_pair(tmp, client));
 }
 
-/* //? ==== MAIN FUNCTIONS ==== ?// */
-
 void	Server::accept_new_connection()
 {
 	quitting = false;
-	std::cout << "accept" << std::endl;
 	int client_fd;
 
 	client_fd = accept(_socket, NULL, NULL);
@@ -189,10 +168,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	std::string	cmd;
 	locate.append(str, start, it - start);
 	cmd.append(str, start, str.find(' '));
-	// options.append(defineOptions(locate));
-	// args.append(defineArgs(locate, cmd.size()));
-	// std::cout << GREEN << "============== NEW COMMAND ==============" << RESET << std::endl;
-	// std::cout << GREEN << "apres decoupage, commande = '" << locate << "'" << std::endl; 
 	if (_clients[socket]->getConnectedStatus() == false && str.find("PASS") == std::string::npos)
 	{
 		if (_clients[socket]->getSkip() == true)
@@ -203,9 +178,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 			size_t test = replyClient(msg, socket);
 			std::cout << "TEST : " << test << std::endl;
 			_clients[socket]->setTempBuffer("", 1);
-			// _clients[socket]->ClearNick();
-			// _clients[socket]->setNickName("\0");
-			// _clients[socket]->setNickName("!!!###");
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);
@@ -213,7 +185,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 			std::cout << "LAODLAOLOAD" << std::endl;
 			return;
 		}
-		// std::cout << "ALL GOOD??? 2222" << std::endl;
 	}
 	if (locate.find("NICK") == 0)
 		nickCmd (locate, socket);
@@ -249,19 +220,13 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
-			// _clients[socket]->ClearNick();
-			// _clients[socket]->setNickName("\0");
-			// _clients[socket]->setNickName("!!!###");
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);
 			quitting = true;
 			std::cout << "LAODLAOLOAD 2222" << std::endl;
-			// delClient(socket);
-			// close(socket);
 			return ;
 		}
-		std::cout << "ALL GOOD???" << std::endl;
 	}
 	else if (locate.find("JOIN") == 0)
 	{
@@ -270,7 +235,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	else if (locate.find("QUIT") == 0)
 	{
 		_clients[socket]->setTempBuffer("", 1);
-		// _clients[socket]->setNickName("\0");
 		quitting = true;
 	}
 	else if (locate.find("PING") == 0)
@@ -281,7 +245,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("INVITE") == 0)
 	{
-	//	std::cout << "LETS GO INVITE BOYS" << std::endl;
 		inviteCmd(locate, socket);
 	}
 	else if (locate.find("TOPIC") == 0)
@@ -290,12 +253,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("KICK") == 0)
 	{
-	//	std::cout << "!!!KICK COMMAND!!!" << std::endl;
 		kickCmd(locate, socket);
 	}
 	else if (locate.find("NOTICE") == 0)
 	{
-		std::cout << "ICI" << std::endl;
 		if (locate.find("BOT") != std::string::npos && locate.find("START") != std::string::npos)
 			botStart(socket);
 	}
@@ -320,7 +281,6 @@ void	Server::parser(std::string cmd, int socket)
 
 void	Server::WelcomeMsg(std::string channel_name, Client *client, int socket)
 {
-	// (void) socket;
 	Channel	*channel;
 	for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
     {
@@ -334,7 +294,6 @@ void	Server::WelcomeMsg(std::string channel_name, Client *client, int socket)
             	if (it_clt->first != socket)
                 {
 		 			std::string nickname = client->getNickName();
-					// std::string msg_to_send = "\x1b[1m\x1b[32mWelcome in the #" + channel_name + " channel.\x1b[0m";
 					std::string msg_to_send = "\x1b[1m\x1b[32mSay Hello to our new member : " + nickname + " !\x1b[0m";
 					std::string channel_msg = "\x1b[3m\x1b[36m#" + channel_name;
 					std::string msg = SENDINCHANNEL(channel_msg, nickname, msg_to_send, channel_name);
@@ -343,7 +302,6 @@ void	Server::WelcomeMsg(std::string channel_name, Client *client, int socket)
 				else
 				{
 		 			std::string nickname = client->getNickName();
-					// std::string msg_to_send = "\x1b[1m\x1b[32mWelcome in the #" + channel_name + " channel.\x1b[0m";
 					std::string welcome = "\x1b[1m\x1b[32mBienvenu dans le #" + channel_name + " channel !\x1b[0m";
 					std::string cowboy = "\x1b[1m\x1b[31mRègle\x1b[0m :\x1b[31m\x1b[5m\x1b[1m Fait pas le cowboy et tout ira bien\x1b[0m\n";
 					std::string channel_msg = "\x1b[3m\x1b[36m#" + channel_name;
@@ -368,26 +326,20 @@ void	Server::closeSockets()
 
 Server::~Server()
 {
-    std::cout << "Destroying the server" << std::endl;
-
-    // Delete clients
     std::map<int, Client*>::iterator client_it;
     for (client_it = _clients.begin(); client_it != _clients.end(); ++client_it)
     {
 		if (_socket != 0)
 			close(client_it->first);
-        delete client_it->second; // Delete the Client object
+        delete client_it->second;
     }
-    _clients.clear(); // Clear the map
-
-    // Delete channels
+    _clients.clear();
     std::map<std::string, Channel*>::iterator channel_it;
     for (channel_it = _channelLst.begin(); channel_it != _channelLst.end(); ++channel_it)
     {
-        std::cout << "Deleting channel" << std::endl;
-        delete channel_it->second; // Delete the Channel object
+        delete channel_it->second;
     }
-    _channelLst.clear(); // Clear the map
+    _channelLst.clear();
 
     FD_CLR(_socket, &_allSockets);
     if (_socket != 0)

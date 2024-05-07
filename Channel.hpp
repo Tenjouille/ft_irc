@@ -14,7 +14,6 @@ class Channel
         int         _limit;
         bool        _inviteonly;
         int         _topicStatus;
-        //liste des clients dans le channel + leurs socket
         std::map<int, Client*>  _clientslst;
         std::map<int, Client*>  _operators;
     public:

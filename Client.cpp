@@ -80,7 +80,6 @@ void	Client::printChannels()
 	
 	while (it != itend)
 	{
-		std::cout << *it << std::endl;
 		++it;
 	}
 }
@@ -96,8 +95,6 @@ void	Client::delChannel(std::string channelName)
 	}
 }
 
-/* ==== GETTERS ====*/
-
 std::string Client::getNickName() const
 {
 	return _nickname;
@@ -105,9 +102,7 @@ std::string Client::getNickName() const
 
 void    Client::updateStatus(int to_set)
 {
-    // _connection_status++;
 	_connection_status = to_set;
-	std::cout << "STATUS UPDATED TO : " << _connection_status << std::endl;
 }
 
 std::string Client::getUserName() const
@@ -140,12 +135,9 @@ int     Client::getStatus()
     return _connection_status;
 }
 
-/* ==== SETTERS ==== */
-
 void    Client::addChannel(std::string channelname_to_add)
 {
 	_channel.push_back(channelname_to_add);
-	std::cout << "ADDED " << channelname_to_add << " into client's vector" << std::endl;
 }
 
 void Client::setSocket(int tmp)
@@ -166,7 +158,6 @@ void Client::setUserName(std::string str)
 void	Client::setConnectedStatus(bool to_set)
 {
 	_connection_status = to_set;
-	std::cout << "CONNECTION STATUS SET TO " << to_set << std::endl;
 }
 
 void	Client::setUserFlag(bool to_set)
@@ -184,8 +175,6 @@ void	Client::ClearNick()
 	_nickname.clear();
 	_nickname.erase();
 }
-
-/* ==== DESTRUCTEUR ==== */
 
 Client::~Client()
 {}

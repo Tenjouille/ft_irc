@@ -6,10 +6,6 @@ void handleSignal(int signal_recu)
 {
 	if (signal_recu == SIGINT)
 	{
-		std::cout << "Closing SERVEUR" << std::endl;
-		std::cout << "Closing SERVEUR" << std::endl;
-		std::cout << "Closing SERVEUR" << std::endl;
-		std::cout << RESET << RED << "Closing SERVEUR" << RESET << std::endl;
 		interrupted = true;
 		return ;
 	}
@@ -19,7 +15,6 @@ void handleSignal(int signal_recu)
 void	Server::loop()
 {
 	struct timeval timer;
-	// int status; commented because error set but not used
 	signal(SIGINT, handleSignal);
 	while (!interrupted)
 	{
@@ -28,15 +23,13 @@ void	Server::loop()
 		timer.tv_usec = 0;
 		int result;
 		result = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
-		// signal(SIGINT, handleSignal);
 		if (result == -1)
 		{
-			std::cout << "SOCKET GO CLOSED" << std::endl;
+			std::cout << "failed to select" << std::endl;
+			return;
 		}
 		if (interrupted == true)
 		{
-			std::cout << "INTERUP : " << interrupted << std::endl;
-			std::cout << "ERROR WITH SELECT" << std::endl;
 			return ;
 		}
 		for (int i = 0; i <= _fdMax; i++)

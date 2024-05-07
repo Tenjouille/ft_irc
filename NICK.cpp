@@ -3,7 +3,6 @@
 bool	Server::checkNickName(std::string to_check, int socket)
 {
 	std::string tmp_name;
-	
 	std::map<int, Client*>::iterator it = _clients.begin();
 	int i = 0;
 	while (it != _clients.end())
@@ -22,14 +21,13 @@ bool	Server::checkNickName(std::string to_check, int socket)
 std::string intToString(int value)
 {
     std::string result;
-    bool negative = false;
-    
+    bool negative = false;  
     if (value < 0) {
         negative = true;
         value = -value;
     }
-    
-    do {
+    do
+	{
         result = char('0' + value % 10) + result;
         value /= 10;
     } while (value != 0);
@@ -37,14 +35,14 @@ std::string intToString(int value)
     if (negative) {
         result = "-" + result;
     }
-    
     return result;
 }
 
 void	Server::nickCmd(std::string str, int socket)
 {
-	std::string cmd = str.substr(str.find(' ') + 1);	
-	if (cmd[0] == '\0')
+	size_t find = str.find(' ');
+	std::string cmd = str.substr(find + 1);	
+	if (cmd[0] == '\0' || find == std::string::npos)
 	{
 		replyClient(ERR_NONICKNAMEGIVE(getClient(socket)->getNickName()), socket);
 		return;
@@ -63,7 +61,6 @@ void	Server::nickCmd(std::string str, int socket)
 			else
 				username = _clients[socket]->getUserName();
 			std::string msg = ERR_ERRONEUSNICKNAME(username, cmd);
-			std::cout << "SENDING : " << msg << std::endl;
 			replyClient(msg, socket);
 			return;
 		}
@@ -72,11 +69,9 @@ void	Server::nickCmd(std::string str, int socket)
 	if (it != _clients.end())
 	{
 		std::string nickname = cmd;
-		std::cout << nickname << std::endl;
 		if (checkNickName(nickname, socket) == false)
 		{
 			_clients[socket]->setSkip(true);
-			std::cout << "LA :" << _clients[socket]->getSkip() << std::endl;
 			replyClient(NICKNAMEINUSE_ERR(nickname), socket);
 			return ;
 		}
@@ -91,15 +86,12 @@ void	Server::nickCmd(std::string str, int socket)
 						it->second->updateStatus(4);
 					else
 						it->second->updateStatus(3);
-					std::cout << "PASSE ICI" << std::endl;
 				}
 			}
 			else
 			{
-				// ":nickname NICK new_nickname\r\n"
 				std::string old = _clients[socket]->getNickName();
 				std::string msg = ":" + old + " NICK " + nickname + "\r\n";
-				std::cout << "SENDING ICI : " << msg << std::endl;
 				replyClient(msg, socket);
 				it->second->setNickName(cmd);
 				return ;
@@ -108,7 +100,6 @@ void	Server::nickCmd(std::string str, int socket)
 		if (it->second->getStatus() >= 4)
 		{
 			it->second->setNickName(cmd);
-			std::cout << it->second->getNickName() << std::endl;
 			std::string server_name = "localhost";
 			std::string username = it->second->getUserName();
 			std::string nickname = it->second->getNickName();

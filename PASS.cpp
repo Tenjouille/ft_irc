@@ -8,7 +8,6 @@ std::string	Server::getServerPassword() const
 std::string Server::getUsernameFormNick(std::string to_parse)
 {
 	std::string tmp_name = to_parse;
-
 	size_t pos = tmp_name.find("NICK ");
 	if (pos != std::string::npos)
 	{
@@ -23,7 +22,6 @@ std::string Server::getUsernameFormNick(std::string to_parse)
 	}
 	else
 	{
-		std::cout << "COULDNT FIND IN THE BUFFER" << std::endl;
 		return ("Error");
 	}
 }
@@ -59,6 +57,5 @@ bool Server::passCmd(std::string str, std::string cmd, int socket)
 	_clients[socket]->dont_set_user(false);
 	if (_clients[socket]->getStatus() == 1)
 		getClient(socket)->updateStatus(2);
-	std::cout << "WE GOT UNTIL HERE?" << std::endl;
 	return (true);
 }

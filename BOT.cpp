@@ -1,11 +1,8 @@
 #include "Server.hpp"
 
-// FIRST MESSAGES SENT BY BOT
 void	Server::startingMsg(int socket)
 {
 	std::string total = "\n\x1b[34m╔═════════════════════════════╗\n\x1b[34m║\x1b[0m\x1b[36m  Bienvenue sur UTV Network\x1b[0m  \x1b[34m║\n\x1b[34m╚═════════════════════════════╝\x1b[0m\n        \x1b[1m\x1b[4mCreated by\x1b[0m :\n{ \x1b[1m\x1b[35mUaupetit\x1b[0m | \x1b[1m\x1b[31mTbourdea\x1b[0m | \x1b[1m\x1b[33mVgoret\x1b[0m }\n\n"; 
-	std::cout << total << std::endl;
-
 	// SEND WELCOME
 	replyClient(total, socket);
 	std::string infos = "\x1b[1mIl y a actuellement\x1b[33m " + intToString(getClientNumber()) + "\x1b[0m\x1b[1m utilisateurs connectés et \x1b[33m" + intToString(getChannelNumber()) + "\x1b[0m\x1b[1m channels de lancés !\x1b[0m\n";
@@ -19,7 +16,6 @@ void	Server::startingMsg(int socket)
 	std::string users_list;
 	while (it != ite)
 	{
-        std::cout << CYAN << socket << " and " << it->second->getSocket() << RESET << std::endl;
         if (_clients[socket]->getNickName() == it->second->getNickName() && socket == it->second->getSocket())
         {
         	users_list += "- " + it->second->getNickName() + " (\x1b[32mYOU\x1b[0m)\n";
@@ -48,7 +44,6 @@ void	Server::startingMsg(int socket)
 	if (i == 0)
 		channels_list = "[ NONE 😭 ]";
 	std::string infos2 = "\x1b[36mUsers actifs :\x1b[0m\n" + users_list + "\x1b[36mChannels actifs :\x1b[0m\n" + channels_list + "\n";
-	std::cout << infos2 << std::endl;
 	replyClient(infos2, socket);
     std::string check_mails = "\x1b[1m\x1b[32mEnvoi \"/NOTICE BOT START\" pour commencer la conversation avec notre \x1b[36mBOT\x1b[0m !\r\n";
 	replyClient(check_mails, socket);
@@ -63,10 +58,8 @@ void    Server::botStart(int socket)
 	std::string help = "Tu peux m'envoyer \"HELP_ME\" si tu es perdu sur ce \x1b[3m\x1b[36mmagnifique\x1b[0m serveur ou \"COMMANDS\" si tu veux savoir ce dont je suis capable...\r\n";
 	
 
-	std::cout << "Sending : " << PRIVMSG(_bot_name, _clients[socket]->getNickName(), bjr) << std::endl;
 	replyClient(PRIVMSG(_bot_name, _clients[socket]->getNickName(), bjr), socket);
 
-	std::cout << "Sending : " << PRIVMSG(_bot_name, _clients[socket]->getNickName(), help) << std::endl;
 	replyClient(PRIVMSG(_bot_name, _clients[socket]->getNickName(), help), socket);
 }
 
@@ -107,7 +100,6 @@ void    bot_sendSelfie(std::string user, int socket)
     replyClient(PRIVMSG(_bot_name, user, "⣿⣿⣄⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⣾⣿⣿⣿⣿⣶⣿⣿⣿⣿⣿⣷⣶⣾⣿⣤⣷⣶⣄⣰⣤⣀⣀⣀⣀⣀⣀⣀⣀\r\n"), socket);
 }
 
-// PARSING WHEN TALKING TO BOT
 void    Server::parsingBot(std::string msg, std::string user, int socket)
 {
     if (msg == "HELP_ME")
@@ -215,7 +207,6 @@ void    Server::parsingBot(std::string msg, std::string user, int socket)
     return;
 }
 
-// SEND HELP_BOX IN GENERAL CHAT
 void    Server::bot_sendHelp(int socket, std::string user)
 {
     replyClient(HELP_BOX(), socket);

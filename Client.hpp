@@ -29,7 +29,6 @@ class Client
         int             _nickcount;
         int             _connection_status;
         std::string     _tempBuffer;
-        //listes de channels dans lequel est le client
         std::vector<std::string> _channel;
         std::vector<std::string> _invitation;
         bool            _dont_set_user;
@@ -54,10 +53,8 @@ class Client
         std::string     getTempBuffer();
         void            setTempBuffer(std::string str, int flag);
         void	        delChannel(std::string channelName);
-        // Client* cloneClient();
         ~Client();
 
-        //to know if we set the user or not depending on value
         void    dont_set_user(bool value);
         bool    do_we_set_or_not() const;
 
@@ -75,7 +72,6 @@ class Client
         bool    getUserFlag() const;
 
 
-        //to change connected status
         void	change_connected();
         bool	getConnectedStatus() const;
 };

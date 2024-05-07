@@ -1,11 +1,5 @@
 #include "Command.hpp"
 
-// Command::Command(char *buffer)
-// {
-
-// }
-
-
 std::string Command::getName() const
 {
 	return _name;

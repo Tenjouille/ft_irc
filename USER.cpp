@@ -18,20 +18,14 @@ bool 	Server::userCheckArgs(std::string str)
 
 void	Server::userCmd(std::string str, int socket)
 {
-	if (userCheckArgs(str) == false)
+	size_t find = str.find(' ');
+	if (userCheckArgs(str) == false || find == std::string::npos)
 	{
 		replyClient(ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "USER"), socket);
 		return;
 	}
-	std::cout << YELLOW << "STR : " << str << RESET << std::endl;
 	std::string cmd = str.substr(str.find(' ') + 1);
 	cmd = cmd.substr(0, cmd.find(' '));
-	// if (getClient(socket)->getStatus() == 4 && _clients[socket]->getSent() == true)
-	// {
-	// 	std::cout << "LUI???" << std::endl;
-	// 	replyClient(ALREADYREGISTERED(getClient(socket)->getNickName()), socket);
-	// 	return;
-	// }
 	for (int i = 0; cmd[i]; i++)
 		if (!((cmd[i] >= 'a' && cmd[i] <= 'z') || (cmd[i] >= 'A' && cmd[i] <= 'Z') || (cmd[i] >= '0' && cmd[i] <= '9')))
 			return;
@@ -64,7 +58,7 @@ void	Server::userCmd(std::string str, int socket)
 			if (_clients[socket]->getConnectedStatus() == false)
 			{
 				replyClient(WELCOME_MSG(server_name, nickname, username), socket);
-				_clients[socket]->change_connected(); //true
+				_clients[socket]->change_connected();
 				startingMsg(socket);
 			}
 		}

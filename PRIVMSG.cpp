@@ -9,7 +9,6 @@ bool    Server::isPartOfChannel(int socket, std::map<int, Client*> client_list)
     {
         if (it->first == socket)
         {
-            std::cout << "CLIENT FOUND : " << socket << " and " << it->first << std::endl;
             return (true);
         }
         ++it;
@@ -33,10 +32,7 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
             {
                 if (isPartOfChannel(socket, client_list) == false)
                 {
-                    // THE USER IS NOT PART OF THE CHANNEL
-                    std::cout << "SOCKET WASNT FOUND IN CLIENT LIST\n" << std::endl;
                     std::string err_msg = ERR_NOTONCHANNEL(_clients[socket]->getNickName(), user);
-                    std::cout << RED << "SENDING : " << err_msg << RESET << std::endl;
                     replyClient(err_msg, socket);
                     return ; 
                 }
@@ -44,9 +40,7 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
                 {
                     if (it_clt->first != socket)
                     {
-                        // std::string msg = SENDINCHANNEL(s_nick, clients[socket]->getUsername(), msg_to_send, user);
                         std::string username = _clients[socket]->getUserName();
-                        //USER == CHANNELNAME
                         std::string msg = SENDINCHANNEL(s_nick, username, msg_to_send, user);
                         replyClient(msg, it_clt->first);
                     }
@@ -83,7 +77,6 @@ int Server::getSocketFromUser(std::string to_find)
             if (it->second->getNickName() == to_find)
             {
                 socket = it->first;
-              //  std::cout << "Socket to send to : " << socket << std::endl;
                 return (socket);
             }
             ++it;
@@ -93,16 +86,9 @@ int Server::getSocketFromUser(std::string to_find)
             if (to_find == "Botimus_Maximus" || to_find == "BOT")
             {
                 socket = -777;
-                std::cout << YELLOW << "TALKING TO THE BOT" << RESET << std::endl;
                 return (socket);
             }
-            else
-                std::cout << RED << "ERROR SOCKET NOT FOUND" << RESET << std::endl;
         }
-    }
-    else
-    {
-        std::cerr << RED << "ERROR D'ITERATOR" << RESET << std::endl;
     }
     return (socket);
 }
@@ -123,7 +109,6 @@ bool Server::msgCheckArgs(std::string locate)
 {
     size_t found;
     found = locate.find(":", 0);
-    std::cout << "found at : " << found << std::endl;
     if (found == std::string::npos)
         return (false);
     return (true);
@@ -131,7 +116,6 @@ bool Server::msgCheckArgs(std::string locate)
 
 void Server::msgCmd(std::string locate, int socket)
 {
-    std::cout << "LOCATE : " << locate << std::endl;
     if (msgCheckArgs(locate) == false)
     {
         replyClient(ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PRIVMSG"), socket);
@@ -150,9 +134,9 @@ void Server::msgCmd(std::string locate, int socket)
             size_t test = locate.find(':', start);
             user = '\0';
             msg = '\0';
-            user = locate.substr(start, end - start); //destinataire
+            user = locate.substr(start, end - start);
             if (locate[test] == ':')
-                msg = locate.substr(test + 1); // +2 pour ignorer ": "
+                msg = locate.substr(test + 1);
             else
                 msg = locate.substr(test);
             if (user[0] == '#')
@@ -161,37 +145,12 @@ void Server::msgCmd(std::string locate, int socket)
  				is_channel = 1;
  			}
         }
-		else
-		{
-            std::cerr << "Erreur: Aucun espace trouvé après le nom d'utilisateur" << std::endl;
-        }
     }
-	else
-	{
-        std::cerr << "Erreur: Chaîne ne contient pas 'PRIVMSG '" << std::endl;
-    }
-	// for (std::map<std::string,
-	// 		Channel *>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
-	// {
-	// 	std::string channel_name = it->first;
-	// 	Channel *channel = it->second;
-	// 	if (channel_name == user)
-	// 	{
-	// 		std::map<int, Client *> client_list = channel->getClientlst();
-	// 		for (std::map<int,
-	// 				Client *>::iterator it_clt = client_list.begin(); it_clt != client_list.end(); ++it_clt)
-	// 		{
-	// 			std::cout << YELLOW << "client dans channel = " << it_clt->second->getNickName() << RESET << std::endl;
-	// 		}
-	// 	}
-	// }
     std::string s_user = _clients[socket]->getUserName();
     std::string s_nick = _clients[socket]->getNickName();
 	if (is_channel == 0)
  	{
         int socket_to_send_to = getSocketFromUser(user);
-        
-        //TALKING TO THE BOT
         if (socket_to_send_to == -777)
         {
             if (user == "BOT")
@@ -200,23 +159,13 @@ void Server::msgCmd(std::string locate, int socket)
                 parsingBot(msg, user, socket);
             return ;
         }
-        
-        //USER TO SEND TO NOT FOUND
         if (socket_to_send_to == -666)
         {
-            std::cout << "ERROR : TARGET NOT FOUND !" << std::endl;
             std::string no_such_nick = ERR_NOSUCHNICK(s_nick, user);
-            std::cout << "Sending error message : " << no_such_nick << std::endl;
             replyClient(no_such_nick, socket);
             return ;
         }
-
-		std::cout << "Username : " << s_user << "\nNickname : " << s_nick << "\nEnvoyer : " << user << "\nMsg : '" << msg << "'" << std::endl;
-
 		std::string msg_to_send = PRIVMSG(s_nick, user, msg);
-		std::cout << "Sending : '" << msg_to_send << "'" << std::endl; 
-
-		std::cout << socket_to_send_to << " et " << socket << std::endl;
 		if (replyClient(msg_to_send, socket_to_send_to) == static_cast<size_t>(-1))
             quitCmd(socket);
 		(void) socket;

@@ -2,12 +2,12 @@
 
 void    Channel::changeOperator(char sign, std::vector<std::string>& args, int socket)
 {
-    int                                    targSocket = -1;
-    bool                                opeStatus = false;
+    int     targSocket = -1;
+    bool    opeStatus = false;
     std::map<int, Client*>::iterator    it = _clientslst.begin();
     (void) socket;
     if (!args.size())
-        return ; // 461 ERR_NEEDMOREPARAMS
+        return ;
     for (;it != _clientslst.end(); it++)
     {
         if (it->second->getNickName() == args[0])
@@ -16,17 +16,13 @@ void    Channel::changeOperator(char sign, std::vector<std::string>& args, int s
             break;
         }
     }
-    // std::cout << YELLOW << "changg OPERATORS for " << it->second->getNickName() << std::endl;
     if (targSocket == -1)
     {
-        // std::string error = ERR_NOSUCHNICK(nickname_op, arg[0]);
-        // std::string e_441 = ERR_USERONCHANNEL(nickname op, arg[0] , _name);
-        return ; // 401 ERR_NOSUCHNICK && 441 ERR_USERNOTINCHANNEL
+        return ;
     }
     for (std::map<int, Client*>::iterator it = _operators.begin();it != _operators.end(); it++)
             if (it->second->getNickName() == args[0])
                 opeStatus = true;
-    std::cout << YELLOW << "opeStatus = " << opeStatus << std::endl;
     if (sign == '+' && opeStatus == false)
         newOperator(targSocket, it->second);
     else if (sign == '-' && opeStatus == true)
@@ -58,9 +54,9 @@ void    Channel::changeLimit(char sign, std::vector<std::string>& args, int sock
     if (sign == '+')
     {
         if (args.size() == 0)
-            return ; // 461 ERR_NEEDMOREPARAMS
+            return ;
         if (atoi(args[0].c_str()) < 1 || strtod(args[0].c_str(), NULL) > 2147483647)
-            return ; // (NO ERROR MSG FOUND)
+            return ;
         _limit = atoi(args[0].c_str());
         args.erase(args.begin());
     }
@@ -74,7 +70,7 @@ void    Channel::changeKey(char sign, std::vector<std::string>& args, int socket
     if (sign == '+')
     {
         if (!args.size())
-            return ; // 461 ERR_NEEDMOREPARAMS
+            return ;
         _key = args[0];
         args.erase(args.begin());
     }
