@@ -3,18 +3,34 @@
 void Server::partCmd(std::string locate, int socket)
 {
     std::cout << locate << std::endl;
-    size_t len = locate.find(" ");
-    size_t secure = locate.find(" ", len);
-    std::string channel_name = locate.substr(len + 1, secure);
-    size_t len2 = locate.find(":");
-    if (channel_name == "PART" || len2 == std::string::npos)
-    {
-        std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
-        replyClient(needmoreparams, socket);
-        return;
-    }
-    std::string reason;
-    reason = locate.substr(len2 + 1);
+size_t len = locate.find(" ");
+if (len == std::string::npos) {
+    // Si aucun espace n'est trouvé dans la commande, renvoyer une erreur
+    std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
+    replyClient(needmoreparams, socket);
+    return;
+}
+
+size_t secure = locate.find(" ", len + 1);
+if (secure == std::string::npos) {
+    // Si aucun deuxième espace n'est trouvé dans la commande, renvoyer une erreur
+    std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
+    replyClient(needmoreparams, socket);
+    return;
+}
+
+std::string channel_name = locate.substr(len + 1, secure - len - 1);
+
+size_t len2 = locate.find(":");
+if (len2 == std::string::npos) {
+    // Si aucun marqueur ':' n'est trouvé dans la commande, renvoyer une erreur
+    std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
+    replyClient(needmoreparams, socket);
+    return;
+}
+
+std::string reason = locate.substr(len2 + 1);
+
 
     // CHECK THAT THE CHANNEL EXISTS
     std::string tmp;
@@ -52,8 +68,7 @@ void Server::partCmd(std::string locate, int socket)
         replyClient(noton, socket);
         return;
     }
-    // IF ONLY ONE LEFT MAKE HIM OP IF NO ONE LEFT DESTROY CHANNEL
-    std::string parting_channel_name = tmp; // Nouvelle variable pour stocker le nom du canal à quitter
+    std::string parting_channel_name = tmp;
     if (channel_name[0] != '#')
     {
         std::string tmp2 = channel_name;
@@ -62,22 +77,21 @@ void Server::partCmd(std::string locate, int socket)
     }
     std::string user = userID(_clients[socket]->getNickName(), _clients[socket]->getUserName());
     std::string part = PART(user, channel_name, reason);
-    findChannel(tmp)->second->removeClientFromLst(_clients[socket]->getNickName());
-    // sendtoothers(partingChannel, part, socket);
     std::map<int, Client *>::iterator it2 = liste.begin();
     std::map<int, Client *>::iterator it2e = liste.end();
     while (it2 != it2e)
     {
-        std::cout << "SENDING TO : " << it2->second->getNickName() << " : " << part << std::endl;
         replyClient(part, it2->first);
         ++it2;
     }
+    findChannel(tmp)->second->removeClientFromLst(_clients[socket]->getNickName());
+    
+    // NEEDED TO CLOSE THE IRSSI WINDOW
     std::string notfound = ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), parting_channel_name); // Utilise parting_channel_name pour générer le message d'erreur
-    // std::string test = ERR_NOTONCHANNEL(_clients[socket]->getNickName(), parting_channel_name);
 	replyClient(notfound, socket);
-	std::string ouais = "\x1b[33mYou left \x1b[36m#" + parting_channel_name + "\x1b[33m ! Reason : " + reason + "\x1b[0m\r\n";
-	replyClient(ouais, socket);
-    // replyClient(part, socket);
+
+    // SEND INFO
+	std::string info = "\x1b[33mYou left \x1b[36m#" + parting_channel_name + "\x1b[33m ! Reason : " + reason + "\x1b[0m\r\n";
+	replyClient(info, socket);
     _clients[socket]->setTempBuffer("", 1);
-    std::cout << "GOT TO THE END" << std::endl;
 }

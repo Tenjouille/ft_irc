@@ -16,8 +16,6 @@
 #define RPL_INVITING(userID, client_nickname, invited_nickname, channel_name) (userID + " INVITE " + invited_nickname + " :" + channel_name + "\r\n") //INVITE CMD
 //!#define NICK(userID, nickname) (userID + " NICK :" + nickname + "\r\n")
 #define PART(userid, channel, reason) (userid + " PART " + channel + " :" + reason + "\r\n");
-#define PART2(userid, channel) (userid + " PART " + channel + " \r\n");
-
 
 // NICK ERRORS //
 #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use." + "\r\n")

@@ -40,10 +40,10 @@ void    Channel::printChannelUsers()
 
 void    Channel::addClient(int socket, Client *client)
 {
-    std::cout << _clientslst.size() << " and " << _operators.size() << std::endl;
     if (_operators.size() == 0)
     {
-        std::cout << "NO OPERATOR SO ADDING HIM" << std::endl;
+        std::string info = "\x1b[35mYou've been promoted to channel operator !\x1b[0m";
+        replyClient(SENDINCHANNEL(client->getNickName(), client->getUserName(), info, _name), socket);
         _operators.insert(std::make_pair(socket, client));
         _clientslst.insert(std::make_pair(socket, client));
         return ;
@@ -68,7 +68,6 @@ void    Channel::removeClientFromLst(std::string clientName)
     {
         if (it->second->getNickName() == clientName)
         {
-            std::cout << "REMOVING " << clientName << std::endl;
             _clientslst.erase(it->first);
             break ;
         }
@@ -77,7 +76,6 @@ void    Channel::removeClientFromLst(std::string clientName)
     {
         if (it->second->getNickName() == clientName)
         {
-            std::cout << "REMOVING OP " << clientName << std::endl;
             _operators.erase(it->first);
             break ;
         }
@@ -87,8 +85,10 @@ void    Channel::removeClientFromLst(std::string clientName)
         std::cout << "STILL A CLIENT IN HERE" << std::endl;
         for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
         {
+            std::string chan = "\x1b[36m#" + _name + "\x1b[0m";
+            std::string info = "\x1b[35mYou've been promoted to channel operator !\x1b[0m";
+            replyClient(SENDINCHANNEL(chan, chan, info, _name), it->first);
             _operators.insert(std::make_pair(it->first, it->second));
-            std::cout << "NEW OP : " << it->second->getNickName() << std::endl;
             break ;
         }
     }

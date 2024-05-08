@@ -34,13 +34,14 @@ Channel* Server::getChannelFromName(std::string name)
 	while (it != ite)
 	{
 		std::string tmp_channel_name = it->first;
-			std::cout << YELLOW <<  "COMPARING : '" << tmp_channel_name << "' and : '" << name << "'" << RESET << std::endl;
+		std::cout << YELLOW <<  "COMPARING : '" << tmp_channel_name << "' and : '" << name << "'" << RESET << std::endl;
 		if (tmp_channel_name == name)
 		{
 			return (it->second);
 		}
 		++it;
 	}
+	std::cout << "NOT FOUND SO LEFT" << std::endl;
 	return (NULL);
 }
 
@@ -173,9 +174,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	{
 		if (_clients[socket]->getSkip() == true)
 		{
-			std::cout << "ICI" << std::endl;
 			getClient(socket)->updateStatus(0);
-			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
+			std::string end = "CAP_ACK END\r\n";
+			replyClient(end, socket);
+			std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
@@ -195,8 +197,9 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (_clients[socket]->getStatus() == 1)
 		{
 			getClient(socket)->updateStatus(0);
-			std::cout << "LA" << std::endl;
-			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
+			std::string end = "CAP_ACK END\r\n";
+			replyClient(end, socket);
+			std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			_clients[socket]->setNickName("\0");
@@ -204,7 +207,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);
-			// quitting = true;
 			return ;
 		}
 	}
@@ -215,9 +217,9 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (passCmd(cmd, locate, socket) == false)
 		{
 			getClient(socket)->updateStatus(0);
-			std::cout << "CONNECTION FAILED TRY FULL PROCESS AGAIN" << std::endl;
-			std::cout << "HERE" << std::endl;
-			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
+			std::string end = "CAP_ACK END\r\n";
+			replyClient(end, socket);
+			std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
