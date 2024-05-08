@@ -30,7 +30,7 @@ void Server::kickCmd(std::string locate, int socket)
     }
     if (findChannel(channelName) == _channelLst.end())
     {
-        replyClient(ERR_NOSUCHCHANNEL(channelName), socket);
+        replyClient(ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), channelName), socket);
         return;
     }
     if (is_in_channel(userName2, channelName) == 1)
@@ -46,7 +46,7 @@ void Server::kickCmd(std::string locate, int socket)
     Channel *channel = getChannelFromName(channelName);
     if (channel == NULL)
     {
-        std::string err_msg = ERR_NOSUCHCHANNEL(channelName);
+        std::string err_msg = ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), channelName);
         replyClient(err_msg, socket);
         return ;
     }

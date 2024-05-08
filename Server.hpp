@@ -85,16 +85,17 @@ class Server
 		//////////////PARSING///////////////
 		void				parser(std::string buffer, int socket);
 		void				defineCmd(std::string cmd, int start, int it, int socket);
-		std::string			defineArgs(std::string cmd);
-		std::string			defineOptions(std::string cmd);
+		std::string			initArgs(std::string cmd);
+		std::string			initOptions(std::string cmd);
 		//////////////COMMANDS//////////////
 		void				caplsCmd(std::string locate, int socket);
 		void				userCmd(std::string str, int socket);
-		void				modeCmd(std::string locate, int socket);
+		int					modeCmd(std::string locate, int socket);
 		void				nickCmd(std::string str, int socket);
 		bool				passCmd(std::string to_parse, std::string cmd, int socket);
 		void				joinCmd(std::string locate, int socket);
 		void				quitCmd(int socket);
+		void	partCmd(std::string locate, int socket);
 		void				pingCmd(std::string cmd, int socket);
 		void 				msgCmd(std::string locate, int socket);
 		ssize_t				sendToClient(std::string to_send, int socket);
@@ -134,7 +135,10 @@ class Server
 		bool 	userCheckArgs(std::string str);
 		bool 	msgCheckArgs(std::string locate);
 		void    delFromChannels(int socket);
-	
+
+		// send part msg to others
+		void	sendtoothers(Channel *channel, std::string msg, int socket);
+
 
 };
 

@@ -25,7 +25,7 @@ void	Server::loop()
 		result = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
 		if (result == -1)
 		{
-			std::cout << "failed to select" << std::endl;
+			std::cout << "Closing Server" << std::endl;
 			return;
 		}
 		if (interrupted == true)
@@ -67,5 +67,5 @@ int main(int ac, char **av)
 		}
 	}
 	else
-		std::cout << "Bad arguments number" << std::endl;
+		std::cout << "Usage : ./ircserv *port* *mdp*" << std::endl;
 }

@@ -8,7 +8,7 @@ INC = Server.hpp Client.hpp Communication.hpp Channel.hpp
 SRCS = main.cpp Channel.cpp  Server.cpp Client.cpp Communication.cpp \
 	PRIVMSG.cpp PASS.cpp NICK.cpp PING.cpp CAPLS.cpp JOIN.cpp USER.cpp \
 	QUIT.cpp INVITE.cpp KICK.cpp TOPIC.cpp MODE.cpp \
-	BOT.cpp modeOptions.cpp \
+	BOT.cpp modeOptions.cpp PART.cpp\
 		
 OBJS_PATH = ./objs
 OBJS_NAMES = $(SRCS:.cpp=.o)

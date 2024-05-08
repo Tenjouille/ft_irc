@@ -40,6 +40,14 @@ void    Channel::printChannelUsers()
 
 void    Channel::addClient(int socket, Client *client)
 {
+    std::cout << _clientslst.size() << " and " << _operators.size() << std::endl;
+    if (_operators.size() == 0)
+    {
+        std::cout << "NO OPERATOR SO ADDING HIM" << std::endl;
+        _operators.insert(std::make_pair(socket, client));
+        _clientslst.insert(std::make_pair(socket, client));
+        return ;
+    }
     _clientslst.insert(std::make_pair(socket, client));
     printChannelUsers();
 }
@@ -60,6 +68,7 @@ void    Channel::removeClientFromLst(std::string clientName)
     {
         if (it->second->getNickName() == clientName)
         {
+            std::cout << "REMOVING " << clientName << std::endl;
             _clientslst.erase(it->first);
             break ;
         }
@@ -68,7 +77,18 @@ void    Channel::removeClientFromLst(std::string clientName)
     {
         if (it->second->getNickName() == clientName)
         {
+            std::cout << "REMOVING OP " << clientName << std::endl;
             _operators.erase(it->first);
+            break ;
+        }
+    }
+    if (_operators.size() == 0 && _clientslst.size() > 0)
+    {
+        std::cout << "STILL A CLIENT IN HERE" << std::endl;
+        for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
+        {
+            _operators.insert(std::make_pair(it->first, it->second));
+            std::cout << "NEW OP : " << it->second->getNickName() << std::endl;
             break ;
         }
     }

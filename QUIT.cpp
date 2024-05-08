@@ -20,11 +20,13 @@ void    Server::delClient(int socket)
     {
             _clients[socket]->setNickName("");
             _clients[socket]->setTempBuffer("", 1);
-            _nb_clients--;
+            if (_nb_clients > 0)
+                _nb_clients--;
             delete _clients[socket];
             _clients.erase(socket);
             FD_CLR(socket, &_allSockets);
 	        _fdMax--;
+            //close socket??
     }
     else
         return ;
@@ -33,4 +35,5 @@ void    Server::delClient(int socket)
 void    Server::quitCmd(int socket)
 {
     delClient(socket);
+    close(socket);
 }

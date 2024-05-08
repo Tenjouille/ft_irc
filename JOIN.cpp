@@ -111,6 +111,7 @@ void Server::joinCmd(std::string locate, int socket)
 
 void Server::createChannel(std::string name, int socket)
 {
+    std::cout << name << std::endl;
     if (_channelLst.find(name) == _channelLst.end())
     {
         replyClient(NOT_EXISTING_CHANNEL(name), socket);

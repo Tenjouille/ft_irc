@@ -92,7 +92,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 	}
 	if (channel_exist == false)
 	{
-		std::string doesnt_exist = ERR_NOSUCHCHANNEL(channel_name);
+		std::string doesnt_exist = ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), channel_name);
 		replyClient(doesnt_exist, socket);
 		return ;
 	}
@@ -124,6 +124,7 @@ void	Server::inviteCmd(std::string locate, int socket)
 	}
 	else if (sender_in_channel == true)
 	{
+		std::cout << "ici2" << std::endl;
 		std::string error_msg = ERR_CHANOPRIVSNEEDED(nickname, channel_name);
 		replyClient(error_msg, socket);
 		return ;

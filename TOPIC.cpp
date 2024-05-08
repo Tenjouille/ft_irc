@@ -41,6 +41,7 @@ void Server::topicCmd(std::string locate, int socket)
         {
             if (it->second->getTopicStatus() == 1 && isClientOp(it->second->getOperatorList(), socket) == false)
             {
+		        std::cout << "ici4" << std::endl;
                 std::string err_msg = ERR_CHANOPRIVSNEEDED(_clients[socket]->getNickName(), channelName);
                 replyClient(err_msg, socket);
                 return ;

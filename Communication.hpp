@@ -9,12 +9,15 @@
 #define WELCOME_MSG(servername, username, nickname) (":" + servername + " 001 " + username + \
 	" :Welcome to the Internet Relay Network " + username + "!" + nickname + "\r\n")
 #define CAP_LS() ("CAP_ACK LS\r\n")
-#define CREATECHANNEL(nickname, username, name) (":" + nickname+ "!" + username + "@localhost JOIN " + name + "\r\n") //CREATE CHANNEL
+#define CREATECHANNEL(nickname, username, name) (":" + nickname + "!" + username + "@localhost JOIN " + name + "\r\n") //CREATE CHANNEL
 #define SENDINCHANNEL(sender, username, msg, channelname) (":" + sender + "!" + username + "@localhost PRIVMSG #" + channelname + " :" + msg + "\r\n") //PRIVMSG FOR CHANNEL
 #define PRIVMSG(nickname, envoyeur, msg) (":" + std::string(nickname) + "!" + "localhost" + " PRIVMSG " + envoyeur + " :" + msg + "\r\n") //PRIVMSG CMD
 #define DEFAULTPONG(servername) ("PONG " + servername + "\r\n") //PONG CMD
 #define RPL_INVITING(userID, client_nickname, invited_nickname, channel_name) (userID + " INVITE " + invited_nickname + " :" + channel_name + "\r\n") //INVITE CMD
 //!#define NICK(userID, nickname) (userID + " NICK :" + nickname + "\r\n")
+#define PART(userid, channel, reason) (userid + " PART " + channel + " :" + reason + "\r\n");
+#define PART2(userid, channel) (userid + " PART " + channel + " \r\n");
+
 
 // NICK ERRORS //
 #define NICKNAMEINUSE_ERR(username) (":localhost 433 * " + username + " :Nickname is already in use." + "\r\n")
@@ -39,7 +42,7 @@
 // INVITE ERRORS //
 #define ERR_NOTINCHANNEL(client_nickname, user_nick, channelname) (client_nickname + " " + user_nick + " " + channelname + " :They aren't on that channel\r\n")
 #define ERR_NOTONCHANNEL(client_nickname, channelname) (client_nickname + " " + channelname + " :You're not on that channel" + "\r\n") //TRYING TO INVITE SOMEONE INTO A CHANNEL YOUR ARE NOT PART OF
-#define ERR_NOSUCHCHANNEL(channelName) (":localhost 403 " + channelName + " :No such channel" + "\r\n") //NEEDS A # IN THE CHANNEL NAME !!
+#define ERR_NOSUCHCHANNEL(nickname, channelName) (":localhost 403 " + nickname + " " + channelName + " :No such channel" + "\r\n") //NEEDS A # IN THE CHANNEL NAME !!
 #define ERR_USERONCHANNEL(client, nickname , channelname) (":localhost 403 " + client + " " + nickname + " " \
 + channelname + " :is already on channel" + "\r\t") //TRYING TO INVITE SOMEONE THAT IS ALREADY IN THE CHANNEL
 #define ERR_CHANOPRIVSNEEDED(client_nickname, channel_name) (client_nickname + " #" + channel_name + " :You're not channel operator" + "\r\n") //OPERTORS CAN INVITE ONLY
@@ -48,7 +51,7 @@
 #define ERR_INVITEONLYCHAN(nickname, channel_name) (":localhost 473 " + nickname + " " + channel_name + " :Cannot join channel (+i)" + "\r\n")
 #define ERR_BADCHANNELKEY(client_nickname, channel_name) (":localhost 475 " + client_nickname + " " + channel_name + " :Cannot join channel (+k)" + "\r\n") //TRYING TO JOIN A CHANNEL WITH BAD KEY
 #define ERR_CHANNELISFULL(client_nickname, channel_name) (":localhost 471 " + client_nickname + " " + channel_name + " :Cannot join channel (+l)" + "\r\n") //TRYING TO JOIN A CHANNEL THAT IS FULL
-#define NOT_EXISTING_CHANNEL(channelName) (":localhost 403 #" + channelName + " :No such channel\r\n") //TRYING TO JOIN A CHANNEL THAT DOESNT EXIST
+#define NOT_EXISTING_CHANNEL(channelName) ("#" + channelName + " :No such channel\r\n") //TRYING TO JOIN A CHANNEL THAT DOESNT EXIST
 #define NOTOPIC(nickname, channelName) (":localhost 331 " + nickname + " #" + channelName + " :No topic is set\r\n")
 // #define ALREADYTOPIC(nickname, channelName, topicName) (":localhost 332 " + nickname + " #" + channelName + " " + topicName + "\r\n")
 #define LISTUSERS(nickname, channelName, userslst) (":localhost 353 " + nickname + " = #" + channelName+ " :@" + userslst + "\r\n")
@@ -71,10 +74,6 @@
 // BOT
 #define _bot_name "Botimus_Maximus"
 
-//NICK
-//JOIN
-//PRIVMSG
-//QUIT
 #define HELP_BOX() (\
 "       Voici quelques commandes utiles :        \n" \
 "┌──────────────────────────────────────────────┐\n" \

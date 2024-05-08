@@ -34,6 +34,7 @@ Channel* Server::getChannelFromName(std::string name)
 	while (it != ite)
 	{
 		std::string tmp_channel_name = it->first;
+			std::cout << YELLOW <<  "COMPARING : '" << tmp_channel_name << "' and : '" << name << "'" << RESET << std::endl;
 		if (tmp_channel_name == name)
 		{
 			return (it->second);
@@ -62,8 +63,8 @@ void	Server::read_data_from_socket(int socket)
 	buffer[bytes_read] = '\0';
 	if (bytes_read == 0 || quitting == true)
     {
-		if (socket != 0)
-			close(socket);
+		// if (socket != 0)
+		// 	close(socket);
         quitCmd(socket);
         return ; 
     }
@@ -172,17 +173,15 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	{
 		if (_clients[socket]->getSkip() == true)
 		{
+			std::cout << "ICI" << std::endl;
 			getClient(socket)->updateStatus(0);
-			std::cout << "CONNECTION FAILED TRY FULL PROCESS AGAIN ICIIII" << std::endl;
 			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
-			size_t test = replyClient(msg, socket);
-			std::cout << "TEST : " << test << std::endl;
+			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);
 			quitting = true;
-			std::cout << "LAODLAOLOAD" << std::endl;
 			return;
 		}
 	}
@@ -196,6 +195,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (_clients[socket]->getStatus() == 1)
 		{
 			getClient(socket)->updateStatus(0);
+			std::cout << "LA" << std::endl;
 			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
@@ -204,8 +204,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);
-			quitting = true;
-			std::cout << "Jsuis chaud" << std::endl;
+			// quitting = true;
 			return ;
 		}
 	}
@@ -217,14 +216,13 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		{
 			getClient(socket)->updateStatus(0);
 			std::cout << "CONNECTION FAILED TRY FULL PROCESS AGAIN" << std::endl;
+			std::cout << "HERE" << std::endl;
 			std::string msg = "CONNECTION INTEROMPUE RELANCE TON CLIENT!!!";
 			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
 				_nb_clients--;
 			_clients[socket]->setConnectedStatus(false);
-			quitting = true;
-			std::cout << "LAODLAOLOAD 2222" << std::endl;
 			return ;
 		}
 	}
@@ -257,8 +255,12 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	}
 	else if (locate.find("NOTICE") == 0)
 	{
-		if (locate.find("BOT") != std::string::npos && locate.find("START") != std::string::npos)
+		if ((locate.find("BOT") != std::string::npos && locate.find("START") != std::string::npos) || (locate.find("bot") != std::string::npos && locate.find("start") != std::string::npos))
 			botStart(socket);
+	}
+	else if (locate.find("PART") == 0)
+	{
+		partCmd(locate, socket);
 	}
 	_clients[socket]->setTempBuffer("", 1);
 }

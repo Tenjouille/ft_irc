@@ -58,7 +58,7 @@ void Server::send_in_channel(std::string user, std::string s_nick, std::string m
     }
     if (channel_found == false)
     {
-        std::string err_msg = ERR_NOSUCHCHANNEL(user);
+        std::string err_msg = ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), user);
         replyClient(err_msg, socket);
         return ;
     }
@@ -168,7 +168,6 @@ void Server::msgCmd(std::string locate, int socket)
 		std::string msg_to_send = PRIVMSG(s_nick, user, msg);
 		if (replyClient(msg_to_send, socket_to_send_to) == static_cast<size_t>(-1))
             quitCmd(socket);
-		(void) socket;
 	}
 	else
 	{
