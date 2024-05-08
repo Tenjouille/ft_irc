@@ -28,6 +28,8 @@ std::string Server::getUsernameFormNick(std::string to_parse)
 
 bool Server::passCmd(std::string str, std::string cmd, int socket)
 {
+	if (cmd != "PASS" && (cmd.substr(0, 5) != "PASS " || cmd.length() <= 5))
+		return false;
 	std::string server_pass = getServerPassword();
 	int i = 0;
 	if (getClient(socket)->getStatus() == 4)

@@ -82,7 +82,6 @@ void    Channel::removeClientFromLst(std::string clientName)
     }
     if (_operators.size() == 0 && _clientslst.size() > 0)
     {
-        std::cout << "STILL A CLIENT IN HERE" << std::endl;
         for (std::map<int, Client*>::iterator it = _clientslst.begin(); it != _clientslst.end(); it++)
         {
             std::string chan = "\x1b[36m#" + _name + "\x1b[0m";

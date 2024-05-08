@@ -2,35 +2,34 @@
 
 void Server::partCmd(std::string locate, int socket)
 {
-    std::cout << locate << std::endl;
-size_t len = locate.find(" ");
-if (len == std::string::npos) {
-    // Si aucun espace n'est trouvé dans la commande, renvoyer une erreur
-    std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
-    replyClient(needmoreparams, socket);
-    return;
-}
+    if (locate != "PART" && (locate.substr(0, 5) != "PART " || locate.length() <= 5))
+        return;
+    size_t len = locate.find(" ");
+    if (len == std::string::npos)
+    {
+        std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
+        replyClient(needmoreparams, socket);
+        return;
+    }
 
-size_t secure = locate.find(" ", len + 1);
-if (secure == std::string::npos) {
-    // Si aucun deuxième espace n'est trouvé dans la commande, renvoyer une erreur
-    std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
-    replyClient(needmoreparams, socket);
-    return;
-}
+    size_t secure = locate.find(" ", len + 1);
+    if (secure == std::string::npos)
+    {
+        std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
+        replyClient(needmoreparams, socket);
+        return;
+    }
 
-std::string channel_name = locate.substr(len + 1, secure - len - 1);
+    std::string channel_name = locate.substr(len + 1, secure - len - 1);
 
-size_t len2 = locate.find(":");
-if (len2 == std::string::npos) {
-    // Si aucun marqueur ':' n'est trouvé dans la commande, renvoyer une erreur
-    std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
-    replyClient(needmoreparams, socket);
-    return;
-}
-
-std::string reason = locate.substr(len2 + 1);
-
+    size_t len2 = locate.find(":");
+    if (len2 == std::string::npos)
+    {
+        std::string needmoreparams = ERR_NEEDMOREPARAMS(_clients[socket]->getNickName(), "PART");
+        replyClient(needmoreparams, socket);
+        return;
+    }
+    std::string reason = locate.substr(len2 + 1);
 
     // CHECK THAT THE CHANNEL EXISTS
     std::string tmp;
@@ -38,13 +37,11 @@ std::string reason = locate.substr(len2 + 1);
         tmp = channel_name.erase(0, 1);
     else
         tmp = channel_name;
-    std::cout << "TMP : '" << tmp << "'" << std::endl;
     Channel *partingChannel = getChannelFromName(tmp);
     if (partingChannel == NULL)
     {
         std::string notfound = ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), channel_name);
         replyClient(notfound, socket);
-        std::cout << "la" << std::endl;
         return;
     }
     // CHECK THAT THE USER IS ON THE CHANNEL
@@ -63,7 +60,6 @@ std::string reason = locate.substr(len2 + 1);
     }
     if (found == false)
     {
-        std::cout << "ici" << std::endl;
         std::string noton = ERR_NOTONCHANNEL(_clients[socket]->getNickName(), channel_name);
         replyClient(noton, socket);
         return;

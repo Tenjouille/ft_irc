@@ -19,11 +19,8 @@ void	Channel::changeOperator(char sign, std::vector<std::string>& args, int sock
 			break;
 		}
 	}
-	// std::cout << YELLOW << "changg OPERATORS for " << it->second->getNickName() << std::endl;
 	if (targSocket == -1)
 	{
-		// std::string error = ERR_NOSUCHNICK(nickname_op, arg[0]);
-		// std::string e_441 = ERR_USERONCHANNEL(nickname op, arg[0] , _name);
 		return ; // 401 ERR_NOSUCHNICK && 441 ERR_USERNOTINCHANNEL
 	}
 	for (std::map<int, Client*>::iterator it = _operators.begin();it != _operators.end(); it++)

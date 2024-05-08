@@ -2,6 +2,8 @@
 
 void	Server::pingCmd(std::string cmd, int socket)
 {
+	if (cmd != "PING" && (cmd.substr(0, 5) != "PING " || cmd.length() <= 5))
+		return;
 	std::string arg = cmd.substr(cmd.find(' ') + 1);
 	if (arg[0] == '\0')
 	{

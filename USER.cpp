@@ -8,16 +8,25 @@ bool 	Server::userCheckArgs(std::string str)
 	while (str[i] != '\r' && i < len)
 	{
 		if (str[i] == ' ')
-			found++;
+		{
+			if (found == 0 && str[i + 1] != ' ')
+				found++;
+			else if (found == 1 && str[i + 1] != ' ')
+				found++;
+			else if (found == 2 && str[i + 1] != ' ')
+				found++;
+		}
 		i++;
 	}
-	if (found != 2)
+	if (found == 3)
 		return (true);
 	return (false);
 }
 
 void	Server::userCmd(std::string str, int socket)
 {
+	if (str != "USER" && (str.substr(0, 5) != "USER " || str.length() <= 5))
+		return;
 	size_t find = str.find(' ');
 	if (userCheckArgs(str) == false || find == std::string::npos)
 	{

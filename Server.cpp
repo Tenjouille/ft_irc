@@ -34,14 +34,12 @@ Channel* Server::getChannelFromName(std::string name)
 	while (it != ite)
 	{
 		std::string tmp_channel_name = it->first;
-		std::cout << YELLOW <<  "COMPARING : '" << tmp_channel_name << "' and : '" << name << "'" << RESET << std::endl;
 		if (tmp_channel_name == name)
 		{
 			return (it->second);
 		}
 		++it;
 	}
-	std::cout << "NOT FOUND SO LEFT" << std::endl;
 	return (NULL);
 }
 
@@ -175,10 +173,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (_clients[socket]->getSkip() == true)
 		{
 			getClient(socket)->updateStatus(0);
-			std::string end = "CAP_ACK END\r\n";
-			replyClient(end, socket);
-			std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m";
-			replyClient(msg, socket);
+			// std::string end = "CAP_ACK END\r\n";
+			// replyClient(end, socket);
+			// std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m\r\n";
+			// replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
 				_nb_clients--;
@@ -188,7 +186,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		}
 	}
 	if (locate.find("NICK") == 0)
+	{
 		nickCmd (locate, socket);
+		return ;
+	}
 	else if (locate.find("CAP LS") == 0 && _clients[socket]->getConnectedStatus() == false)
 		caplsCmd(locate, socket);
 	else if (locate.find("USER") == 0)
@@ -197,10 +198,10 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (_clients[socket]->getStatus() == 1)
 		{
 			getClient(socket)->updateStatus(0);
-			std::string end = "CAP_ACK END\r\n";
-			replyClient(end, socket);
-			std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m";
-			replyClient(msg, socket);
+			// std::string end = "CAP_ACK END\r\n";
+			// replyClient(end, socket);
+			// std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m\r\r";
+			// replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			_clients[socket]->setNickName("\0");
 			_clients[socket]->ClearNick();
@@ -214,13 +215,9 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		modeCmd(locate, socket);
 	else if (locate.find("PASS") == 0)
 	{
-		if (passCmd(cmd, locate, socket) == false)
+		if (passCmd(cmd, locate, socket) == false && _clients[socket]->getConnectedStatus() == false)
 		{
 			getClient(socket)->updateStatus(0);
-			std::string end = "CAP_ACK END\r\n";
-			replyClient(end, socket);
-			std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m";
-			replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
 				_nb_clients--;

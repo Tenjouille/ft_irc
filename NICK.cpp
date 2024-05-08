@@ -41,10 +41,16 @@ std::string intToString(int value)
 void	Server::nickCmd(std::string str, int socket)
 {
 	size_t find = str.find(' ');
-	std::string cmd = str.substr(find + 1);	
-	if (cmd[0] == '\0' || find == std::string::npos)
+	if (str != "NICK" && (str.substr(0, 5) != "NICK " || str.length() <= 5))
 	{
-		replyClient(ERR_NONICKNAMEGIVE(getClient(socket)->getNickName()), socket);
+		getClient(socket)->updateStatus(0);
+		return;
+	}
+	std::string cmd = str.substr(find + 1);	
+	if ((cmd[0] == '\0' || find == std::string::npos) && _clients[socket]->getConnectedStatus() == false)
+	{
+		std::string error = "Error";
+		replyClient(ERR_NONICKNAMEGIVE(error), socket);
 		return;
 	}
 	if (_clients[socket]->do_we_set_or_not() == true)
@@ -82,19 +88,35 @@ void	Server::nickCmd(std::string str, int socket)
 				it->second->setNickName(cmd);
 				if (_clients[socket]->getStatus() == 2 || _clients[socket]->getStatus() == 3)
 				{
-					if (_clients[socket]->getStatus() == 3)
-						it->second->updateStatus(4);
-					else
-						it->second->updateStatus(3);
+					if (_clients[socket]->getNickFlag() == false)
+					{
+						if (_clients[socket]->getStatus() == 3)
+							it->second->updateStatus(4);
+						else
+							it->second->updateStatus(3);
+						_clients[socket]->setNickFlag(true);
+					}
 				}
 			}
 			else
 			{
-				std::string old = _clients[socket]->getNickName();
-				std::string msg = ":" + old + " NICK " + nickname + "\r\n";
-				replyClient(msg, socket);
-				it->second->setNickName(cmd);
-				return ;
+				if (cmd == "NICK")
+				{
+					std::string old = _clients[socket]->getNickName();
+					std::string msg = ":" + old + " NICK " + old + "\r\n";
+					replyClient(msg, socket);
+					_clients[socket]->setTempBuffer("", 1);
+					return ;
+				}
+				else
+				{
+					std::string old = _clients[socket]->getNickName();
+					std::string msg = ":" + old + " NICK " + nickname + "\r\n";
+					replyClient(msg, socket);
+					it->second->setNickName(cmd);
+					_clients[socket]->setTempBuffer("", 1);
+					return ;
+				}
 			}
 		}
 		if (it->second->getStatus() >= 4)

@@ -2,6 +2,8 @@
 
 void Server::kickCmd(std::string locate, int socket)
 {
+    if (locate != "KICK" && (locate.substr(0, 5) != "KICK " || locate.length() <= 5))
+        return;
     size_t d_start = locate.find(":") - 2;
     size_t d_end = locate.rfind(" ", d_start) + 1;
     size_t start = locate.find("#");

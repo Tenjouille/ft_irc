@@ -9,6 +9,7 @@ Client::Client()
 	_sent = false;
 	_skip = false;
 	_userflag = false;
+	_nickflag = false;
 }
 
 void	Client::setSent(bool to_set)
@@ -102,7 +103,24 @@ std::string Client::getNickName() const
 
 void    Client::updateStatus(int to_set)
 {
+	if (to_set == 0)
+	{
+		std::string end = "CAP_ACK END\r\n";
+		replyClient(end, _socket);
+		std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m\r\n";
+		replyClient(msg, _socket);
+	}
 	_connection_status = to_set;
+}
+
+void	Client::setNickFlag(bool to_set)
+{
+	_nickflag = to_set;
+}
+
+bool    Client::getNickFlag() const
+{
+	return _nickflag;
 }
 
 std::string Client::getUserName() const

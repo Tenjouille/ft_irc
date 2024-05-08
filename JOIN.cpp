@@ -31,6 +31,10 @@ void extractStringAndFill(std::string& input, std::string& afterSpace)
 
 void Server::joinCmd(std::string locate, int socket)
 {
+        if (locate != "JOIN" && (locate.substr(0, 5) != "JOIN " || locate.length() <= 5))
+        {
+            return;
+        }
         int flag = 0;
         size_t start = 0;
         start = locate.find("#");
@@ -111,7 +115,6 @@ void Server::joinCmd(std::string locate, int socket)
 
 void Server::createChannel(std::string name, int socket)
 {
-    std::cout << name << std::endl;
     if (_channelLst.find(name) == _channelLst.end())
     {
         replyClient(NOT_EXISTING_CHANNEL(name), socket);

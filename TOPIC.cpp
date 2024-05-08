@@ -18,6 +18,8 @@ bool    Server::isClientOp(std::map<int, Client*> op_list, int socket)
 
 void Server::topicCmd(std::string locate, int socket)
 {
+    if (locate != "TOPIC" && (locate.substr(0, 6) != "TOPIC " || locate.length() <= 6))
+        return;
     std::string channelName;
     std::string topicName;
 
@@ -29,11 +31,33 @@ void Server::topicCmd(std::string locate, int socket)
         {
             channelName = locate.substr(start + 1, end - start - 1);
         }
+        else
+        {
+            channelName = locate.substr(start + 1);
+        }
     }
     start = locate.rfind(':');
     if (start != std::string::npos)
     {
         topicName = locate.substr(start + 1);
+    }
+    else
+    {
+        Channel *found = getChannelFromName(channelName);
+        if (found == NULL)
+        {
+            std::string err = ERR_NOSUCHCHANNEL(_clients[socket]->getNickName(), channelName);
+            replyClient(err, socket);
+            return;
+        }
+        else
+        {
+            if (found->getTopic() == "")
+                replyClient(TOPIC(_clients[socket]->getNickName(), channelName, "No Topic"), socket);
+            else
+                replyClient(TOPIC(_clients[socket]->getNickName(), channelName, found->getTopic()), socket);
+        }
+        return ;
     }
     for (std::map<std::string, Channel*>::iterator it = _channelLst.begin(); it != _channelLst.end(); ++it)
     {
@@ -41,7 +65,6 @@ void Server::topicCmd(std::string locate, int socket)
         {
             if (it->second->getTopicStatus() == 1 && isClientOp(it->second->getOperatorList(), socket) == false)
             {
-		        std::cout << "ici4" << std::endl;
                 std::string err_msg = ERR_CHANOPRIVSNEEDED(_clients[socket]->getNickName(), channelName);
                 replyClient(err_msg, socket);
                 return ;

@@ -107,6 +107,8 @@ size_t	optionNB(std::string options)
 
 int	Server::modeCmd(std::string locate, int socket)
 {
+	if (locate != "MODE" && (locate.substr(0, 5) != "MODE " || locate.length() <= 5))
+		return 1;
 	std::cout << "locate : " << locate << std::endl;
 	std::string	cmd = locate.substr(locate.find(' ') + 1);
 	std::cout << CYAN << cmd << " -> " << _channelLst.size() << RESET << std::endl;
