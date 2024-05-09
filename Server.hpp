@@ -80,7 +80,7 @@ class Server
 		void				setfdMax(int socket);
 		///////////////LOOP/////////////////
 		void				loop();
-		void				read_data_from_socket(int socket);
+		int					read_data_from_socket(int socket);
 		void				accept_new_connection();
 		//////////////PARSING///////////////
 		void				parser(std::string buffer, int socket);

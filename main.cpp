@@ -23,23 +23,23 @@ void	Server::loop()
 		timer.tv_usec = 0;
 		int result;
 		result = select(_fdMax + 1, &_readFds, NULL, NULL, &timer);
-		if (result == -1)
+		if (result == -1 || interrupted == true)
 		{
 			std::cout << "Closing Server" << std::endl;
 			return;
 		}
-		if (interrupted == true)
-		{
-			return ;
-		}
 		for (int i = 0; i <= _fdMax; i++)
 		{
 			if (FD_ISSET(i, &_readFds) != 1)
+			{
 				continue ;
+			}
 			if (i == _socket)
 				accept_new_connection();
 			else
+			{
 				read_data_from_socket(i);
+			}
 		}
 	}
 }

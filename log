@@ -1,0 +1,23 @@
+<< CAP LS
+<< PASS mdp
+<< NICK tenj
+<< USER tbourd tbourd localhost :Victor GORET
+>> CAP_ACK LS
+>> :localhost 001 tenj :Welcome to the Internet Relay Network tenj!tbourd
+<< MODE tenj +i
+>> 
+>> [34m╔═════════════════════════════╗
+>> [34m║[0m[36m  Bienvenue sur UTV Network[0m  [34m║
+>> [34m╚═════════════════════════════╝[0m
+>>         [1m[4mCreated by[0m :
+>> { [1m[35mUaupetit[0m | [1m[31mTbourdea[0m | [1m[33mVgoret[0m }
+>> 
+>> [1mIl y a actuellement[33m 1[0m[1m utilisateurs connectés et [33m0[0m[1m channels de lancés ![0m
+>> [36mUsers actifs :[0m
+>> - tenj ([32mYOU[0m)
+>> [36mChannels actifs :[0m
+>> [ NONE 😭 ]
+>> [1m[32mEnvoi "/NOTICE BOT START" pour commencer la conversation avec notre [36mBOT[0m !
+<< PING localhost
+>> PONG localhost
+--> lag pong

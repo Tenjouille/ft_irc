@@ -11,5 +11,7 @@ void	Server::caplsCmd(std::string locate, int socket)
 		}
 	}
 	else
+	{
 		getClient(socket)->updateStatus(0);
+	}
 }

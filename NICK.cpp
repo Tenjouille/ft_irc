@@ -43,7 +43,8 @@ void	Server::nickCmd(std::string str, int socket)
 	size_t find = str.find(' ');
 	if (str != "NICK" && (str.substr(0, 5) != "NICK " || str.length() <= 5))
 	{
-		getClient(socket)->updateStatus(0);
+		if (_clients[socket]->getConnectedStatus() == false)
+			getClient(socket)->updateStatus(0);
 		return;
 	}
 	std::string cmd = str.substr(find + 1);	
@@ -114,7 +115,6 @@ void	Server::nickCmd(std::string str, int socket)
 					std::string msg = ":" + old + " NICK " + nickname + "\r\n";
 					replyClient(msg, socket);
 					it->second->setNickName(cmd);
-					_clients[socket]->setTempBuffer("", 1);
 					return ;
 				}
 			}

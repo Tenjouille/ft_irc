@@ -25,9 +25,18 @@ void    Server::delClient(int socket)
             delete _clients[socket];
             _clients.erase(socket);
             FD_CLR(socket, &_allSockets);
-	        _fdMax--;
-            //close socket??
-    }
+            if (socket == _fdMax)
+            {
+                for (int i = _fdMax - 1; i >= 0; i--)
+                {
+                    if (FD_ISSET(i, &_allSockets))
+                    {
+                        _fdMax = i;
+                        break;
+                    }
+                }
+            }
+        }
     else
         return ;
 }

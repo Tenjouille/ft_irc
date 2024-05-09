@@ -54,37 +54,33 @@ int	Server::getSocket() const
 	return _socket;
 }
 
-void	Server::read_data_from_socket(int socket)
+int		Server::read_data_from_socket(int socket)
 {
 	char buffer[1024];
 	int bytes_read;
 	bytes_read = recv(socket, buffer, 1024, 0);
 	buffer[bytes_read] = '\0';
-	if (bytes_read == 0 || quitting == true)
+	if (bytes_read <= 0 || quitting == true)
     {
-		// if (socket != 0)
-		// 	close(socket);
+		_clients[socket]->setConnectedStatus(false);
         quitCmd(socket);
-        return ; 
+        return 0; 
     }
     if (buffer[0] == '\0')
 	{
-		return ;
+		return 0;
 	}
 	std::string cmd1 = buffer;
-	if (cmd1[cmd1.size() - 2] != '\r' && cmd1[cmd1.size() - 1] != '\n')
-	{
-
-	}
 	getClient(socket)->setTempBuffer(static_cast<char*>(buffer), 0);
 	std::string cmd = getClient(socket)->getTempBuffer();
-	if (cmd[cmd.size() - 2] == '\r' && cmd[cmd.size() - 1] == '\n')
+	if ((cmd[cmd.size() - 2] == '\r' && cmd[cmd.size() - 1] == '\n') || cmd == "")
 	{
 		parser(getClient(socket)->getTempBuffer(), socket);
 		if (getClient(socket) && quitting == false)
 			getClient(socket)->setTempBuffer("", 1);
 	}
 	buffer[0] = '\0';
+	return (1);
 }
 
 struct sockaddr_in	Server::getServerAddress() const
@@ -173,10 +169,7 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (_clients[socket]->getSkip() == true)
 		{
 			getClient(socket)->updateStatus(0);
-			// std::string end = "CAP_ACK END\r\n";
-			// replyClient(end, socket);
-			// std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m\r\n";
-			// replyClient(msg, socket);
+
 			_clients[socket]->setTempBuffer("", 1);
 			if (_nb_clients > 0)
 				_nb_clients--;
@@ -198,10 +191,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 		if (_clients[socket]->getStatus() == 1)
 		{
 			getClient(socket)->updateStatus(0);
-			// std::string end = "CAP_ACK END\r\n";
-			// replyClient(end, socket);
-			// std::string msg = "\x1b[4m\x1b[1mCONNECTION FAILED ! TRY FULL PROCESSUS AGAIN FROM CAP LS !!\x1b[0m\r\r";
-			// replyClient(msg, socket);
 			_clients[socket]->setTempBuffer("", 1);
 			_clients[socket]->setNickName("\0");
 			_clients[socket]->ClearNick();
@@ -229,11 +218,6 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	{
 		joinCmd(locate, socket);
 	}
-	else if (locate.find("QUIT") == 0)
-	{
-		_clients[socket]->setTempBuffer("", 1);
-		quitting = true;
-	}
 	else if (locate.find("PING") == 0)
 		pingCmd(locate, socket);
 	else if (locate.find("PRIVMSG") == 0)
@@ -260,6 +244,16 @@ void	Server::defineCmd(std::string str, int start, int it, int socket)
 	else if (locate.find("PART") == 0)
 	{
 		partCmd(locate, socket);
+	}
+	else
+	{
+		if (locate == "")
+			return ;
+		std::string err = "Unknown Command : " + locate + "\r\n";
+		replyClient(err, socket);
+		if (_clients[socket]->getConnectedStatus() == false)
+			_clients[socket]->updateStatus(0);
+		return ;
 	}
 	_clients[socket]->setTempBuffer("", 1);
 }
